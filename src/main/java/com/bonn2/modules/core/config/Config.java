@@ -1,10 +1,10 @@
 package com.bonn2.modules.core.config;
 
+import com.bonn2.Bot;
 import com.bonn2.modules.Module;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.vectorio.Bot;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

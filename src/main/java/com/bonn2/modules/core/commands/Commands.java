@@ -1,6 +1,7 @@
 package com.bonn2.modules.core.commands;
 
-import com.vectorio.Bot;
+import com.bonn2.modules.Module;
+import com.bonn2.Bot;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.util.LinkedList;

@@ -1,6 +1,7 @@
 package com.bonn2.modules.core.permissions;
 
-import com.vectorio.utils.Config;
+import com.bonn2.modules.Module;
+import com.bonn2.modules.core.config.Config;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import org.jetbrains.annotations.NotNull;
