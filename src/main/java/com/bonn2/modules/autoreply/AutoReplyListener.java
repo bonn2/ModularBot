@@ -1,8 +1,8 @@
 package com.bonn2.modules.autoreply;
 
-import com.vectorio.Bot;
-import com.vectorio.modules.core.permissions.PermissionLevel;
-import com.vectorio.modules.core.permissions.Permissions;
+import com.bonn2.Bot;
+import com.bonn2.modules.core.permissions.PermissionLevel;
+import com.bonn2.modules.core.permissions.Permissions;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -14,8 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.vectorio.modules.autoreply.AutoReply.AUTO_REPLIES;
-import static com.vectorio.modules.autoreply.AutoReply.save;
+import static com.bonn2.modules.autoreply.AutoReply.AUTO_REPLIES;
+import static com.bonn2.modules.autoreply.AutoReply.save;
 
 public class AutoReplyListener extends ListenerAdapter {
 
