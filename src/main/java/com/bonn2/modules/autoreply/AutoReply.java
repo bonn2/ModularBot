@@ -17,6 +17,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.bonn2.Bot.logger;
+
 public class AutoReply extends Module {
 
     /**
@@ -59,9 +61,9 @@ public class AutoReply extends Module {
     @Override
     public void load() {
         version = "v1.1";
-        System.out.println("Loading auto reply module " + version + "...");
+        logger.info("Loading auto reply module " + version + "...");
 
-        System.out.println("- Loading Saved Data...");
+        logger.info("- Loading Saved Data...");
         try {
             AUTO_REPLY_FILE = new File(Bot.localPath + "auto-replies.json");
             if (AUTO_REPLY_FILE.createNewFile()) {
@@ -73,11 +75,11 @@ public class AutoReply extends Module {
                     AUTO_REPLIES.add(new Data((JsonObject) jsonElement));
             }
         } catch (IOException e) {
-            System.out.println("Failed to save default file!");
+            logger.error("Failed to save default file!");
             e.printStackTrace();
         }
 
-        System.out.println("- Creating commands...");
+        logger.info("- Creating commands...");
         Commands.addCommand(
                 new CommandData(
                         "autoreply",
@@ -107,12 +109,12 @@ public class AutoReply extends Module {
                         )
                 ));
 
-        System.out.println("- Registering Listeners...");
+        logger.info("- Registering Listeners...");
         Bot.jda.addEventListener(new AutoReplyListener());
     }
 
     public static void save() {
-        System.out.println("Saving auto replies to file...");
+        logger.info("Saving auto replies to file...");
         try {
             JsonArray jsonArray = new JsonArray(AUTO_REPLIES.size());
             for (Data data : AUTO_REPLIES)

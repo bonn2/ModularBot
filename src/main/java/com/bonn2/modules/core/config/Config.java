@@ -16,6 +16,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.bonn2.Bot.logger;
+
 public class Config extends Module {
     static JsonObject CONFIG;
 
@@ -24,7 +26,7 @@ public class Config extends Module {
      * Write a new config to disk if no config exists.
      */
     public void load() {
-        System.out.println("Loading config...");
+        logger.info("Loading config...");
         try {
             File configFile = new File(Bot.localPath + "config.json");
             if (configFile.createNewFile()) {

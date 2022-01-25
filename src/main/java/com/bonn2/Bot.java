@@ -11,6 +11,8 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -20,6 +22,7 @@ import java.util.List;
 
 public class Bot
 {
+    public static Logger logger;
     public static JDA jda = null;
     public static String localPath;
     public static Guild guild;
@@ -31,7 +34,9 @@ public class Bot
 
         long startTime = System.currentTimeMillis();
 
-        System.out.println("Starting bot...");
+        logger = LoggerFactory.getLogger("Modular Bot");
+
+        logger.info("Starting Bot...");
 
         File jarFile = new File(Bot.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
         localPath = jarFile.getParent() + File.separator;
@@ -53,7 +58,7 @@ public class Bot
         // Wait until jda is initialized
         jda.awaitReady();
 
-        System.out.println("Logged in to: " + jda.getSelfUser().getAsTag());
+        logger.info("Logged in to: " + jda.getSelfUser().getAsTag());
 
         // Get Guild
         guild = jda.getGuildById(Config.get("guild").getAsString());
@@ -67,6 +72,6 @@ public class Bot
 
         Commands.updateCommands();
 
-        System.out.println("Finished Loading! (" + ((float)(System.currentTimeMillis() - startTime)) / 1000 + " sec)");
+        logger.info("Finished Loading! (" + ((float)(System.currentTimeMillis() - startTime)) / 1000 + " sec)");
     }
 }

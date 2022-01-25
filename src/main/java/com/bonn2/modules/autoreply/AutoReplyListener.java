@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.bonn2.Bot.logger;
 import static com.bonn2.modules.autoreply.AutoReply.AUTO_REPLIES;
 import static com.bonn2.modules.autoreply.AutoReply.save;
 
@@ -54,7 +55,7 @@ public class AutoReplyListener extends ListenerAdapter {
                     event.reply("That id does not exist.").setEphemeral(true).queue();
                     return;
                 }
-                System.out.printf("Deleting auto reply %s%n", index);
+                logger.info("Deleting auto reply %s%n".formatted(index));
                 AUTO_REPLIES.remove(index);
                 EmbedBuilder embedBuilder = new EmbedBuilder();
                 embedBuilder.setTitle("Deleted auto reply %s".formatted(index));
@@ -69,7 +70,7 @@ public class AutoReplyListener extends ListenerAdapter {
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
         if (event.getMember() == null) return;
         if (listeningIDS.containsKey(event.getMember().getId())) {
-            System.out.println("Creating a new auto reply...");
+            logger.info("Creating a new auto reply...");
             AutoReply.Data data = listeningIDS.get(event.getMember().getId());
             data.reply = event.getMessage().getContentRaw();
             listeningIDS.remove(event.getMember().getId());

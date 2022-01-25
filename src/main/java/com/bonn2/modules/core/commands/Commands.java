@@ -7,13 +7,15 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.bonn2.Bot.logger;
+
 public class Commands extends Module {
 
     private static final List<CommandData> commands = new LinkedList<>();
 
     @Override
     public void load() {
-        System.out.println("Loading commands module...");
+        logger.info("Loading commands module...");
         version = "v1.0";
     }
 
@@ -29,7 +31,7 @@ public class Commands extends Module {
      * Tell bot to send the commands to Discord
      */
     public static void updateCommands() {
-        System.out.println("Updating guild commands...");
+        logger.info("Updating guild commands...");
         Bot.guild.updateCommands().addCommands(commands).complete();
     }
 }
