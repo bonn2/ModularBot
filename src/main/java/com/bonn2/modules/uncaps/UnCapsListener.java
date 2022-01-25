@@ -60,7 +60,8 @@ public class UnCapsListener extends ListenerAdapter {
     private boolean shouldLower(char[] characters) {
         int combo = 0;
         for (char character : characters) {
-            if (combo >= 10) return true;
+            // TODO: 1/25/2022 Make combo configurable with Settings
+            if (combo >= 5) return true;
             if (isUpperCase(character)) combo++;
             else if (isLowerCase(character)) combo = 0;
         }
