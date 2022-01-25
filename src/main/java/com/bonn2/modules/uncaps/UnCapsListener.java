@@ -13,8 +13,8 @@ import java.util.concurrent.TimeUnit;
 
 public class UnCapsListener extends ListenerAdapter {
 
-    static final List<Character> uppercase = Arrays.asList('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
-    static final List<Character> lowercase = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
+    static final List<Character> UPPERCASE = Arrays.asList('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+    static final List<Character> LOWERCASE = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
@@ -65,8 +65,8 @@ public class UnCapsListener extends ListenerAdapter {
         for (char character : characters) {
             // TODO: 1/25/2022 Make combo configurable with Settings
             if (combo >= 5) return true;
-            if (uppercase.contains(character)) combo++;
-            else if (lowercase.contains(character)) combo = 0;
+            if (UPPERCASE.contains(character)) combo++;
+            else if (LOWERCASE.contains(character)) combo = 0;
         }
         return false;
     }
