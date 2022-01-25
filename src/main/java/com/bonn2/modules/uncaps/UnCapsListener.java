@@ -3,8 +3,6 @@ package com.bonn2.modules.uncaps;
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
-import com.bonn2.modules.core.config.Config;
-import net.dv8tion.jda.api.entities.Icon;
 import net.dv8tion.jda.api.entities.Webhook;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -14,8 +12,6 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class UnCapsListener extends ListenerAdapter {
-
-    Map<String, Webhook> webhooks = new HashMap<>();
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
