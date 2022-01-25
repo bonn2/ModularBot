@@ -35,7 +35,10 @@ public class UnCapsListener extends ListenerAdapter {
             // Create Webhook message
             WebhookMessageBuilder messageBuilder = new WebhookMessageBuilder();
             messageBuilder.setUsername(event.getAuthor().getName());
-            messageBuilder.setAvatarUrl(event.getAuthor().getEffectiveAvatarUrl());
+            if (event.getMember() == null)
+                messageBuilder.setAvatarUrl(event.getAuthor().getEffectiveAvatarUrl());
+            else
+                messageBuilder.setAvatarUrl(event.getMember().getEffectiveAvatarUrl());
             messageBuilder.setContent(content.toLowerCase(Locale.ROOT));
 
             // Send Message
