@@ -46,7 +46,7 @@ public class UnCapsListener extends ListenerAdapter {
                 messageBuilder.setUsername(event.getMember().getEffectiveName());
             }
 
-            messageBuilder.setContent(content.toLowerCase(Locale.ROOT));
+            messageBuilder.setContent(content.toLowerCase(Locale.ROOT).replace("@", "*"));
 
             // Send Message
             client.send(messageBuilder.build());
@@ -61,13 +61,17 @@ public class UnCapsListener extends ListenerAdapter {
     }
 
     private boolean shouldLower(char[] characters) {
-        int combo = 0;
+        float capitals = 0;
+        float total = 0;
         for (char character : characters) {
-            // TODO: 1/25/2022 Make combo configurable with Settings
-            if (combo >= 5) return true;
-            if (UPPERCASE.contains(character)) combo++;
-            else if (LOWERCASE.contains(character)) combo = 0;
+            if (UPPERCASE.contains(character)) {
+                capitals++;
+                total++;
+            }
+            else if (LOWERCASE.contains(character))
+                total++;
         }
+        if (total > 0 && capitals > 1) return (capitals / total) >= 0.5f;
         return false;
     }
 }
