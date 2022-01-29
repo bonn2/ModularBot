@@ -4,6 +4,7 @@ import com.bonn2.modules.autoreply.AutoReply;
 import com.bonn2.modules.core.commands.Commands;
 import com.bonn2.modules.core.config.Config;
 import com.bonn2.modules.core.permissions.Permissions;
+import com.bonn2.modules.pubictimeout.PublicTimeout;
 import com.bonn2.modules.uncaps.UnCaps;
 import com.google.gson.JsonElement;
 import net.dv8tion.jda.api.JDA;
@@ -69,6 +70,7 @@ public class Bot
         // Load Modules
         new AutoReply().load();
         new UnCaps().load();
+        new PublicTimeout().load();
 
         Commands.updateCommands();
 
