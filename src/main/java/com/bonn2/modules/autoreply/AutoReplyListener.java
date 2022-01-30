@@ -103,6 +103,4 @@ public class AutoReplyListener extends ListenerAdapter {
             }
         }
     }
-
-
 }
