@@ -3,7 +3,7 @@ package com.bonn2.modules.core.permissions;
 import com.bonn2.modules.Module;
 import com.bonn2.modules.core.config.Config;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -31,7 +31,7 @@ public class Permissions extends Module {
      * @param level The required permission level to pass the check.
      * @return True if the member has the provided permission level.
      */
-    public static boolean hasPermissionReply(@NotNull SlashCommandEvent event, @NotNull PermissionLevel level) {
+    public static boolean hasPermissionReply(@NotNull SlashCommandInteraction event, @NotNull PermissionLevel level) {
         if (hasPermission(Objects.requireNonNull(event.getMember()), level)) {
             return true;
         } else {

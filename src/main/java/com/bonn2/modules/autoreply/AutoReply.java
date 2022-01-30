@@ -2,10 +2,9 @@ package com.bonn2.modules.autoreply;
 
 import com.bonn2.Bot;
 import com.bonn2.modules.Module;
-import com.bonn2.modules.core.commands.Commands;
 import com.google.gson.*;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.bonn2.Bot.commands;
 import static com.bonn2.Bot.logger;
 
 public class AutoReply extends Module {
@@ -80,8 +80,8 @@ public class AutoReply extends Module {
         }
 
         logger.info("- Creating commands...");
-        Commands.addCommand(
-                new CommandData(
+        commands = commands.addCommands(
+                Commands.slash(
                         "autoreply",
                         "Manage auto-replies"
                 ).addSubcommands(

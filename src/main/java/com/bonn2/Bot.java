@@ -1,7 +1,6 @@
 package com.bonn2;
 
 import com.bonn2.modules.autoreply.AutoReply;
-import com.bonn2.modules.core.commands.Commands;
 import com.bonn2.modules.core.config.Config;
 import com.bonn2.modules.core.permissions.Permissions;
 import com.bonn2.modules.pubictimeout.PublicTimeout;
@@ -12,6 +11,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +29,7 @@ public class Bot
     public static Guild guild;
     public static TextChannel logChannel;
     public static List<String> modRoleIds = new ArrayList<>();
+    public static CommandListUpdateAction commands;
 
     // Handles starting the bot, and initializing static variables
     public static void main(String[] args) throws GeneralSecurityException, URISyntaxException, InterruptedException {
@@ -67,12 +68,15 @@ public class Bot
         // Get Channels
         logChannel = (TextChannel) jda.getGuildChannelById(Config.get("LOG_CHANNEL_ID").getAsString());
 
+        // Init commands update action
+        commands = guild.updateCommands();
+
         // Load Modules
         new AutoReply().load();
         new UnCaps().load();
         new PublicTimeout().load();
 
-        Commands.updateCommands();
+        commands.queue();
 
         logger.info("Finished Loading! (" + ((float)(System.currentTimeMillis() - startTime)) / 1000 + " sec)");
     }

@@ -4,7 +4,7 @@ import com.bonn2.Bot;
 import com.bonn2.modules.core.permissions.PermissionLevel;
 import com.bonn2.modules.core.permissions.Permissions;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +23,7 @@ public class AutoReplyListener extends ListenerAdapter {
     Map<String, AutoReply.Data> listeningIDS = new HashMap<>();
 
     @Override
-    public void onSlashCommand(@NotNull SlashCommandEvent event) {
+    public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         if (!event.getName().equals("autoreply")) return;
         if (!Permissions.hasPermissionReply(event, PermissionLevel.ADMIN)) return;
         switch (Objects.requireNonNull(event.getSubcommandName())) {
