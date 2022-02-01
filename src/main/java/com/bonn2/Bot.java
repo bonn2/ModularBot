@@ -20,7 +20,7 @@ import java.security.GeneralSecurityException;
 
 public class Bot
 {
-    public static Logger logger;
+    public final static Logger logger = LoggerFactory.getLogger("Modular Bot");
     public static JDA jda = null;
     public static String localPath;
     public static Guild guild;
@@ -31,8 +31,6 @@ public class Bot
     public static void main(String[] args) throws GeneralSecurityException, URISyntaxException, InterruptedException {
 
         long startTime = System.currentTimeMillis();
-
-        logger = LoggerFactory.getLogger("Modular Bot");
 
         logger.info("Starting Bot...");
 
@@ -58,7 +56,7 @@ public class Bot
         // Get Guild
         guild = jda.getGuildById(Config.get("guild").getAsString());
 
-        // Get Channels
+        // Get Log Channel
         logChannel = (TextChannel) jda.getGuildChannelById(Config.get("LOG_CHANNEL_ID").getAsString());
 
         // Init commands update action
