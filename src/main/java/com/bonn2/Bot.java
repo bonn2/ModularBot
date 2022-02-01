@@ -5,7 +5,6 @@ import com.bonn2.modules.core.config.Config;
 import com.bonn2.modules.core.permissions.Permissions;
 import com.bonn2.modules.pubictimeout.PublicTimeout;
 import com.bonn2.modules.uncaps.UnCaps;
-import com.google.gson.JsonElement;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -18,8 +17,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Bot
 {
@@ -28,7 +25,6 @@ public class Bot
     public static String localPath;
     public static Guild guild;
     public static TextChannel logChannel;
-    public static List<String> modRoleIds = new ArrayList<>();
     public static CommandListUpdateAction commands;
 
     // Handles starting the bot, and initializing static variables
@@ -46,9 +42,6 @@ public class Bot
         // Load data from disk
         new Config().load();
         new Permissions().load();
-        for (JsonElement element : Config.get("MODERATION_IDS").getAsJsonArray()) {
-            modRoleIds.add(element.getAsString());
-        }
 
         jda = JDABuilder.createDefault(Config.get("token").getAsString())
                 .enableIntents(
