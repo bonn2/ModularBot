@@ -16,14 +16,17 @@ import static com.bonn2.Bot.logger;
 
 public class PublicTimeout extends Module {
 
+    public PublicTimeout() {
+        version = "v1.1";
+        priority = Priority.POST_JDA_LOW;
+        name = "PublicTimeout";
+    }
+
     public static Role TIMEOUT_ROLE;
     public static Map<Member, ScheduledExecutorService> SCHEDULED = new HashMap<>();
 
     @Override
     public void load() {
-        version = "v1.1";
-        logger.info("Loading public timeout module " + version + "...");
-
         logger.info("- Getting Roles");
         TIMEOUT_ROLE = Bot.jda.getRoleById("936679469190635550");
 

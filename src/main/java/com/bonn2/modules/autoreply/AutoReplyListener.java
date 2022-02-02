@@ -66,6 +66,7 @@ public class AutoReplyListener extends ListenerAdapter {
         }
     }
 
+    // TODO: 2/1/2022 Replace this with just another /option
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
         if (event.getMember() == null) return;

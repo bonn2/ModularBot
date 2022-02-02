@@ -8,14 +8,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-import static com.bonn2.Bot.logger;
-
 public class Permissions extends Module {
+
+    public Permissions() {
+        version = "v1.0";
+        priority = Priority.PRE_JDA_LOW;
+        name = "Permissions";
+    }
 
     @Override
     public void load() {
-        logger.info("Loading permissions module...");
-        version = "v1.0";
         PermissionLevel.adminIDS = Config.getList("ADMIN_IDS");
         PermissionLevel.modIDS = Config.getList("MODERATION_IDS");
     }

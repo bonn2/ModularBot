@@ -21,6 +21,12 @@ import static com.bonn2.Bot.logger;
 
 public class AutoReply extends Module {
 
+    public AutoReply() {
+        version = "v1.1";
+        priority = Priority.POST_JDA_LOW;
+        name = "AutoReply";
+    }
+
     /**
      * Data holder for Auto replies
      */
@@ -60,9 +66,6 @@ public class AutoReply extends Module {
 
     @Override
     public void load() {
-        version = "v1.1";
-        logger.info("Loading auto reply module " + version + "...");
-
         logger.info("- Loading Saved Data...");
         try {
             AUTO_REPLY_FILE = new File(Bot.localPath + "auto-replies.json");

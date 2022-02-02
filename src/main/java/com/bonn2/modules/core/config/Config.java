@@ -19,6 +19,13 @@ import java.util.Objects;
 import static com.bonn2.Bot.logger;
 
 public class Config extends Module {
+
+    public Config() {
+        version = "v1.0";
+        priority = Priority.PRE_JDA_HIGH;
+        name = "Config";
+    }
+
     static JsonObject CONFIG;
 
     /**
