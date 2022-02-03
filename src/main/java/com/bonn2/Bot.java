@@ -2,7 +2,6 @@ package com.bonn2;
 
 import com.bonn2.modules.Module;
 import com.bonn2.modules.core.config.Config;
-import com.bonn2.utils.StringUtil;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
