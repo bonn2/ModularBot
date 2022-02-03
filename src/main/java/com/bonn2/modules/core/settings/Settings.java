@@ -39,10 +39,10 @@ public class Settings extends Module {
 
     @Override
     public void load() {
-        logger.info("- Registering listeners...");
+        logger.info("Registering listeners...");
         Bot.jda.addEventListener(new SettingsListener());
 
-        logger.info("- Creating commands...");
+        logger.info("Creating commands...");
         commands = commands.addCommands(
                 Commands.slash(
                         "settings",
@@ -65,7 +65,7 @@ public class Settings extends Module {
                 )
         );
 
-        logger.info("- Loading settings from file...");
+        logger.info("Loading settings from file...");
         try {
             if (!settingsFile.createNewFile()) {
                 JsonObject jsonObject = new Gson().fromJson(new String(new FileInputStream(settingsFile).readAllBytes()), JsonObject.class);
@@ -73,15 +73,33 @@ public class Settings extends Module {
                     for (String moduleKey : jsonObject.keySet()) {
                         Module module = Bot.getModuleIgnoreCase(moduleKey);
                         if (module != null) {
+                            Map<String, Setting.Type> registeredSettings = getRegisteredSettings(moduleKey);
                             for (String settingKey : jsonObject.get(moduleKey).getAsJsonObject().keySet()) {
-                                set(
-                                        module,
-                                        settingKey,
-                                        jsonObject.get(moduleKey).getAsJsonObject().get(settingKey)
-                                                .getAsString()
-                                                .split(":", 2)[1],
-                                        false
-                                );
+                                if (registeredSettings.containsKey(settingKey)) {
+                                    String[] typeValue = jsonObject.get(moduleKey).getAsJsonObject().get(settingKey)
+                                            .getAsString()
+                                            .split(":", 2);
+                                    if (Setting.Type.fromString(typeValue[0]) == registeredSettings.get(settingKey)) {
+                                        set(
+                                                module,
+                                                settingKey,
+                                                typeValue[1],
+                                                false
+                                        );
+                                    } else {
+                                        logger.warn("Type mismatch in setting %s -> %s; %s != %s".formatted(
+                                                module.name,
+                                                settingKey,
+                                                Setting.Type.fromString(typeValue[0]),
+                                                getRegisteredSettings(moduleKey).get(settingKey)
+                                        ));
+                                    }
+                                } else {
+                                    logger.warn("Found unregistered settings for module %s; %s".formatted(
+                                            module.name,
+                                            settingKey
+                                    ));
+                                }
                             }
                         } else {
                             logger.warn("Found settings for a module that does not exist: %s".formatted(moduleKey));
@@ -116,7 +134,10 @@ public class Settings extends Module {
     }
 
     public static Map<String, Setting.Type> getRegisteredSettings(String module) {
-        return registeredSettings.get(module);
+        if (registeredSettings.containsKey(module))
+            return registeredSettings.get(module);
+        else
+            return new HashMap<>();
     }
 
     private static void save() {
@@ -149,11 +170,11 @@ public class Settings extends Module {
         }
     }
 
-    public static void set(@NotNull Module module, String key, String value) {
-        set(module, key, value, true);
+    public static boolean set(@NotNull Module module, String key, String value) {
+        return set(module, key, value, true);
     }
 
-    public static void set(@NotNull Module module, String key, String value, boolean save) {
+    public static boolean set(@NotNull Module module, String key, String value, boolean save) {
         // Check if setting is registered and get type
         Setting.Type type;
         if (hasSetting(module, key)) {
@@ -164,7 +185,7 @@ public class Settings extends Module {
                     key,
                     value
             ));
-            return;
+            return false;
         }
         // Get current module settings or default
         Map<String, Setting> moduleSettings;
@@ -174,11 +195,16 @@ public class Settings extends Module {
             moduleSettings = new HashMap<>();
 
         // Set module setting
-        moduleSettings.put(key, Setting.of(value, type));
+        Setting setting = Setting.of(value, type);
+        if (setting == null) return false;
+        moduleSettings.put(key, setting);
         settings.put(module.name, moduleSettings);
 
         // Save the new settings to file
         if (save) save();
+
+        // Success
+        return true;
     }
 
     /**

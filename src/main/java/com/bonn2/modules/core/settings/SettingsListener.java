@@ -63,7 +63,7 @@ public class SettingsListener extends ListenerAdapter {
             event.replyEmbeds(embedBuilder.build()).queue();
             return;
         }
-        String key = Objects.requireNonNull(event.getOption("setting")).getAsString();
+        String key = Objects.requireNonNull(event.getOption("setting")).getAsString().toLowerCase();
         if (event.getOption("value") == null) {
             if (Settings.hasSetting(module, key)) {
                 event.reply("You must provide a value to set %s to.".formatted(StringUtil.capitalize(key)))
@@ -79,21 +79,26 @@ public class SettingsListener extends ListenerAdapter {
         }
         String value = Objects.requireNonNull(event.getOption("value")).getAsString();
         if (Settings.hasSetting(module, key)) {
-            Settings.set(module, key, value);
-            EmbedBuilder embedBuilder = new EmbedBuilder();
-            embedBuilder.setTitle("%s settings".formatted(module.name));
-            embedBuilder.setColor(Color.CYAN);
-            for (String k : registeredSettings.keySet()) {
-                embedBuilder.addField(
-                        StringUtil.capitalize(k),
-                        "Type: %s\nValue: %s".formatted(
-                                StringUtil.capitalize(registeredSettings.get(k).toString().toLowerCase()),
-                                Objects.requireNonNull(Settings.get(module, k)).getAsString()
-                        ),
-                        true
-                );
+            if (Settings.set(module, key, value)) {
+                EmbedBuilder embedBuilder = new EmbedBuilder();
+                embedBuilder.setTitle("%s settings".formatted(module.name));
+                embedBuilder.setColor(Color.CYAN);
+                for (String k : registeredSettings.keySet()) {
+                    embedBuilder.addField(
+                            StringUtil.capitalize(k),
+                            "Type: %s\nValue: %s".formatted(
+                                    StringUtil.capitalize(registeredSettings.get(k).toString().toLowerCase()),
+                                    Objects.requireNonNull(Settings.get(module, k)).getAsString()
+                            ),
+                            true
+                    );
+                }
+                event.replyEmbeds(embedBuilder.build()).queue();
+            } else {
+                event.reply("That is not a valid value!")
+                        .setEphemeral(true)
+                        .queue();
             }
-            event.replyEmbeds(embedBuilder.build()).queue();
         } else {
             event.reply("The module %s does not have a setting %s!".formatted(module.name, key))
                     .setEphemeral(true)
