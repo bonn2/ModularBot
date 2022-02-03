@@ -2,6 +2,7 @@ package com.bonn2;
 
 import com.bonn2.modules.Module;
 import com.bonn2.modules.core.config.Config;
+import com.bonn2.utils.StringUtil;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -47,6 +48,9 @@ public class Bot
             logger.info("Located module %s".formatted(module.getCanonicalName()));
             modules.add(module.getDeclaredConstructor().newInstance());
         }
+
+        logger.info("Sorting modules...");
+        modules.sort(new Module.SortByName());
 
         logger.info("Loading Pre-JDA Modules...");
         for (Module module : modules) {
@@ -96,9 +100,21 @@ public class Bot
                 module.load();
             }
         }
+        for (Module module : modules) {
+            if (module.priority.equals(Module.Priority.SETTINGS)) {
+                logger.info("Loading %s version %s".formatted(module.name, module.version));
+                module.load();
+            }
+        }
 
         commands.queue();
 
         logger.info("Finished Loading! (" + ((float)(System.currentTimeMillis() - startTime)) / 1000 + " sec)");
+    }
+
+    public static Module getModuleIgnoreCase(String name) {
+        for (Module module : modules)
+            if (module.name.equalsIgnoreCase(name)) return module;
+        return null;
     }
 }

@@ -18,7 +18,7 @@ public class UnCaps extends Module {
     @Override
     public void load() {
         logger.info("- Registering settings...");
-        Settings.register("uncaps", "threshold", Setting.Type.FLOAT);
+        Settings.register(this, "threshold", Setting.Type.FLOAT, String.valueOf(0.5));
 
         logger.info("- Registering Listeners...");
         Bot.jda.addEventListener(new UnCapsListener());
