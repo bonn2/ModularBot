@@ -1,12 +1,7 @@
 package com.bonn2;
 
 import com.bonn2.modules.Module;
-import com.bonn2.modules.autoreply.AutoReply;
 import com.bonn2.modules.core.config.Config;
-import com.bonn2.modules.core.permissions.Permissions;
-import com.bonn2.modules.core.settings.Settings;
-import com.bonn2.modules.pubictimeout.PublicTimeout;
-import com.bonn2.modules.uncaps.UnCaps;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
