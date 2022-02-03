@@ -27,13 +27,13 @@ public class PublicTimeout extends Module {
 
     @Override
     public void load() {
-        logger.info("- Getting Roles");
+        logger.info("Getting Roles");
         TIMEOUT_ROLE = Bot.jda.getRoleById("936679469190635550");
 
-        logger.info("- Registering Listeners...");
+        logger.info("Registering Listeners...");
         Bot.jda.addEventListener(new PublicTimeoutListener());
 
-        logger.info("- Checking Users for old Timeout Roles");
+        logger.info("Checking Users for old Timeout Roles");
         checkUsers();
     }
 

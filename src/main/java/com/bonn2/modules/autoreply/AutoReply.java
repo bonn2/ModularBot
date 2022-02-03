@@ -66,7 +66,7 @@ public class AutoReply extends Module {
 
     @Override
     public void load() {
-        logger.info("- Loading Saved Data...");
+        logger.info("Loading Saved Data...");
         try {
             AUTO_REPLY_FILE = new File(Bot.localPath + "auto-replies.json");
             if (AUTO_REPLY_FILE.createNewFile()) {
@@ -82,7 +82,7 @@ public class AutoReply extends Module {
             e.printStackTrace();
         }
 
-        logger.info("- Creating commands...");
+        logger.info("Creating commands...");
         commands = commands.addCommands(
                 Commands.slash(
                         "autoreply",
@@ -112,7 +112,7 @@ public class AutoReply extends Module {
                         )
                 ));
 
-        logger.info("- Registering Listeners...");
+        logger.info("Registering Listeners...");
         Bot.jda.addEventListener(new AutoReplyListener());
     }
 
