@@ -28,10 +28,16 @@ public class Config extends Module {
 
     static JsonObject CONFIG;
 
+    @Override
+    public void registerSettings() {
+
+    }
+
     /**
      * Load the config from file into ram.
      * Write a new config to disk if no config exists.
      */
+    @Override
     public void load() {
         logger.info("Loading config...");
         try {

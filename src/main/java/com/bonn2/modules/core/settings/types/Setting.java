@@ -2,18 +2,20 @@ package com.bonn2.modules.core.settings.types;
 
 import com.bonn2.Bot;
 import com.google.gson.JsonElement;
+import net.dv8tion.jda.api.entities.Role;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class Setting {
 
     public enum Type {
-        INT, DOUBLE, FLOAT, NULL;
+        INT, DOUBLE, FLOAT, ROLE, NULL;
 
         public static Type fromString(String string) {
             return switch (string.toUpperCase()) {
                 case "INT" -> INT;
                 case "DOUBLE" -> DOUBLE;
                 case "FLOAT" -> FLOAT;
+                case "ROLE" -> ROLE;
                 default -> NULL;
             };
         }
@@ -46,6 +48,7 @@ public abstract class Setting {
                 case INT -> new IntSetting(Integer.parseInt(value));
                 case DOUBLE -> new DoubleSetting(Double.parseDouble(value));
                 case FLOAT -> new FloatSetting(Float.parseFloat(value));
+                case ROLE -> new RoleSetting(value);
                 default -> null;
             };
         } catch (NumberFormatException ignored) {
@@ -68,5 +71,10 @@ public abstract class Setting {
     public float getAsFloat() {
         Bot.logger.warn("Getting unimplemented setting value!");
         return 0;
+    }
+
+    public Role getAsRole() {
+        Bot.logger.warn("Getting unimplemented setting value!");
+        return null;
     }
 }

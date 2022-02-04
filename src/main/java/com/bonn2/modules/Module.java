@@ -14,6 +14,7 @@ public abstract class Module {
     public Priority priority = Priority.POST_JDA_LOW;
     public String name = "Unnamed";
 
+    public abstract void registerSettings();
     public abstract void load();
 
     public static class SortByName implements Comparator<Module> {

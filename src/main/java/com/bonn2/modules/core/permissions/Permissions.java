@@ -17,6 +17,11 @@ public class Permissions extends Module {
     }
 
     @Override
+    public void registerSettings() {
+
+    }
+
+    @Override
     public void load() {
         PermissionLevel.adminIDS = Config.getList("ADMIN_IDS");
         PermissionLevel.modIDS = Config.getList("MODERATION_IDS");

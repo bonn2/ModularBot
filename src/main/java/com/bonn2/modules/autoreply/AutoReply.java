@@ -65,6 +65,11 @@ public class AutoReply extends Module {
     static List<Data> AUTO_REPLIES = new LinkedList<>();
 
     @Override
+    public void registerSettings() {
+
+    }
+
+    @Override
     public void load() {
         logger.info("Loading Saved Data...");
         try {

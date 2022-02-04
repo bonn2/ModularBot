@@ -38,6 +38,11 @@ public class Settings extends Module {
     static File settingsFile = new File(localPath + "/settings.json");
 
     @Override
+    public void registerSettings() {
+
+    }
+
+    @Override
     public void load() {
         logger.info("Registering listeners...");
         Bot.jda.addEventListener(new SettingsListener());
@@ -178,7 +183,7 @@ public class Settings extends Module {
         // Check if setting is registered and get type
         Setting.Type type;
         if (hasSetting(module, key)) {
-                type = registeredSettings.get(module.name).get(key);
+                type = getRegisteredSettingType(module, key);
         } else {
             logger.warn("Tried to set an unregistered setting!\nModule: %s\nKey: %s\nValue: %s".formatted(
                     module.name,
@@ -242,6 +247,13 @@ public class Settings extends Module {
         if (registeredSettings.containsKey(module.name))
             return registeredSettings.get(module.name).containsKey(key);
         return false;
+    }
+
+    public static Setting.Type getRegisteredSettingType(Module module, String key) {
+        if (hasSetting(module, key)) {
+            return registeredSettings.get(module.name).get(key);
+        }
+        return Setting.Type.NULL;
     }
 
 }
