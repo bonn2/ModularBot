@@ -15,7 +15,7 @@ repositories {
 
 dependencies {
     implementation('net.dv8tion:JDA:5.0.0-alpha.5')
-    implementation('org.slf4j:slf4j-simple:1.7.33')
+    implementation('org.slf4j:slf4j-simple:2.0.0-alpha6')
     implementation('com.google.code.gson:gson:2.8.9')
     implementation('club.minnced:discord-webhooks:0.7.5')
     implementation('org.reflections:reflections:0.10.2')
