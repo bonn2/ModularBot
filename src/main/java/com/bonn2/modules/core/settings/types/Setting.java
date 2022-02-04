@@ -8,7 +8,13 @@ import org.jetbrains.annotations.NotNull;
 public abstract class Setting {
 
     public enum Type {
-        INT, DOUBLE, FLOAT, ROLE, NULL;
+        INT("0"), DOUBLE("0"), FLOAT("0"), ROLE("0"), NULL("0");
+
+        public final String unset;
+
+        Type(String unset) {
+            this.unset = unset;
+        }
 
         public static Type fromString(String string) {
             return switch (string.toUpperCase()) {
@@ -60,17 +66,17 @@ public abstract class Setting {
 
     public double getAsDouble() {
         Bot.logger.warn("Getting unimplemented setting value!");
-        return 0;
+        return Double.parseDouble(Type.DOUBLE.unset);
     }
 
     public int getAsInt() {
         Bot.logger.warn("Getting unimplemented setting value!");
-        return 0;
+        return Integer.parseInt(Type.INT.unset);
     }
 
     public float getAsFloat() {
         Bot.logger.warn("Getting unimplemented setting value!");
-        return 0;
+        return Float.parseFloat(Type.FLOAT.unset);
     }
 
     public Role getAsRole() {

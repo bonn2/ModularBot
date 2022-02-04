@@ -28,7 +28,7 @@ public class PublicTimeout extends Module {
 
     @Override
     public void registerSettings() {
-        Settings.register(this, "timeout_role", Setting.Type.ROLE, "0");
+        Settings.register(this, "timeout_role", Setting.Type.ROLE, Setting.Type.ROLE.unset);
     }
 
     @Override
@@ -60,18 +60,17 @@ public class PublicTimeout extends Module {
 
     public void scheduleRoleRemoval(@NotNull Member member) {
         Role timeoutRole = getTimeoutRole();
-        ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(1);
-        executor.schedule(
+        // Store executor so it can be canceled
+        PublicTimeout.SCHEDULED.put(member, new ScheduledThreadPoolExecutor(1));
+        // Schedule removal after storage to prevent rescheduling
+        PublicTimeout.SCHEDULED.get(member).schedule(
                 () -> {
-                    if (member.getRoles().contains(timeoutRole))
-                        Bot.guild.removeRoleFromMember(member, timeoutRole).queue();
+                    Bot.guild.removeRoleFromMember(member, timeoutRole).queue();
                     PublicTimeout.SCHEDULED.remove(member);
                 },
                 Objects.requireNonNull(member.getTimeOutEnd()).toEpochSecond() - System.currentTimeMillis() / 1000,
                 TimeUnit.SECONDS
         );
-        // Store executor so it can be canceled
-        PublicTimeout.SCHEDULED.put(member, executor);
     }
 
     public Role getTimeoutRole() {
