@@ -5,10 +5,14 @@ import com.google.gson.JsonElement;
 import net.dv8tion.jda.api.entities.Role;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Setting {
 
     public enum Type {
-        INT("0"), DOUBLE("0"), FLOAT("0"), ROLE("0"), NULL("0");
+        INT("0"), DOUBLE("0"), FLOAT("0"), ROLE("0"), NULL("0"),
+        ROLE_LIST("0");
 
         public final String unset;
 
@@ -22,6 +26,7 @@ public abstract class Setting {
                 case "DOUBLE" -> DOUBLE;
                 case "FLOAT" -> FLOAT;
                 case "ROLE" -> ROLE;
+                case "ROLE_LIST" -> ROLE_LIST;
                 default -> NULL;
             };
         }
@@ -55,6 +60,7 @@ public abstract class Setting {
                 case DOUBLE -> new DoubleSetting(Double.parseDouble(value));
                 case FLOAT -> new FloatSetting(Float.parseFloat(value));
                 case ROLE -> new RoleSetting(value);
+                case ROLE_LIST -> new RoleListSetting(value);
                 default -> null;
             };
         } catch (NumberFormatException ignored) {
@@ -62,7 +68,7 @@ public abstract class Setting {
         }
     }
 
-    public abstract String getAsString();
+    public abstract String getDisplayString();
 
     public double getAsDouble() {
         Bot.logger.warn("Getting unimplemented setting value!");
@@ -82,5 +88,15 @@ public abstract class Setting {
     public Role getAsRole() {
         Bot.logger.warn("Getting unimplemented setting value!");
         return null;
+    }
+
+    public List<Role> getAsRoleList() {
+        Bot.logger.warn("Getting unimplemented setting value!");
+        return new ArrayList<>();
+    }
+
+    public List<String> getAsRoleIdList() {
+        Bot.logger.warn("Getting unimplemented setting value!");
+        return new ArrayList<>();
     }
 }

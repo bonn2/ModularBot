@@ -19,7 +19,7 @@ public class RoleSetting extends Setting {
     }
 
     @Override
-    public String getAsString() {
+    public String getDisplayString() {
         return "<@&%s>".formatted(id);
     }
 

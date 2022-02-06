@@ -17,7 +17,7 @@ public class DoubleSetting extends Setting {
     }
 
     @Override
-    public String getAsString() {
+    public String getDisplayString() {
         return String.valueOf(value);
     }
 

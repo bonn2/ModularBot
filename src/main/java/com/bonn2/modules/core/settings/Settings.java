@@ -175,6 +175,10 @@ public class Settings extends Module {
         }
     }
 
+    public static boolean set(@NotNull Module module, String key, @NotNull Setting value) {
+        return set(module, key, value.toJson().getAsString().split(":", 2)[1]);
+    }
+
     public static boolean set(@NotNull Module module, String key, String value) {
         return set(module, key, value, true);
     }

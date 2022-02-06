@@ -17,7 +17,7 @@ public class FloatSetting extends Setting {
     }
 
     @Override
-    public String getAsString() {
+    public String getDisplayString() {
         return String.valueOf(value);
     }
 

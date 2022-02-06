@@ -2,6 +2,8 @@ package com.bonn2.modules.core.permissions;
 
 import com.bonn2.modules.Module;
 import com.bonn2.modules.core.config.Config;
+import com.bonn2.modules.core.settings.Settings;
+import com.bonn2.modules.core.settings.types.Setting;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import org.jetbrains.annotations.NotNull;
@@ -11,20 +13,21 @@ import java.util.Objects;
 public class Permissions extends Module {
 
     public Permissions() {
-        version = "v1.0";
-        priority = Priority.PRE_JDA_LOW;
+        version = "v1.1";
+        priority = Priority.POST_JDA_HIGH;
         name = "Permissions";
     }
 
     @Override
     public void registerSettings() {
-
+        Settings.register(this, "admin_roles", Setting.Type.ROLE_LIST, Setting.Type.ROLE_LIST.unset);
+        Settings.register(this, "mod_roles", Setting.Type.ROLE_LIST, Setting.Type.ROLE_LIST.unset);
     }
 
     @Override
     public void load() {
-        PermissionLevel.adminIDS = Config.getList("ADMIN_IDS");
-        PermissionLevel.modIDS = Config.getList("MODERATION_IDS");
+        PermissionLevel.ownerId = Config.get("owner_id").getAsString();
+        PermissionLevel.permissions = this;
     }
 
     public static boolean hasPermission(@NotNull Member member, @NotNull PermissionLevel level) {
