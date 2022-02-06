@@ -54,14 +54,14 @@ public class Bot
         logger.info("Loading Pre-JDA Modules...");
         for (Module module : modules) {
             if (module.priority.equals(Module.Priority.PRE_JDA_HIGH)) {
-                logger.info("Loading %s version %s".formatted(module.name, module.version));
+                logger.info("Loading %s version %s...".formatted(module.name, module.version));
                 module.load();
                 logger.info("Loaded %s version %s".formatted(module.name, module.version));
             }
         }
         for (Module module : modules) {
             if (module.priority.equals(Module.Priority.PRE_JDA_LOW)) {
-                logger.info("Loading %s version %s".formatted(module.name, module.version));
+                logger.info("Loading %s version %s...".formatted(module.name, module.version));
                 module.load();
                 logger.info("Loaded %s version %s".formatted(module.name, module.version));
             }
@@ -97,21 +97,21 @@ public class Bot
         logger.info("Loading Post-JDA Modules...");
         for (Module module : modules) {
             if (module.priority.equals(Module.Priority.SETTINGS)) {
-                logger.info("Loading %s version %s".formatted(module.name, module.version));
+                logger.info("Loading %s version %s...".formatted(module.name, module.version));
                 module.load();
                 logger.info("Loaded %s version %s".formatted(module.name, module.version));
             }
         }
         for (Module module : modules) {
             if (module.priority.equals(Module.Priority.POST_JDA_HIGH)) {
-                logger.info("Loading %s version %s".formatted(module.name, module.version));
+                logger.info("Loading %s version %s...".formatted(module.name, module.version));
                 module.load();
                 logger.info("Loaded %s version %s".formatted(module.name, module.version));
             }
         }
         for (Module module : modules) {
             if (module.priority.equals(Module.Priority.POST_JDA_LOW)) {
-                logger.info("Loading %s version %s".formatted(module.name, module.version));
+                logger.info("Loading %s version %s...".formatted(module.name, module.version));
                 module.load();
                 logger.info("Loaded %s version %s".formatted(module.name, module.version));
             }
