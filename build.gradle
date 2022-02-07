@@ -3,8 +3,12 @@ plugins {
     id'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
+mainClassName = 'com.bonn2.Bot'
+
 group 'com.bonn2'
 version '1.0'
+
+sourceCompatibility = targetCompatibility = 16
 
 repositories {
     mavenCentral()
