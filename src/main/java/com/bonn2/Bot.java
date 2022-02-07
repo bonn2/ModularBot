@@ -17,6 +17,7 @@ import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class Bot
@@ -63,6 +64,12 @@ public class Bot
                 module.load();
                 logger.info("Loaded %s version %s".formatted(module.name, module.version));
             }
+        }
+
+        // Check token
+        if (Objects.equals(Config.get("guild").getAsString(), "")) {
+            logger.error("Token is empty!");
+            return;
         }
 
         jda = JDABuilder.createDefault(Config.get("token").getAsString())
