@@ -24,7 +24,7 @@ public class SettingsListener extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
-        if (event.getCommandId().equals("settings")) return;
+        if (!event.getName().equals("settings")) return;
         if (!Permissions.hasPermissionReply(event.getInteraction(), PermissionLevel.ADMIN)) return;
         // Return list of all modules with registered settings
         if (event.getOption("module") == null) {
