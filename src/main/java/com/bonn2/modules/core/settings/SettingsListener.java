@@ -102,7 +102,7 @@ public class SettingsListener extends ListenerAdapter {
                                 .queue();
                         return;
                     }
-                    Role role = Bot.jda.getRoleById(value);
+                    Role role = Bot.jda.getRoleById(value.trim().substring(3, 21));
                     if (role == null) {
                         event.reply("Could not find that role!")
                                 .setEphemeral(true)
