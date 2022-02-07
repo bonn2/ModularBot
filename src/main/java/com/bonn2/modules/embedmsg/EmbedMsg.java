@@ -1,4 +1,4 @@
-package com.bonn2.modules.displaymessagelink;
+package com.bonn2.modules.embedmsg;
 
 import com.bonn2.Bot;
 import com.bonn2.modules.Module;
@@ -7,12 +7,12 @@ import com.bonn2.modules.core.settings.types.Setting;
 
 import static com.bonn2.Bot.logger;
 
-public class DisplayMessageLink extends Module {
+public class EmbedMsg extends Module {
 
-    public DisplayMessageLink() {
-        version = "v1.0";
+    public EmbedMsg() {
+        version = "v1.1";
         priority = Priority.POST_JDA_LOW;
-        name = "DisplayMessageLink";
+        name = "EmbedMsg";
     }
 
     @Override
@@ -23,6 +23,6 @@ public class DisplayMessageLink extends Module {
     @Override
     public void load() {
         logger.info("Registering Listeners...");
-        Bot.jda.addEventListener(new DisplayMessageLinkListener(this));
+        Bot.jda.addEventListener(new EmbedMsgListener(this));
     }
 }

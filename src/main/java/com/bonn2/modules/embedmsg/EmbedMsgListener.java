@@ -1,4 +1,4 @@
-package com.bonn2.modules.displaymessagelink;
+package com.bonn2.modules.embedmsg;
 
 import com.bonn2.Bot;
 import com.bonn2.modules.core.settings.Settings;
@@ -16,12 +16,12 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DisplayMessageLinkListener extends ListenerAdapter {
+public class EmbedMsgListener extends ListenerAdapter {
 
     static Pattern linkPattern = Pattern.compile("https://discord\\.com/channels/[0-9]+/[0-9]+/[0-9]+");
-    final DisplayMessageLink module;
+    final EmbedMsg module;
 
-    public DisplayMessageLinkListener(DisplayMessageLink module) {
+    public EmbedMsgListener(EmbedMsg module) {
         this.module = module;
     }
 
