@@ -1,4 +1,4 @@
-package com.bonn2.modules.pubictimeout;
+package com.bonn2.modules.showtimeout;
 
 import com.bonn2.Bot;
 import com.bonn2.modules.Module;
@@ -17,12 +17,12 @@ import java.util.concurrent.TimeUnit;
 
 import static com.bonn2.Bot.logger;
 
-public class PublicTimeout extends Module {
+public class ShowTimeout extends Module {
 
-    public PublicTimeout() {
-        version = "v1.1";
+    public ShowTimeout() {
+        version = "v1.2";
         priority = Priority.POST_JDA_LOW;
-        name = "PublicTimeout";
+        name = "ShowTimeout";
     }
     public static Map<Member, ScheduledExecutorService> SCHEDULED = new HashMap<>();
 
@@ -34,7 +34,7 @@ public class PublicTimeout extends Module {
     @Override
     public void load() {
         logger.info("Registering Listeners...");
-        Bot.jda.addEventListener(new PublicTimeoutListener(this));
+        Bot.jda.addEventListener(new ShowTimeoutListener(this));
         logger.info("Checking Users for old Timeout Roles");
         checkUsers();
     }
@@ -61,12 +61,12 @@ public class PublicTimeout extends Module {
     public void scheduleRoleRemoval(@NotNull Member member) {
         Role timeoutRole = getTimeoutRole();
         // Store executor so it can be canceled
-        PublicTimeout.SCHEDULED.put(member, new ScheduledThreadPoolExecutor(1));
+        ShowTimeout.SCHEDULED.put(member, new ScheduledThreadPoolExecutor(1));
         // Schedule removal after storage to prevent rescheduling
-        PublicTimeout.SCHEDULED.get(member).schedule(
+        ShowTimeout.SCHEDULED.get(member).schedule(
                 () -> {
                     Bot.guild.removeRoleFromMember(member, timeoutRole).queue();
-                    PublicTimeout.SCHEDULED.remove(member);
+                    ShowTimeout.SCHEDULED.remove(member);
                 },
                 Objects.requireNonNull(member.getTimeOutEnd()).toEpochSecond() - System.currentTimeMillis() / 1000,
                 TimeUnit.SECONDS
