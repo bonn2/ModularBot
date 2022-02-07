@@ -5,7 +5,6 @@ import com.bonn2.modules.core.config.Config;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import org.reflections.Reflections;
@@ -26,7 +25,6 @@ public class Bot
     public static JDA jda = null;
     public static String localPath;
     public static Guild guild;
-    public static TextChannel logChannel;
     public static CommandListUpdateAction commands;
     public static List<Module> modules = new LinkedList<>();
 
@@ -81,9 +79,10 @@ public class Bot
 
         // Get Guild
         guild = jda.getGuildById(Config.get("guild").getAsString());
-
-        // Get Log Channel
-        logChannel = (TextChannel) jda.getGuildChannelById(Config.get("LOG_CHANNEL_ID").getAsString());
+        if (guild == null) {
+            logger.error("Failed to get guild!");
+            return;
+        }
 
         // Init commands update action
         commands = guild.updateCommands();

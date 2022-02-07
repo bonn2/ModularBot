@@ -1,6 +1,5 @@
 package com.bonn2.modules.autoreply;
 
-import com.bonn2.Bot;
 import com.bonn2.modules.core.permissions.PermissionLevel;
 import com.bonn2.modules.core.permissions.Permissions;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -85,7 +84,7 @@ public class AutoReplyListener extends ListenerAdapter {
                 words.append(word).append(" ");
             embedBuilder.addField("Words", words.toString(), false);
             embedBuilder.addField("Reply", data.reply, false);
-            Bot.logChannel.sendMessageEmbeds(embedBuilder.build()).queue();
+            event.getTextChannel().sendMessageEmbeds(embedBuilder.build()).queue();
             event.getMessage().delete().queue();
             // Save auto replies to file
             save();
