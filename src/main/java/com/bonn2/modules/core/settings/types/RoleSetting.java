@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.entities.Role;
 
 public class RoleSetting extends Setting {
 
-    public String id;
+    public final String id;
 
     public RoleSetting(String id) {
         this.id = id;
