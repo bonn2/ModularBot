@@ -3,6 +3,7 @@ package com.bonn2.modules.uncaps;
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
+import com.bonn2.modules.core.settings.Settings;
 import net.dv8tion.jda.api.entities.Webhook;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -18,6 +19,12 @@ public class UnCapsListener extends ListenerAdapter {
 
     static final List<Character> UPPERCASE = Arrays.asList('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
     static final List<Character> LOWERCASE = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
+
+    final UnCaps module;
+
+    public UnCapsListener(UnCaps module) {
+        this.module = module;
+    }
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
@@ -74,7 +81,7 @@ public class UnCapsListener extends ListenerAdapter {
             else if (LOWERCASE.contains(character))
                 total++;
         }
-        if (total > 0 && capitals > 1) return (capitals / total) >= 0.5f;
+        if (total > 0 && capitals > 1) return (capitals / total) >= Settings.get(module, "threshold").getAsFloat();
         return false;
     }
 }

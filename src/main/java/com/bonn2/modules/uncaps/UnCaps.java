@@ -26,6 +26,6 @@ public class UnCaps extends Module {
         Settings.register(this, "threshold", Setting.Type.FLOAT, String.valueOf(0.5));
 
         logger.info("Registering Listeners...");
-        Bot.jda.addEventListener(new UnCapsListener());
+        Bot.jda.addEventListener(new UnCapsListener(this));
     }
 }
