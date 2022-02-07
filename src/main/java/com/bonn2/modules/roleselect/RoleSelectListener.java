@@ -56,7 +56,10 @@ public class RoleSelectListener extends ListenerAdapter {
         // Create selection menu
         SelectMenu.Builder selectionBuilder = SelectMenu.create("roleselect")
                 .setMinValues((int) event.getOption("min_selection").getAsLong())
-                .setMaxValues((int) event.getOption("max_selection").getAsLong())
+                .setMaxValues(
+                        event.getOption("max_selection").getAsLong() > 25 ?
+                                25 : (int) event.getOption("max_selection").getAsLong()
+                )
                 .setPlaceholder(event.getOption("placeholder").getAsString());
 
         // List of added roles (needed for security)
