@@ -1,6 +1,5 @@
 package com.bonn2.modules.autoreply;
 
-import com.bonn2.modules.core.permissions.PermissionLevel;
 import com.bonn2.modules.core.permissions.Permissions;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -24,7 +23,7 @@ public class AutoReplyListener extends ListenerAdapter {
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         if (!event.getName().equals("autoreply")) return;
-        if (!Permissions.hasPermissionReply(event, PermissionLevel.ADMIN)) return;
+        if (!Permissions.hasPermissionReply(event, Permissions.Level.ADMIN)) return;
         switch (Objects.requireNonNull(event.getSubcommandName())) {
             case "create" -> {
                 AutoReply.Data data = new AutoReply.Data(

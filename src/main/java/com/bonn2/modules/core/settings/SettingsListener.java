@@ -2,7 +2,6 @@ package com.bonn2.modules.core.settings;
 
 import com.bonn2.Bot;
 import com.bonn2.modules.Module;
-import com.bonn2.modules.core.permissions.PermissionLevel;
 import com.bonn2.modules.core.permissions.Permissions;
 import com.bonn2.modules.core.settings.types.RoleListSetting;
 import com.bonn2.modules.core.settings.types.Setting;
@@ -20,14 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.regex.Matcher;
 
 public class SettingsListener extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         if (!event.getName().equals("settings")) return;
-        if (!Permissions.hasPermissionReply(event.getInteraction(), PermissionLevel.ADMIN)) return;
+        if (!Permissions.hasPermissionReply(event.getInteraction(), Permissions.Level.ADMIN)) return;
         // Return list of all modules with registered settings
         if (event.getOption("module") == null) {
             EmbedBuilder embedBuilder = new EmbedBuilder();

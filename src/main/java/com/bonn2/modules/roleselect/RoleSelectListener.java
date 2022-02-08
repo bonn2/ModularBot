@@ -1,7 +1,6 @@
 package com.bonn2.modules.roleselect;
 
 import com.bonn2.Bot;
-import com.bonn2.modules.core.permissions.PermissionLevel;
 import com.bonn2.modules.core.permissions.Permissions;
 import com.bonn2.modules.core.settings.Settings;
 import com.bonn2.modules.core.settings.types.RoleListSetting;
@@ -35,7 +34,7 @@ public class RoleSelectListener extends ListenerAdapter {
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         // Check permissions
         if (!event.getName().equals("roleselect")) return;
-        if (!Permissions.hasPermissionReply(event, PermissionLevel.ADMIN)) return;
+        if (!Permissions.hasPermissionReply(event, Permissions.Level.ADMIN)) return;
 
         // Validate min/max
         if (event.getOption("min_selection").getAsLong() < 0) {
