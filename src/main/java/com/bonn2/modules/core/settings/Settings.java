@@ -2,6 +2,7 @@ package com.bonn2.modules.core.settings;
 
 import com.bonn2.Bot;
 import com.bonn2.modules.Module;
+import com.bonn2.modules.core.settings.types.IntSetting;
 import com.bonn2.modules.core.settings.types.Setting;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -9,7 +10,6 @@ import com.google.gson.JsonObject;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -220,9 +220,9 @@ public class Settings extends Module {
      * Get the value of a {@link Setting}, or a default value
      * @param module The module the {@link Setting} is registered to
      * @param key    The key to the {@link Setting}
-     * @return       The {@link Setting} of the registered value, or null if setting is unregistered
+     * @return       The {@link Setting} of the registered value, or an {@link IntSetting} of value 0 if  unregistered
      */
-    public static @Nullable Setting get(@NotNull Module module, String key) {
+    public static Setting get(@NotNull Module module, String key) {
         if (hasSetting(module, key)) {
                 // If setting is set, return that
                 // else return setting value of unset
@@ -237,7 +237,7 @@ public class Settings extends Module {
                     module.name,
                     key
             ));
-            return null;
+            return new IntSetting(0);
         }
     }
 

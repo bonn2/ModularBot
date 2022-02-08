@@ -10,6 +10,7 @@ import com.bonn2.utils.StringUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Matcher;
 
 public class SettingsListener extends ListenerAdapter {
 
@@ -96,7 +98,7 @@ public class SettingsListener extends ListenerAdapter {
                 case ROLE -> {
                     // Check if passed value is a role
                     if (!value.trim().matches("<@&[0-9]{18}>")) {
-                        event.reply("%s is not a role! Make sure you tab complete the role, rather than just typing the name!"
+                        event.reply("`%s` is not a role! Make sure you tab complete the role, rather than just typing the name!"
                                 .formatted(value))
                                 .setEphemeral(true)
                                 .queue();
@@ -169,6 +171,38 @@ public class SettingsListener extends ListenerAdapter {
                     messageBuilder.setEmbeds(embedBuilder.build());
                     messageBuilder.setContent(replyString.toString());
                     event.reply(messageBuilder.build()).queue();
+                }
+                case TEXT_CHANNEL -> {
+                    // Check if text channel was provided
+                    if (!value.trim().matches("<#[0-9]{18}>")) {
+                        event.reply("`%s` is not a channel! Make sure you tab complete the channel, rather than just typing the name!"
+                                        .formatted(value))
+                                .setEphemeral(true)
+                                .queue();
+                        return;
+                    }
+                    TextChannel textChannel = Bot.jda.getTextChannelById(value.trim().substring(2, 20));
+                    if (textChannel == null) {
+                        event.reply("Could not find that channel!")
+                                .setEphemeral(true)
+                                .queue();
+                        return;
+                    }
+                    Settings.set(module, key, textChannel.getId());
+                    EmbedBuilder embedBuilder = new EmbedBuilder();
+                    embedBuilder.setTitle("%s settings".formatted(module.name));
+                    embedBuilder.setColor(Color.CYAN);
+                    for (String k : registeredSettings.keySet()) {
+                        embedBuilder.addField(
+                                StringUtil.capitalize(k),
+                                "Type: %s\nValue: %s".formatted(
+                                        StringUtil.capitalize(registeredSettings.get(k).toString().toLowerCase()),
+                                        Objects.requireNonNull(Settings.get(module, k)).getDisplayString()
+                                ),
+                                true
+                        );
+                    }
+                    event.replyEmbeds(embedBuilder.build()).queue();
                 }
                 // Handle everything else
                 default -> {

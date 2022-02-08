@@ -3,6 +3,7 @@ package com.bonn2.modules.core.settings.types;
 import com.bonn2.Bot;
 import com.google.gson.JsonElement;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public abstract class Setting {
 
     public enum Type {
         INT("0"), DOUBLE("0"), FLOAT("0"), ROLE("0"), NULL("0"),
-        ROLE_LIST("0");
+        ROLE_LIST("0"), TEXT_CHANNEL("0");
 
         public final String unset;
 
@@ -20,13 +21,14 @@ public abstract class Setting {
             this.unset = unset;
         }
 
-        public static Type fromString(String string) {
+        public static Type fromString(@NotNull String string) {
             return switch (string.toUpperCase()) {
                 case "INT" -> INT;
                 case "DOUBLE" -> DOUBLE;
                 case "FLOAT" -> FLOAT;
                 case "ROLE" -> ROLE;
                 case "ROLE_LIST" -> ROLE_LIST;
+                case "TEXT_CHANNEL" -> TEXT_CHANNEL;
                 default -> NULL;
             };
         }
@@ -61,6 +63,7 @@ public abstract class Setting {
                 case FLOAT -> new FloatSetting(Float.parseFloat(value));
                 case ROLE -> new RoleSetting(value);
                 case ROLE_LIST -> new RoleListSetting(value);
+                case TEXT_CHANNEL -> new TextChannelSetting(value);
                 default -> null;
             };
         } catch (NumberFormatException ignored) {
@@ -98,5 +101,10 @@ public abstract class Setting {
     public List<String> getAsRoleIdList() {
         Bot.logger.warn("Getting unimplemented setting value!");
         return new ArrayList<>();
+    }
+
+    public TextChannel getAsTextChannel() {
+        Bot.logger.warn("Getting unimplemented setting value!");
+        return null;
     }
 }
