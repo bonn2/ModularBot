@@ -24,9 +24,9 @@ public class Bot
 {
     public final static Logger logger = LoggerFactory.getLogger("Modular Bot");
     public static JDA jda = null;
-    public static String localPath;
-    public static Guild guild;
-    public static CommandListUpdateAction commands;
+    public static String localPath = null;
+    public static Guild guild = null;
+    public static CommandListUpdateAction commands = null;
     public static List<Module> modules = new LinkedList<>();
 
     // Handles starting the bot, and initializing static variables
