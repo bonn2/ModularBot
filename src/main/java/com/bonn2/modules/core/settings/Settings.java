@@ -26,7 +26,7 @@ import static com.bonn2.Bot.*;
 public class Settings extends Module {
 
     public Settings() {
-        version = "v1.0";
+        version = "v1.1";
         priority = Priority.SETTINGS;
         name = "Settings";
     }
