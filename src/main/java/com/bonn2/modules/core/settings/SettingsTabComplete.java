@@ -85,6 +85,7 @@ public class SettingsTabComplete extends ListenerAdapter {
                                         channel.getAsMention()
                                 ));
                             }
+                            if (choices.size() == 25) break;
                         }
                         event.replyChoices(choices).queue();
                     }
@@ -98,6 +99,7 @@ public class SettingsTabComplete extends ListenerAdapter {
                                         role.getAsMention()
                                 ));
                             }
+                            if (choices.size() == 25) break;
                         }
                         event.replyChoices(choices).queue();
                     }
