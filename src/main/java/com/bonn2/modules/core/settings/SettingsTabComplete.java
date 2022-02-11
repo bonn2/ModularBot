@@ -90,8 +90,6 @@ public class SettingsTabComplete extends ListenerAdapter {
                         event.replyChoices(choices).queue();
                     }
                     case ROLE -> {
-                        if (value.startsWith("@"))
-                            value = value.replaceFirst("@", "");
                         for (Role role : Objects.requireNonNull(event.getGuild()).getRoles()) {
                             if (role.getName().toLowerCase(Locale.ROOT).startsWith(value)) {
                                 choices.add(new Command.Choice(
