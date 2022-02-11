@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class SettingsListener extends ListenerAdapter {
+public class SettingsCommand extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
@@ -233,5 +233,7 @@ public class SettingsListener extends ListenerAdapter {
         }
 
     }
+
+
 
 }

@@ -17,7 +17,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static com.bonn2.Bot.*;
 
@@ -45,7 +47,8 @@ public class Settings extends Module {
     @Override
     public void load() {
         logger.info("Registering listeners...");
-        Bot.jda.addEventListener(new SettingsListener());
+        jda.addEventListener(new SettingsCommand());
+        jda.addEventListener(new SettingsTabComplete());
 
         logger.info("Creating commands...");
         commands = commands.addCommands(
@@ -56,17 +59,20 @@ public class Settings extends Module {
                         OptionType.STRING,
                         "module",
                         "The module to change the settings of.",
-                        false
+                        false,
+                        true
                 ).addOption(
                         OptionType.STRING,
                         "setting",
                         "The setting to change.",
-                        false
+                        false,
+                        true
                 ).addOption(
                         OptionType.STRING,
                         "value",
                         "The value to set the setting to.",
-                        false
+                        false,
+                        true
                 )
         );
 
@@ -258,6 +264,17 @@ public class Settings extends Module {
             return registeredSettings.get(module.name).get(key);
         }
         return Setting.Type.NULL;
+    }
+
+    /**
+     * Returns a {@link Set<String>} of all the setting keys registered to a module
+     * @param module The module to check
+     * @return       The {@link Set<String>} of settings registered
+     */
+    public static Set<String> getSettings(@NotNull Module module) {
+        if (registeredSettings.get(module.name) == null)
+            return new HashSet<>(0);
+        return registeredSettings.get(module.name).keySet();
     }
 
 }
