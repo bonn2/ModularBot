@@ -128,6 +128,11 @@ public class Bot
         logger.info("Finished Loading! (" + ((float)(System.currentTimeMillis() - startTime)) / 1000 + " sec)");
     }
 
+    /**
+     * Gets a {@link Module} by a specified name
+     * @param name The name of the {@link Module} to get
+     * @return     The {@link Module} of the specified name, or null if not found
+     */
     public static Module getModuleIgnoreCase(String name) {
         for (Module module : modules)
             if (module.name.equalsIgnoreCase(name)) return module;
