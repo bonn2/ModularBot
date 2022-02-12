@@ -29,6 +29,7 @@ public class ChatLog extends Module {
 
     @Override
     public void load() {
+        instance = this;
         Bot.logger.info("Getting channels...");
         logChannel = Settings.get(this, "log_channel").getAsTextChannel();
     }
