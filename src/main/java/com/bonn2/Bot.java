@@ -7,6 +7,9 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -133,7 +136,7 @@ public class Bot
      * @param name The name of the {@link Module} to get
      * @return     The {@link Module} of the specified name, or null if not found
      */
-    public static Module getModuleIgnoreCase(String name) {
+    public static @Nullable Module getModuleIgnoreCase(@NotNull String name) {
         for (Module module : modules)
             if (module.name.equalsIgnoreCase(name)) return module;
         return null;
