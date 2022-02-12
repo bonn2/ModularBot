@@ -3,6 +3,7 @@ package com.bonn2.modules.uncaps;
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
+import com.bonn2.modules.core.permissions.Permissions;
 import com.bonn2.modules.core.settings.Settings;
 import net.dv8tion.jda.api.entities.Webhook;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -28,10 +29,12 @@ public class UnCapsListener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+        if (event.getMember() == null) return;
+        if (Permissions.hasPermission(event.getMember(), Permissions.Level.MOD)) return;
         String content = event.getMessage().getContentRaw();
 
         // Decide if message should be converted to lower case
-        if (shouldLower(content.toCharArray())) {
+        if (shouldLower(content)) {
             // Create temp webhook in channel
             Webhook webhook = event.getTextChannel().createWebhook("UnCapsTemp " + UUID.randomUUID()).complete();
 
@@ -70,10 +73,13 @@ public class UnCapsListener extends ListenerAdapter {
 
     }
 
-    private boolean shouldLower(char[] characters) {
+    private boolean shouldLower(@NotNull String string) {
+        String[] words = string.split("[\s_]");
+        if (words.length < 3 && string.length() < 10)
+            return false;
         float capitals = 0;
         float total = 0;
-        for (char character : characters) {
+        for (char character : string.toCharArray()) {
             if (UPPERCASE.contains(character)) {
                 capitals++;
                 total++;
