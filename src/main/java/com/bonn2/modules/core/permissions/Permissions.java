@@ -6,6 +6,7 @@ import com.bonn2.modules.core.settings.Settings;
 import com.bonn2.modules.core.settings.types.Setting;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import org.jetbrains.annotations.NotNull;
 
@@ -69,6 +70,15 @@ public class Permissions extends Module {
      * @return True if the member has the provided permission level.
      */
     public static boolean hasPermissionReply(@NotNull SlashCommandInteraction event, @NotNull Level level) {
+        if (hasPermission(Objects.requireNonNull(event.getMember()), level)) {
+            return true;
+        } else {
+            event.reply("You do not have permission to do that!").setEphemeral(true).queue();
+            return false;
+        }
+    }
+
+    public static boolean hasPermissionReply(@NotNull SelectMenuInteractionEvent event, @NotNull Level level) {
         if (hasPermission(Objects.requireNonNull(event.getMember()), level)) {
             return true;
         } else {
