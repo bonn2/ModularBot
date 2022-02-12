@@ -17,7 +17,7 @@ public class ChatLog extends Module {
     private static ChatLog instance;
 
     public ChatLog() {
-        version = "v1.0";
+        version = "v1.1";
         priority = Priority.POST_JDA_HIGH;
         name = "ChatLog";
     }
