@@ -1,15 +1,20 @@
 package com.bonn2.modules.core.chatlog;
 
+import com.bonn2.Bot;
 import com.bonn2.modules.Module;
 import com.bonn2.modules.core.settings.Settings;
 import com.bonn2.modules.core.settings.types.Setting;
 import net.dv8tion.jda.api.entities.TextChannel;
+import org.w3c.dom.Text;
 
 public class ChatLog extends Module {
 
     public enum Type {
         AUTO_KICK, KICK, BAN
     }
+
+    private static TextChannel logChannel;
+    private static ChatLog instance;
 
     public ChatLog() {
         version = "v1.0";
@@ -24,10 +29,16 @@ public class ChatLog extends Module {
 
     @Override
     public void load() {
-
+        Bot.logger.info("Getting channels...");
+        logChannel = Settings.get(this, "log_channel").getAsTextChannel();
     }
 
-    public TextChannel getLogChannel() {
-        return Settings.get(this, "log_channel").getAsTextChannel();
+    public static TextChannel getLogChannel() {
+        TextChannel channelFromSettings = Settings.get(instance, "log_channel").getAsTextChannel();
+        if (logChannel == null)
+            logChannel = Settings.get(instance, "log_channel").getAsTextChannel();
+        if (!logChannel.getId().equals(channelFromSettings.getId()))
+            logChannel = channelFromSettings;
+        return logChannel;
     }
 }

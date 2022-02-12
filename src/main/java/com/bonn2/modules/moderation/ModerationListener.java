@@ -39,7 +39,7 @@ public class ModerationListener extends ListenerAdapter {
                         amount,
                         channel.getId()
                 ));
-                ChatLog.logChannel.sendMessageEmbeds(embedBuilder.build()).queue();
+                ChatLog.getLogChannel().sendMessageEmbeds(embedBuilder.build()).queue();
             }
         }
     }
