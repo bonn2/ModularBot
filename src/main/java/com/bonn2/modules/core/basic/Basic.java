@@ -2,19 +2,14 @@ package com.bonn2.modules.core.basic;
 
 import com.bonn2.Bot;
 import com.bonn2.modules.Module;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 import static com.bonn2.Bot.commands;
 import static com.bonn2.Bot.logger;
 
 public class Basic extends Module {
-
-    /*
-    This module will contain basic commands for controlling the bot, ex:
-    /ping
-    /modules list
-    /modules docs <module>
-    */
 
     public Basic() {
         name = "Basic";
@@ -30,12 +25,33 @@ public class Basic extends Module {
     @Override
     public void load() {
         logger.info("Registering Listeners...");
-        Bot.jda.addEventListener(new BasicListener());
+        Bot.jda.addEventListener(new BasicCommands());
+        Bot.jda.addEventListener(new BasicTabComplete());
         logger.info("Creating commands...");
         commands = commands.addCommands(
                 Commands.slash(
                         "ping",
                         "Get the ping of the bot."
+                ),
+                Commands.slash(
+                        "modules",
+                        "Get information about modules."
+                ).addSubcommands(
+                        new SubcommandData(
+                                "list",
+                                "List all of the modules, and their versions."
+                        )
+                ).addSubcommands(
+                        new SubcommandData(
+                                "docs",
+                                "Get detailed information about a module."
+                        ).addOption(
+                                OptionType.STRING,
+                                "module",
+                                "The module to get the information of.",
+                                true,
+                                true
+                        )
                 )
         );
     }
