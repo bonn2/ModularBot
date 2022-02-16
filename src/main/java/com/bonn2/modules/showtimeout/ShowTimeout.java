@@ -28,7 +28,8 @@ public class ShowTimeout extends Module {
 
     @Override
     public void registerSettings() {
-        Settings.register(this, "timeout_role", Setting.Type.ROLE, Setting.Type.ROLE.unset);
+        Settings.register(this, "timeout_role", Setting.Type.ROLE, Setting.Type.ROLE.unset,
+                "The role to be given to timed out users.");
     }
 
     @Override

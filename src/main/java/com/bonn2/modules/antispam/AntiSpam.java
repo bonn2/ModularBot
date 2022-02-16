@@ -28,9 +28,12 @@ public class AntiSpam extends Module {
 
     @Override
     public void registerSettings() {
-        Settings.register(this, "messages_delete_threshold", Setting.Type.INT, "3");
-        Settings.register(this, "messages_timeout_threshold", Setting.Type.INT, "4");
-        Settings.register(this, "channels_kick_threshold", Setting.Type.INT, "4");
+        Settings.register(this, "messages_delete_threshold", Setting.Type.INT, "3",
+                "The number of repeat messages before they are deleted.");
+        Settings.register(this, "messages_timeout_threshold", Setting.Type.INT, "4",
+                "The number of repeat messages before the user is timed out.");
+        Settings.register(this, "channels_kick_threshold", Setting.Type.INT, "4",
+                "The number of channels repeat messages can be sent in before the user is kicked.");
     }
 
     @Override

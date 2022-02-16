@@ -37,6 +37,7 @@ public class Settings extends Module {
     static Map<String, Map<String, Setting.Type>> registeredSettings = new HashMap<>();
     static Map<String, Map<String, Setting>> defaultSettings = new HashMap<>();
     static Map<String, Map<String, Setting>> settings = new HashMap<>();
+    static Map<String, Map<String, String>> descriptions = new HashMap<>();
     static File settingsFile = new File(localPath + "/settings.json");
 
     @Override
@@ -124,7 +125,7 @@ public class Settings extends Module {
         }
     }
 
-    public static void register(@NotNull Module module, String key, Setting.Type type, String unSet) {
+    public static void register(@NotNull Module module, String key, Setting.Type type, String unSet, String description) {
         // Register setting type
         Map<String, Setting.Type> moduleSettings;
         if (registeredSettings.containsKey(module.name))
@@ -142,11 +143,27 @@ public class Settings extends Module {
             moduleDefaults = new HashMap<>();
         moduleDefaults.put(key, Setting.of(unSet, type));
         defaultSettings.put(module.name, moduleDefaults);
+
+        // Register setting description
+        Map<String, String> moduleSettingDescriptions;
+        if (descriptions.containsKey(module.name))
+            moduleSettingDescriptions = descriptions.get(module.name);
+        else
+            moduleSettingDescriptions = new HashMap<>();
+        moduleSettingDescriptions.put(key, description);
+        descriptions.put(module.name, moduleSettingDescriptions);
     }
 
     public static Map<String, Setting.Type> getRegisteredSettings(String module) {
         if (registeredSettings.containsKey(module))
             return registeredSettings.get(module);
+        else
+            return new HashMap<>();
+    }
+
+    public static Map<String, String> getDescriptions(String module) {
+        if (descriptions.containsKey(module))
+            return descriptions.get(module);
         else
             return new HashMap<>();
     }

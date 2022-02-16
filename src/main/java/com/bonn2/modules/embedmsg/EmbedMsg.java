@@ -17,7 +17,8 @@ public class EmbedMsg extends Module {
 
     @Override
     public void registerSettings() {
-        Settings.register(this, "max_links", Setting.Type.INT, "5");
+        Settings.register(this, "max_links", Setting.Type.INT, "5",
+                "The maximum number of message links to reply to in one message.");
     }
 
     @Override

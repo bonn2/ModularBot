@@ -23,7 +23,8 @@ public class UnCaps extends Module {
     @Override
     public void load() {
         logger.info("Registering settings...");
-        Settings.register(this, "threshold", Setting.Type.FLOAT, String.valueOf(0.5));
+        Settings.register(this, "threshold", Setting.Type.FLOAT, String.valueOf(0.5),
+                "The percentage of capital letters before dropping messages to lower case.");
 
         logger.info("Registering Listeners...");
         Bot.jda.addEventListener(new UnCapsListener(this));

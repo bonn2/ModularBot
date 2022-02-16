@@ -22,7 +22,8 @@ public class RoleSelect extends Module {
 
     @Override
     public void registerSettings() {
-        Settings.register(this, "allowed_roles", Setting.Type.ROLE_LIST, Setting.Type.ROLE_LIST.unset);
+        Settings.register(this, "allowed_roles", Setting.Type.ROLE_LIST, Setting.Type.ROLE_LIST.unset,
+                "The roles that can be given through selection menus. (Keep up to date to prevent spoofing)");
     }
 
     @Override

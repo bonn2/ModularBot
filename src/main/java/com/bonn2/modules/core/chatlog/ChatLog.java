@@ -24,7 +24,8 @@ public class ChatLog extends Module {
 
     @Override
     public void registerSettings() {
-        Settings.register(this, "log_channel", Setting.Type.TEXT_CHANNEL, Setting.Type.TEXT_CHANNEL.unset);
+        Settings.register(this, "log_channel", Setting.Type.TEXT_CHANNEL, Setting.Type.TEXT_CHANNEL.unset,
+                "The channel log messages are sent to.");
     }
 
     @Override

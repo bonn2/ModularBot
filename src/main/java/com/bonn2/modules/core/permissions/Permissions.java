@@ -48,8 +48,10 @@ public class Permissions extends Module {
 
     @Override
     public void registerSettings() {
-        Settings.register(this, "admin_roles", Setting.Type.ROLE_LIST, Setting.Type.ROLE_LIST.unset);
-        Settings.register(this, "mod_roles", Setting.Type.ROLE_LIST, Setting.Type.ROLE_LIST.unset);
+        Settings.register(this, "admin_roles", Setting.Type.ROLE_LIST, Setting.Type.ROLE_LIST.unset,
+                "The roles that are granted admin permission level.");
+        Settings.register(this, "mod_roles", Setting.Type.ROLE_LIST, Setting.Type.ROLE_LIST.unset,
+                "The roles that are granted moderator permission level.");
     }
 
     @Override

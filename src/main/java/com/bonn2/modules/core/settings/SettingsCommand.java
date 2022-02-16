@@ -53,6 +53,8 @@ public class SettingsCommand extends ListenerAdapter {
             event.reply("That module does not have any settings!").setEphemeral(true).queue();
             return;
         }
+        // Get setting descriptions
+        Map<String, String> descriptions = Settings.getDescriptions(module.name);
         // Return a list of all registered settings for the module
         if (event.getOption("setting") == null) {
             EmbedBuilder embedBuilder = new EmbedBuilder();
@@ -61,7 +63,8 @@ public class SettingsCommand extends ListenerAdapter {
             for (String key : registeredSettings.keySet()) {
                 embedBuilder.addField(
                         StringUtil.capitalize(key),
-                        "Type: %s\nValue: %s".formatted(
+                        "%s\n**Type:** %s\n**Value:** %s".formatted(
+                                descriptions.get(key),
                                 StringUtil.capitalize(registeredSettings.get(key).toString().toLowerCase()),
                                 Objects.requireNonNull(Settings.get(module, key)).getDisplayString()
                         ),
