@@ -2,12 +2,13 @@ package com.bonn2.modules.core.settings.types;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import org.jetbrains.annotations.NotNull;
 
 public class BooleanSetting extends Setting {
 
     public boolean value;
 
-    public BooleanSetting(String value) {
+    public BooleanSetting(@NotNull String value) {
         this.value = value.equalsIgnoreCase("true");
     }
 

@@ -2,12 +2,13 @@ package com.bonn2.modules.core.settings.types;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import org.jetbrains.annotations.NotNull;
 
 public class StringSetting extends Setting {
 
     public String value;
 
-    public StringSetting(String string) {
+    public StringSetting(@NotNull String string) {
         value = string;
     }
 
