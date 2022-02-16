@@ -34,7 +34,7 @@ public class SettingsCommand extends ListenerAdapter {
             for (Module module : Bot.modules) {
                 embedBuilder.addField(
                         module.name,
-                        "Version %s".formatted(module.version),
+                        "Setting nodes: %s".formatted(Settings.getRegisteredSettings(module.name).keySet().size()),
                         true
                 );
             }
