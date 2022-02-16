@@ -13,6 +13,8 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import javax.annotation.Nonnull;
 import java.util.*;
 
+import static com.bonn2.Bot.logger;
+
 public class SettingsTabComplete extends ListenerAdapter {
 
     public void onCommandAutoCompleteInteraction(@Nonnull CommandAutoCompleteInteractionEvent event) {
@@ -98,6 +100,18 @@ public class SettingsTabComplete extends ListenerAdapter {
                                 ));
                             }
                             if (choices.size() == 25) break;
+                        }
+                        event.replyChoices(choices).queue();
+                    }
+                    case BOOLEAN -> {
+                        String[] options = {"true", "false"};
+                        for (String option : options) {
+                            if (option.startsWith(value)) {
+                                choices.add(new Command.Choice(
+                                        option,
+                                        option
+                                ));
+                            }
                         }
                         event.replyChoices(choices).queue();
                     }
