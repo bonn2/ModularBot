@@ -13,7 +13,7 @@ public abstract class Setting {
 
     public enum Type {
         INT("0"), DOUBLE("0"), FLOAT("0"), ROLE("0"), NULL("0"),
-        ROLE_LIST("0"), TEXT_CHANNEL("0");
+        ROLE_LIST("0"), TEXT_CHANNEL("0"), STRING("");
 
         public final String unset;
 
@@ -29,6 +29,7 @@ public abstract class Setting {
                 case "ROLE" -> ROLE;
                 case "ROLE_LIST" -> ROLE_LIST;
                 case "TEXT_CHANNEL" -> TEXT_CHANNEL;
+                case "STRING" -> STRING;
                 default -> NULL;
             };
         }
@@ -64,6 +65,7 @@ public abstract class Setting {
                 case ROLE -> new RoleSetting(value);
                 case ROLE_LIST -> new RoleListSetting(value);
                 case TEXT_CHANNEL -> new TextChannelSetting(value);
+                case STRING -> new StringSetting(value);
                 default -> null;
             };
         } catch (NumberFormatException ignored) {
@@ -106,5 +108,10 @@ public abstract class Setting {
     public TextChannel getAsTextChannel() {
         Bot.logger.warn("Getting unimplemented setting value!");
         return null;
+    }
+
+    public String getAsString() {
+        Bot.logger.warn("Getting unimplemented setting value!");
+        return "";
     }
 }
