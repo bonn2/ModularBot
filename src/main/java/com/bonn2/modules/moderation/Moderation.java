@@ -2,7 +2,6 @@ package com.bonn2.modules.moderation;
 
 import com.bonn2.Bot;
 import com.bonn2.modules.Module;
-import com.bonn2.modules.roleselect.RoleSelectListener;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
@@ -28,7 +27,7 @@ public class Moderation extends Module {
         logger.info("Registering listeners...");
         Bot.jda.addEventListener(new ModerationListener());
         logger.info("Creating commands...");
-        commands = commands.addCommands(
+        commands.add(
                 Commands.slash(
                         "mod",
                         "Moderation commands"

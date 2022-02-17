@@ -28,11 +28,13 @@ public class Basic extends Module {
         Bot.jda.addEventListener(new BasicCommands());
         Bot.jda.addEventListener(new BasicTabComplete());
         logger.info("Creating commands...");
-        commands = commands.addCommands(
+        commands.add(
                 Commands.slash(
                         "ping",
                         "Get the ping of the bot."
-                ),
+                )
+        );
+        commands.add(
                 Commands.slash(
                         "modules",
                         "Get information about modules."

@@ -31,7 +31,7 @@ public class RoleSelect extends Module {
         logger.info("Registering listeners...");
         Bot.jda.addEventListener(new RoleSelectListener(this));
         logger.info("Creating commands...");
-        commands = commands.addCommands(
+        commands.add(
                 Commands.slash(
                         "roleselect",
                         "Manage RoleSelect"

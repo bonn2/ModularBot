@@ -5,9 +5,8 @@ import com.bonn2.modules.core.config.Config;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
@@ -29,7 +28,7 @@ public class Bot
     public static JDA jda = null;
     public static String localPath = null;
     public static Guild guild = null;
-    public static CommandListUpdateAction commands = null;
+    public static List<CommandData> commands = new LinkedList<>();
     public static List<Module> modules = new LinkedList<>();
 
     // Handles starting the bot, and initializing static variables
@@ -94,9 +93,6 @@ public class Bot
             return;
         }
 
-        // Init commands update action
-        commands = guild.updateCommands();
-
         logger.info("Registering Settings...");
         for (Module module : modules) {
             module.registerSettings();
@@ -126,7 +122,7 @@ public class Bot
             }
         }
 
-        commands.queue();
+        guild.updateCommands().addCommands(commands).queue();
 
         logger.info("Finished Loading! (" + ((float)(System.currentTimeMillis() - startTime)) / 1000 + " sec)");
     }

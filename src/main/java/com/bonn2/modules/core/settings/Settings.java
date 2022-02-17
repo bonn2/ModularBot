@@ -52,7 +52,7 @@ public class Settings extends Module {
         jda.addEventListener(new SettingsTabComplete());
 
         logger.info("Creating commands...");
-        commands = commands.addCommands(
+        commands.add(
                 Commands.slash(
                         "settings",
                         "Manage settings"

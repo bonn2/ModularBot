@@ -88,7 +88,7 @@ public class AutoReply extends Module {
         }
 
         logger.info("Creating commands...");
-        commands = commands.addCommands(
+        commands.add(
                 Commands.slash(
                         "autoreply",
                         "Manage auto-replies"
