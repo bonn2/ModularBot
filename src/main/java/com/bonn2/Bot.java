@@ -125,8 +125,20 @@ public class Bot
 
         logger.info("Updating commands...");
         CommandListUpdateAction commandListUpdateAction = guild.updateCommands();
-        for (Module module : modules)
-            commandListUpdateAction = commandListUpdateAction.addCommands(module.getCommands());
+        int totalCommands = 0;
+        for (Module module : modules) {
+            CommandData[] commands = module.getCommands();
+            totalCommands += commands.length;
+            logger.info("Got %s command%s from %s".formatted(
+                    commands.length,
+                    commands.length == 1 ? "" : "s",
+                    module.name));
+            commandListUpdateAction = commandListUpdateAction.addCommands(commands);
+        }
+        logger.info("Queueing %s / 50 top level command%s".formatted(
+                totalCommands,
+                totalCommands == 1 ? "" : "s"
+        ));
         commandListUpdateAction.queue();
 
         logger.info("Finished Loading! (" + ((float)(System.currentTimeMillis() - startTime)) / 1000 + " sec)");
