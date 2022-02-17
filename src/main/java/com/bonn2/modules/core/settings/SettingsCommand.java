@@ -6,6 +6,7 @@ import com.bonn2.modules.core.permissions.Permissions;
 import com.bonn2.modules.core.settings.types.Setting;
 import com.bonn2.utils.StringUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -45,39 +46,33 @@ public class SettingsCommand extends ListenerAdapter {
             event.reply("That module does not exist!").setEphemeral(true).queue();
             return;
         }
-        // Get registered settings for the module
-        Map<String, Setting.Type> registeredSettings = Settings.getRegisteredSettings(module.name);
-        if (registeredSettings == null) {
+        // Check if module has settings
+        if (!module.hasSettings()) {
             event.reply("That module does not have any settings!").setEphemeral(true).queue();
             return;
         }
-        // Get setting descriptions
-        Map<String, String> descriptions = Settings.getDescriptions(module.name);
         // Return a list of all registered settings for the module
         if (event.getOption("setting") == null) {
-            EmbedBuilder embedBuilder = new EmbedBuilder();
-            embedBuilder.setTitle("%s settings".formatted(module.name));
-            embedBuilder.setColor(Color.CYAN);
-            for (String key : registeredSettings.keySet()) {
-                embedBuilder.addField(
-                        StringUtil.capitalize(key),
-                        "%s\n**Type:** %s\n**Value:** %s".formatted(
-                                descriptions.get(key),
-                                StringUtil.capitalize(registeredSettings.get(key).toString().toLowerCase()),
-                                Objects.requireNonNull(Settings.get(module, key)).getDisplayString()
-                        ),
-                        false
-                );
-            }
-            event.replyEmbeds(embedBuilder.build()).queue();
+            event.replyEmbeds(getModuleSettingEmbed(module)).queue();
             return;
         }
         String key = Objects.requireNonNull(event.getOption("setting"))
                 .getAsString()
                 .toLowerCase()
                 .replaceAll(" ", "_");
+        // Unset the value
+        if (event.getOption("default") != null && Objects.requireNonNull(event.getOption("default")).getAsBoolean()) {
+            if (Settings.hasSetting(module, key)) {
+                Settings.unSet(module, key);
+                event.replyEmbeds(getModuleSettingEmbed(module)).queue();
+            } else {
+                event.reply("The module %s does not have a setting %s!".formatted(module.name, key))
+                        .setEphemeral(true)
+                        .queue();
+            }
+        }
         // If multiple values are provided
-        if (event.getOption("values") != null) {
+        else if (event.getOption("values") != null) {
             if (Settings.hasSetting(module, key)) {
                 switch (Settings.getRegisteredSettingType(module, key)) {
                     case ROLE_LIST -> {
@@ -100,20 +95,7 @@ public class SettingsCommand extends ListenerAdapter {
                             valueToSet.deleteCharAt(valueToSet.length() - 1);
 
                         Settings.set(module, key, valueToSet.toString());
-                        EmbedBuilder embedBuilder = new EmbedBuilder();
-                        embedBuilder.setTitle("%s settings".formatted(module.name));
-                        embedBuilder.setColor(Color.CYAN);
-                        for (String k : registeredSettings.keySet()) {
-                            embedBuilder.addField(
-                                    StringUtil.capitalize(k),
-                                    "Type: %s\nValue: %s".formatted(
-                                            StringUtil.capitalize(registeredSettings.get(k).toString().toLowerCase()),
-                                            Objects.requireNonNull(Settings.get(module, k)).getDisplayString()
-                                    ),
-                                    true
-                            );
-                        }
-                        event.replyEmbeds(embedBuilder.build()).queue();
+                        event.replyEmbeds(getModuleSettingEmbed(module)).queue();
                     }
                     default -> event.reply("This setting does not support multiple values!")
                             .setEphemeral(true)
@@ -162,20 +144,7 @@ public class SettingsCommand extends ListenerAdapter {
                             return;
                         }
                         Settings.set(module, key, role.getId());
-                        EmbedBuilder embedBuilder = new EmbedBuilder();
-                        embedBuilder.setTitle("%s settings".formatted(module.name));
-                        embedBuilder.setColor(Color.CYAN);
-                        for (String k : registeredSettings.keySet()) {
-                            embedBuilder.addField(
-                                    StringUtil.capitalize(k),
-                                    "Type: %s\nValue: %s".formatted(
-                                            StringUtil.capitalize(registeredSettings.get(k).toString().toLowerCase()),
-                                            Objects.requireNonNull(Settings.get(module, k)).getDisplayString()
-                                    ),
-                                    true
-                            );
-                        }
-                        event.replyEmbeds(embedBuilder.build()).queue();
+                        event.replyEmbeds(getModuleSettingEmbed(module)).queue();
                     }
                     case TEXT_CHANNEL -> {
                         // Check if text channel was provided
@@ -194,38 +163,12 @@ public class SettingsCommand extends ListenerAdapter {
                             return;
                         }
                         Settings.set(module, key, textChannel.getId());
-                        EmbedBuilder embedBuilder = new EmbedBuilder();
-                        embedBuilder.setTitle("%s settings".formatted(module.name));
-                        embedBuilder.setColor(Color.CYAN);
-                        for (String k : registeredSettings.keySet()) {
-                            embedBuilder.addField(
-                                    StringUtil.capitalize(k),
-                                    "Type: %s\nValue: %s".formatted(
-                                            StringUtil.capitalize(registeredSettings.get(k).toString().toLowerCase()),
-                                            Objects.requireNonNull(Settings.get(module, k)).getDisplayString()
-                                    ),
-                                    true
-                            );
-                        }
-                        event.replyEmbeds(embedBuilder.build()).queue();
+                        event.replyEmbeds(getModuleSettingEmbed(module)).queue();
                     }
                     // Handle everything else
                     default -> {
                         if (Settings.set(module, key, value)) {
-                            EmbedBuilder embedBuilder = new EmbedBuilder();
-                            embedBuilder.setTitle("%s settings".formatted(module.name));
-                            embedBuilder.setColor(Color.CYAN);
-                            for (String k : registeredSettings.keySet()) {
-                                embedBuilder.addField(
-                                        StringUtil.capitalize(k),
-                                        "Type: %s\nValue: %s".formatted(
-                                                StringUtil.capitalize(registeredSettings.get(k).toString().toLowerCase()),
-                                                Objects.requireNonNull(Settings.get(module, k)).getDisplayString()
-                                        ),
-                                        true
-                                );
-                            }
-                            event.replyEmbeds(embedBuilder.build()).queue();
+                            event.replyEmbeds(getModuleSettingEmbed(module)).queue();
                         } else {
                             event.reply("That is not a valid value!")
                                     .setEphemeral(true)
@@ -239,5 +182,28 @@ public class SettingsCommand extends ListenerAdapter {
                         .queue();
             }
         }
+    }
+
+    private @NotNull MessageEmbed getModuleSettingEmbed(@NotNull Module module) {
+        // Get registered settings for the module
+        Map<String, Setting.Type> registeredSettings = Settings.getRegisteredSettings(module.name);
+        // Get setting descriptions
+        Map<String, String> descriptions = Settings.getDescriptions(module.name);
+        // Create embed
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        embedBuilder.setTitle("%s settings".formatted(module.name));
+        embedBuilder.setColor(Color.CYAN);
+        for (String key : registeredSettings.keySet()) {
+            embedBuilder.addField(
+                    StringUtil.capitalize(key),
+                    "%s\n**Type:** %s\n**Value:** %s".formatted(
+                            descriptions.get(key),
+                            StringUtil.capitalize(registeredSettings.get(key).toString().toLowerCase()),
+                            Objects.requireNonNull(Settings.get(module, key)).getDisplayString()
+                    ),
+                    false
+            );
+        }
+        return embedBuilder.build();
     }
 }

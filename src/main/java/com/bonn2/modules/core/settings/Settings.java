@@ -81,7 +81,7 @@ public class Settings extends Module {
                         false
                 ).addOption(
                         OptionType.BOOLEAN,
-                        "unset",
+                        "default",
                         "Set an option to default.",
                         false
                 )
@@ -246,6 +246,34 @@ public class Settings extends Module {
         if (save) save();
 
         // Success
+        return true;
+    }
+
+    /**
+     * Sets a {@link Setting} back to the default. As if it was never set.
+     * @param module The {@link Module} the {@link Setting} is registered to
+     * @param key    The key to reset
+     * @return       True if {@link Setting} exists and was unset. (Will return true on repeat calls)
+     */
+    public static boolean unSet(@NotNull Module module, String key) {
+        // Check if setting is registered
+        if (!hasSetting(module, key)) {
+            logger.warn("Tried to unSet an unregistered setting!\nModule: %s\nKey: %s".formatted(
+                    module.name,
+                    key
+            ));
+            return false;
+        }
+        // Get current module settings or do nothing
+        Map<String, Setting> moduleSettings;
+        if (settings.containsKey(module.name)) {
+            moduleSettings = settings.get(module.name);
+            // UnSet module setting
+            moduleSettings.remove(key);
+            settings.put(module.name, moduleSettings);
+            // Save the new settings to file
+            save();
+        }
         return true;
     }
 
