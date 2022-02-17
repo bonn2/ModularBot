@@ -24,6 +24,10 @@ public class NSFWFilter extends Module {
                 "The percentage confidence to delete adult images. (-1 to disable)");
         Settings.register(this, "teen_delete_threshold", Setting.Type.FLOAT, "-1",
                 "The percentage confidence to delete teen images. (-1 to disable)");
+        Settings.register(this, "teen_and_adult_delete_threshold", Setting.Type.FLOAT, "-1",
+                "The percentage confidence of `teen + adult` to delete images. (-1 to disable)");
+        Settings.register(this, "immune_roles", Setting.Type.ROLE_LIST, Setting.Type.ROLE_LIST.unset,
+                "The roles that should not be scanned.");
     }
 
     @Override

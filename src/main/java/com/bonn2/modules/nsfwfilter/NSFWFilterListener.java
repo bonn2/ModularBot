@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.AttachmentOption;
@@ -32,6 +33,9 @@ public class NSFWFilterListener extends ListenerAdapter {
 
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
         if (event.getAuthor().isBot()) return;
+        if (event.getMember() == null) return;
+        for (Role role : Settings.get(module, "immune_roles").getAsRoleList())
+            if (event.getMember().getRoles().contains(role)) return;
         String key = Settings.get(module, "api_key").getAsString();
         if (key.equals("")) return;
         for (Message.Attachment attachment : event.getMessage().getAttachments()) {
@@ -87,6 +91,26 @@ public class NSFWFilterListener extends ListenerAdapter {
                     if (teenDeleteThreshold >= 0 && response.get("predictions").getAsJsonObject().get("teen").getAsFloat() >= teenDeleteThreshold) {
                         MessageBuilder messageBuilder = new MessageBuilder();
                         messageBuilder.setContent(":x: Deleted an image that is over the teen threshold!");
+                        messageBuilder.setEmbeds(getResultsEmbed(
+                                response.get("predictions").getAsJsonObject(),
+                                event.getMessage().getTimeCreated().toInstant().toEpochMilli())
+                        );
+                        ChatLog.getLogChannel().sendMessage(messageBuilder.build())
+                                .addFile(
+                                        new URL(attachment.getUrl()).openStream(),
+                                        "image." + attachment.getFileExtension(),
+                                        AttachmentOption.SPOILER
+                                )
+                                .queue();
+                        event.getMessage().delete().queue();
+                        return;
+                    }
+                    float teenAndAdultThreshold = Settings.get(module, "teen_and_adult_delete_threshold").getAsFloat();
+                    // Delete if over teen threshold
+                    if (teenAndAdultThreshold >= 0 &&
+                            response.get("predictions").getAsJsonObject().get("teen").getAsFloat() + response.get("predictions").getAsJsonObject().get("adult").getAsFloat() >= teenAndAdultThreshold) {
+                        MessageBuilder messageBuilder = new MessageBuilder();
+                        messageBuilder.setContent(":x: Deleted an image that is over the teen + adult threshold!");
                         messageBuilder.setEmbeds(getResultsEmbed(
                                 response.get("predictions").getAsJsonObject(),
                                 event.getMessage().getTimeCreated().toInstant().toEpochMilli())
