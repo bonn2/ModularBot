@@ -3,7 +3,6 @@ package com.bonn2.modules.uncaps;
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
-import com.bonn2.modules.core.permissions.Permissions;
 import com.bonn2.modules.core.settings.Settings;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.Webhook;
