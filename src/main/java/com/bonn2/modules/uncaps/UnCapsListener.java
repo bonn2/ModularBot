@@ -5,6 +5,7 @@ import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.bonn2.modules.core.permissions.Permissions;
 import com.bonn2.modules.core.settings.Settings;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.Webhook;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -30,7 +31,8 @@ public class UnCapsListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
         if (event.getMember() == null) return;
-        if (Permissions.hasPermission(event.getMember(), Permissions.Level.MOD)) return;
+        for (Role role : Settings.get(module, "immune_roles").getAsRoleList())
+            if (event.getMember().getRoles().contains(role)) return;
         String content = event.getMessage().getContentRaw();
 
         // Decide if message should be converted to lower case
@@ -75,7 +77,11 @@ public class UnCapsListener extends ListenerAdapter {
 
     private boolean shouldLower(@NotNull String string) {
         String[] words = string.split("[\s_]");
-        if (words.length < 3 && string.length() < 10)
+        int minWords = Settings.get(module, "minimum_words").getAsInt();
+        if (minWords > -1 && words.length < minWords)
+            return false;
+        int minLength = Settings.get(module, "minimum_characters").getAsInt();
+        if (minLength > -1 && string.length() < 10)
             return false;
         float capitals = 0;
         float total = 0;
