@@ -18,12 +18,6 @@ public class UnCaps extends Module {
 
     @Override
     public void registerSettings() {
-
-    }
-
-    @Override
-    public void load() {
-        logger.info("Registering settings...");
         Settings.register(this, "threshold", Setting.Type.FLOAT, String.valueOf(0.5),
                 "The percentage of capital letters before dropping messages to lower case.");
         Settings.register(this, "minimum_words", Setting.Type.INT, String.valueOf(3),
@@ -32,7 +26,10 @@ public class UnCaps extends Module {
                 "The minimum number of characters in a message to lower. (-1 to disable)");
         Settings.register(this, "immune_roles", Setting.Type.ROLE_LIST, Setting.Type.ROLE_LIST.unset,
                 "Roles that should not be lowered.");
+    }
 
+    @Override
+    public void load() {
         logger.info("Registering Listeners...");
         Bot.jda.addEventListener(new UnCapsListener(this));
     }
