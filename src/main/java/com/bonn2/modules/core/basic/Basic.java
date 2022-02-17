@@ -7,7 +7,6 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
-import static com.bonn2.Bot.commands;
 import static com.bonn2.Bot.logger;
 
 public class Basic extends Module {

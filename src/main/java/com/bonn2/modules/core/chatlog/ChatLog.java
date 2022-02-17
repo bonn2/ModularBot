@@ -6,7 +6,6 @@ import com.bonn2.modules.core.settings.Settings;
 import com.bonn2.modules.core.settings.types.Setting;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import org.w3c.dom.Text;
 
 public class ChatLog extends Module {
 
