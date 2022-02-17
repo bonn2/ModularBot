@@ -74,6 +74,16 @@ public class Settings extends Module {
                         "The value to set the setting to.",
                         false,
                         true
+                ).addOption(
+                        OptionType.STRING,
+                        "values",
+                        "Use multiple values. (Only works with list type settings)",
+                        false
+                ).addOption(
+                        OptionType.BOOLEAN,
+                        "unset",
+                        "Set an option to default.",
+                        false
                 )
         );
 

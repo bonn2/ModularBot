@@ -13,8 +13,6 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import javax.annotation.Nonnull;
 import java.util.*;
 
-import static com.bonn2.Bot.logger;
-
 public class SettingsTabComplete extends ListenerAdapter {
 
     public void onCommandAutoCompleteInteraction(@Nonnull CommandAutoCompleteInteractionEvent event) {
@@ -91,11 +89,11 @@ public class SettingsTabComplete extends ListenerAdapter {
                         }
                         event.replyChoices(choices).queue();
                     }
-                    case ROLE -> {
+                    case ROLE, ROLE_LIST -> {
                         for (Role role : Objects.requireNonNull(event.getGuild()).getRoles()) {
                             if (role.getName().toLowerCase(Locale.ROOT).startsWith(value)) {
                                 choices.add(new Command.Choice(
-                                        "@" + role.getName(),
+                                        role.getName(),
                                         role.getAsMention()
                                 ));
                             }
