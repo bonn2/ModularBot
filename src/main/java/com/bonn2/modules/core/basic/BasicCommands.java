@@ -32,7 +32,7 @@ public class BasicCommands extends ListenerAdapter {
                         for (Module module : Bot.modules) {
                             embedBuilder.addField(
                                     module.name,
-                                    "Version %s".formatted(module.version),
+                                    "Version: %s".formatted(module.version),
                                     true
                             );
                         }
