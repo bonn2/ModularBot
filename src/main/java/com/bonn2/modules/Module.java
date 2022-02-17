@@ -18,14 +18,6 @@ public abstract class Module {
     public abstract void registerSettings();
     public abstract void load();
 
-    /**
-     * Check if a module has registered settings
-     * @return True if there are settings registered by this module
-     */
-    public boolean hasSettings() {
-        return Settings.getSettings(this).size() > 0;
-    }
-
     public static class SortByName implements Comparator<Module> {
         @Override
         public int compare(@NotNull Module o1, @NotNull Module o2) {

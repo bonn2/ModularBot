@@ -25,7 +25,7 @@ public class SettingsTabComplete extends ListenerAdapter {
                 List<Command.Choice> choices = new ArrayList<>();
                 for (Module module : Bot.modules)
                     if (module.name.toLowerCase(Locale.ROOT).startsWith(Objects.requireNonNull(event.getOption("module")).getAsString().toLowerCase(Locale.ROOT))
-                            && module.hasSettings())
+                            && Settings.registeredSettingsCount(module) > 0)
                         choices.add(new Command.Choice(module.name, module.name));
                 event.replyChoices(choices).queue();
             }

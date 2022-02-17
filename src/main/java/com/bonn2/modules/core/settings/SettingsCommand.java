@@ -47,7 +47,7 @@ public class SettingsCommand extends ListenerAdapter {
             return;
         }
         // Check if module has settings
-        if (!module.hasSettings()) {
+        if (Settings.registeredSettingsCount(module) == 0) {
             event.reply("That module does not have any settings!").setEphemeral(true).queue();
             return;
         }

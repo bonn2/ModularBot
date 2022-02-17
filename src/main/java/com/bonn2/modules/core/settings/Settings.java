@@ -302,6 +302,12 @@ public class Settings extends Module {
         }
     }
 
+    public static int registeredSettingsCount(@NotNull Module module) {
+        if (registeredSettings.containsKey(module.name))
+            return registeredSettings.get(module.name).keySet().size();
+        return 0;
+    }
+
     /**
      * Check if a setting is registered
      * @param module The module the setting is registered to
