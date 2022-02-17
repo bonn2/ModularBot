@@ -1,9 +1,10 @@
 package com.bonn2.modules;
 
-import com.bonn2.modules.core.settings.Settings;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
+import java.util.List;
 
 public abstract class Module {
 
@@ -17,6 +18,7 @@ public abstract class Module {
 
     public abstract void registerSettings();
     public abstract void load();
+    public abstract CommandData[] getCommands();
 
     public static class SortByName implements Comparator<Module> {
         @Override

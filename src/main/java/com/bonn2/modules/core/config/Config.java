@@ -5,6 +5,7 @@ import com.bonn2.modules.Module;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -53,6 +54,11 @@ public class Config extends Module {
             System.out.println("Failed to save default config!");
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public CommandData[] getCommands() {
+        return new CommandData[0];
     }
 
     /**

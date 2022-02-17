@@ -3,6 +3,7 @@ package com.bonn2.modules.moderation;
 import com.bonn2.Bot;
 import com.bonn2.modules.Module;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
@@ -26,8 +27,11 @@ public class Moderation extends Module {
     public void load() {
         logger.info("Registering listeners...");
         Bot.jda.addEventListener(new ModerationListener());
-        logger.info("Creating commands...");
-        commands.add(
+    }
+
+    @Override
+    public CommandData[] getCommands() {
+        return new CommandData[] {
                 Commands.slash(
                         "mod",
                         "Moderation commands"
@@ -42,6 +46,6 @@ public class Moderation extends Module {
                                 true
                         )
                 )
-        );
+        };
     }
 }

@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
@@ -122,7 +123,11 @@ public class Bot
             }
         }
 
-        guild.updateCommands().addCommands(commands).queue();
+        logger.info("Updating commands...");
+        CommandListUpdateAction commandListUpdateAction = guild.updateCommands();
+        for (Module module : modules)
+            commandListUpdateAction = commandListUpdateAction.addCommands(module.getCommands());
+        commandListUpdateAction.queue();
 
         logger.info("Finished Loading! (" + ((float)(System.currentTimeMillis() - startTime)) / 1000 + " sec)");
     }

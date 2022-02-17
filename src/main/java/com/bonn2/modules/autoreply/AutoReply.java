@@ -4,6 +4,7 @@ import com.bonn2.Bot;
 import com.bonn2.modules.Module;
 import com.google.gson.*;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -87,8 +89,13 @@ public class AutoReply extends Module {
             e.printStackTrace();
         }
 
-        logger.info("Creating commands...");
-        commands.add(
+        logger.info("Registering Listeners...");
+        Bot.jda.addEventListener(new AutoReplyListener());
+    }
+
+    @Override
+    public CommandData[] getCommands() {
+        return new CommandData[] {
                 Commands.slash(
                         "autoreply",
                         "Manage auto-replies"
@@ -115,10 +122,8 @@ public class AutoReply extends Module {
                                 "The id of the auto-reply to delete.",
                                 true
                         )
-                ));
-
-        logger.info("Registering Listeners...");
-        Bot.jda.addEventListener(new AutoReplyListener());
+                )
+        };
     }
 
     public static void save() {

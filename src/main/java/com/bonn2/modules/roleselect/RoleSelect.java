@@ -5,9 +5,9 @@ import com.bonn2.modules.Module;
 import com.bonn2.modules.core.settings.Settings;
 import com.bonn2.modules.core.settings.types.Setting;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
-import static com.bonn2.Bot.commands;
 import static com.bonn2.Bot.logger;
 
 public class RoleSelect extends Module {
@@ -30,8 +30,11 @@ public class RoleSelect extends Module {
     public void load() {
         logger.info("Registering listeners...");
         Bot.jda.addEventListener(new RoleSelectListener(this));
-        logger.info("Creating commands...");
-        commands.add(
+    }
+
+    @Override
+    public CommandData[] getCommands() {
+        return new CommandData[] {
                 Commands.slash(
                         "roleselect",
                         "Manage RoleSelect"
@@ -161,6 +164,6 @@ public class RoleSelect extends Module {
                         "The twentieth role.",
                         false
                 )
-        );
+        };
     }
 }

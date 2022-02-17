@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,42 +51,6 @@ public class Settings extends Module {
         logger.info("Registering listeners...");
         jda.addEventListener(new SettingsCommand());
         jda.addEventListener(new SettingsTabComplete());
-
-        logger.info("Creating commands...");
-        commands.add(
-                Commands.slash(
-                        "settings",
-                        "Manage settings"
-                ).addOption(
-                        OptionType.STRING,
-                        "module",
-                        "The module to change the settings of.",
-                        false,
-                        true
-                ).addOption(
-                        OptionType.STRING,
-                        "setting",
-                        "The setting to change.",
-                        false,
-                        true
-                ).addOption(
-                        OptionType.STRING,
-                        "value",
-                        "The value to set the setting to.",
-                        false,
-                        true
-                ).addOption(
-                        OptionType.STRING,
-                        "values",
-                        "Use multiple values. (Only works with list type settings)",
-                        false
-                ).addOption(
-                        OptionType.BOOLEAN,
-                        "default",
-                        "Set an option to default.",
-                        false
-                )
-        );
 
         logger.info("Loading settings from file...");
         try {
@@ -133,6 +98,44 @@ public class Settings extends Module {
             logger.error("Failed to load settings!");
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public CommandData[] getCommands() {
+        return new CommandData[] {
+                Commands.slash(
+                        "settings",
+                        "Manage settings"
+                ).addOption(
+                        OptionType.STRING,
+                        "module",
+                        "The module to change the settings of.",
+                        false,
+                        true
+                ).addOption(
+                        OptionType.STRING,
+                        "setting",
+                        "The setting to change.",
+                        false,
+                        true
+                ).addOption(
+                        OptionType.STRING,
+                        "value",
+                        "The value to set the setting to.",
+                        false,
+                        true
+                ).addOption(
+                        OptionType.STRING,
+                        "values",
+                        "Use multiple values. (Only works with list type settings)",
+                        false
+                ).addOption(
+                        OptionType.BOOLEAN,
+                        "default",
+                        "Set an option to default.",
+                        false
+                )
+        };
     }
 
     public static void register(@NotNull Module module, String key, Setting.Type type, String unSet, String description) {

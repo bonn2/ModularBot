@@ -6,6 +6,7 @@ import com.bonn2.modules.core.settings.Settings;
 import com.bonn2.modules.core.settings.types.Setting;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -38,6 +39,11 @@ public class ShowTimeout extends Module {
         Bot.jda.addEventListener(new ShowTimeoutListener(this));
         logger.info("Checking Users for old Timeout Roles");
         checkUsers();
+    }
+
+    @Override
+    public CommandData[] getCommands() {
+        return new CommandData[0];
     }
 
     public void checkUsers() {

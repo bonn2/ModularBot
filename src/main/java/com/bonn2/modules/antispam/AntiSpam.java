@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +41,11 @@ public class AntiSpam extends Module {
     public void load() {
         Bot.logger.info("Registering Listeners...");
         Bot.jda.addEventListener(new AntiSpamListener(this));
+    }
+
+    @Override
+    public CommandData[] getCommands() {
+        return new CommandData[0];
     }
 
     public static class MessageLog {

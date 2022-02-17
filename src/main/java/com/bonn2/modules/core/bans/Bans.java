@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonPrimitive;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -45,6 +46,11 @@ public class Bans extends Module {
         }
         logger.info("Registering listeners...");
         Bot.jda.addEventListener(new BansListener());
+    }
+
+    @Override
+    public CommandData[] getCommands() {
+        return new CommandData[0];
     }
 
     /**

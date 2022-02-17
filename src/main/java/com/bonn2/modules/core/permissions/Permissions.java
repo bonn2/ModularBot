@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -58,6 +59,11 @@ public class Permissions extends Module {
     public void load() {
         Level.ownerId = Config.get("owner_id").getAsString();
         Level.permissions = this;
+    }
+
+    @Override
+    public CommandData[] getCommands() {
+        return new CommandData[0];
     }
 
     public static boolean hasPermission(@NotNull Member member, @NotNull Level level) {
