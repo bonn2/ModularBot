@@ -59,7 +59,7 @@ public class AntiSpam extends Module {
          */
         public boolean isSimilar(@NotNull Message message) {
             // This is extremely basic atm, but I broke this out into a separate function, so I can make
-            // it smarter as is required
+            if (message.getContentRaw().equals("")) return false;
             return messages.get(0).getContentRaw().equals(message.getContentRaw());
         }
 
