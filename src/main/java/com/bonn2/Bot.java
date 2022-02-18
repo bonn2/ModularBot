@@ -123,6 +123,12 @@ public class Bot
             }
         }
 
+        updateCommands();
+
+        logger.info("Finished Loading! (" + ((float)(System.currentTimeMillis() - startTime)) / 1000 + " sec)");
+    }
+
+    public static void updateCommands() {
         logger.info("Updating commands...");
         CommandListUpdateAction commandListUpdateAction = guild.updateCommands();
         int totalCommands = 0;
@@ -140,8 +146,6 @@ public class Bot
                 totalCommands == 1 ? "" : "s"
         ));
         commandListUpdateAction.queue();
-
-        logger.info("Finished Loading! (" + ((float)(System.currentTimeMillis() - startTime)) / 1000 + " sec)");
     }
 
     /**
