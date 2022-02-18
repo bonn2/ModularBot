@@ -5,6 +5,8 @@ import com.bonn2.modules.core.settings.Settings;
 import com.bonn2.modules.core.settings.types.Setting;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
+import java.util.Set;
+
 import static com.bonn2.Bot.jda;
 
 public class NSFWFilter extends Module {
@@ -29,6 +31,8 @@ public class NSFWFilter extends Module {
                 "The percentage confidence of `teen + adult` to delete images. (-1 to disable)");
         Settings.register(this, "immune_roles", Setting.Type.ROLE_LIST, Setting.Type.ROLE_LIST.unset,
                 "The roles that should not be scanned.");
+        Settings.register(this, "message", Setting.Type.STRING, "",
+                "The message to send the user as a warning, use @user to mention the user.");
     }
 
     @Override

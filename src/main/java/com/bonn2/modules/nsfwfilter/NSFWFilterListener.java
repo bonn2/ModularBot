@@ -66,6 +66,15 @@ public class NSFWFilterListener extends ListenerAdapter {
                                 )
                                 .queue();
                         event.getMessage().delete().queue();
+                        String message = Settings.get(module, "message").getAsString();
+                        if (!Objects.equals(message, "")) {
+                            event.getTextChannel().sendMessageEmbeds(new EmbedBuilder()
+                                    .setTitle(message.replaceAll("@user", event.getAuthor().getAsMention()))
+                                    .setColor(Color.RED)
+                                    .build())
+                                    .mention(event.getAuthor())
+                                    .queue();
+                        }
                         return;
                     }
                     // Delete if over adult threshold
@@ -84,6 +93,15 @@ public class NSFWFilterListener extends ListenerAdapter {
                                 )
                                 .queue();
                         event.getMessage().delete().queue();
+                        String message = Settings.get(module, "message").getAsString();
+                        if (!Objects.equals(message, "")) {
+                            event.getTextChannel().sendMessageEmbeds(new EmbedBuilder()
+                                            .setTitle(message.replaceAll("@user", event.getAuthor().getAsMention()))
+                                            .setColor(Color.RED)
+                                            .build())
+                                    .mention(event.getAuthor())
+                                    .queue();
+                        }
                         return;
                     }
                     float teenDeleteThreshold = Settings.get(module, "teen_delete_threshold").getAsFloat();
@@ -103,6 +121,15 @@ public class NSFWFilterListener extends ListenerAdapter {
                                 )
                                 .queue();
                         event.getMessage().delete().queue();
+                        String message = Settings.get(module, "message").getAsString();
+                        if (!Objects.equals(message, "")) {
+                            event.getTextChannel().sendMessageEmbeds(new EmbedBuilder()
+                                            .setTitle(message.replaceAll("@user", event.getAuthor().getAsMention()))
+                                            .setColor(Color.RED)
+                                            .build())
+                                    .mention(event.getAuthor())
+                                    .queue();
+                        }
                         return;
                     }
                     float teenAndAdultThreshold = Settings.get(module, "teen_and_adult_delete_threshold").getAsFloat();
@@ -123,6 +150,15 @@ public class NSFWFilterListener extends ListenerAdapter {
                                 )
                                 .queue();
                         event.getMessage().delete().queue();
+                        String message = Settings.get(module, "message").getAsString();
+                        if (!Objects.equals(message, "")) {
+                            event.getTextChannel().sendMessageEmbeds(new EmbedBuilder()
+                                            .setTitle(message.replaceAll("@user", event.getAuthor().getAsMention()))
+                                            .setColor(Color.RED)
+                                            .build())
+                                    .mention(event.getAuthor())
+                                    .queue();
+                        }
                         return;
                     }
                     // Log if detected as non-everyone
