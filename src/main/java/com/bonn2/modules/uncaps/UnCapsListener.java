@@ -62,11 +62,17 @@ public class UnCapsListener extends ListenerAdapter {
 
             messageBuilder.setContent(content.toLowerCase(Locale.ROOT).replace("@", "*"));
 
-            // Send Message
-            client.send(messageBuilder.build());
-
             // Delete original
-            event.getMessage().delete().queue();
+            try {
+                event.getMessage().delete().complete();
+            } catch (RuntimeException ignored) {
+                // Delete temp webhook
+                webhook.delete().queueAfter(10, TimeUnit.SECONDS);
+                return;
+            }
+
+            // Send New
+            client.send(messageBuilder.build());
 
             // Delete temp webhook
             webhook.delete().queueAfter(10, TimeUnit.SECONDS);
