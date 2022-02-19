@@ -22,6 +22,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.bonn2.Bot.logger;
+
 public class RoleSelectListener extends ListenerAdapter {
 
     final RoleSelect module;
@@ -49,7 +51,7 @@ public class RoleSelectListener extends ListenerAdapter {
         // Create embed
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setTitle(event.getOption("title").getAsString());
-        embedBuilder.setDescription(event.getOption("description").getAsString());
+        embedBuilder.setDescription(event.getOption("description").getAsString().replaceAll("\\\\n", "\n"));
         embedBuilder.setColor(Color.CYAN);
 
         // Create selection menu

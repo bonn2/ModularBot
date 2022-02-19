@@ -46,7 +46,7 @@ public class RoleSelect extends Module {
                 ).addOption(
                         OptionType.STRING,
                         "description",
-                        "The description of the embed.",
+                        "The description of the embed. You can use \\n for newlines",
                         true
                 ).addOption(
                         OptionType.INTEGER,
