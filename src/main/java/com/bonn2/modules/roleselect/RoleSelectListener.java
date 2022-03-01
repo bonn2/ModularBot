@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.SelectMenuInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -21,8 +22,6 @@ import javax.annotation.Nonnull;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.bonn2.Bot.logger;
 
 public class RoleSelectListener extends ListenerAdapter {
 
@@ -130,5 +129,13 @@ public class RoleSelectListener extends ListenerAdapter {
             stringBuilder.append("<@&%s> ".formatted(role.getId()));
 
         event.getHook().editOriginal(stringBuilder.toString()).queue();
+    }
+
+    @Override
+    public void onGuildMemberJoin(@Nonnull GuildMemberJoinEvent event) {
+        List<Role> roles = Settings.get(module, "default_roles").getAsRoleList();
+        for (Role role : roles) {
+            event.getGuild().addRoleToMember(event.getMember(), role).queue();
+        }
     }
 }

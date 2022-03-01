@@ -15,13 +15,15 @@ public class RoleSelect extends Module {
     public static final int max_selections = 25;
 
     public RoleSelect() {
-        version = "v1.0";
+        version = "v1.1";
         priority = Priority.POST_JDA_LOW;
         name = "RoleSelect";
     }
 
     @Override
     public void registerSettings() {
+        Settings.register(this, "default_roles", Setting.Type.ROLE_LIST, Setting.Type.ROLE_LIST.unset,
+                "The roles to give a person when they join the server.");
         Settings.register(this, "allowed_roles", Setting.Type.ROLE_LIST, Setting.Type.ROLE_LIST.unset,
                 "The roles that can be given through selection menus. (Keep up to date to prevent spoofing)");
     }
