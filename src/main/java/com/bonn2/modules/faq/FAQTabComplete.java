@@ -15,6 +15,7 @@ import static com.bonn2.modules.faq.FAQ.QUESTIONS;
 public class FAQTabComplete extends ListenerAdapter {
 
     public void onCommandAutoCompleteInteraction(@Nonnull CommandAutoCompleteInteractionEvent event) {
+        if (!event.getName().equals("faq")) return;
         List<Command.Choice> choices = new ArrayList<>();
         for (FAQ.Question question : QUESTIONS) {
             if (question.name.toLowerCase(Locale.ROOT).startsWith(event.getOption("name").getAsString().toLowerCase(Locale.ROOT))) {
