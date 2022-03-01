@@ -31,8 +31,8 @@ public class NowPlayingListener extends ListenerAdapter {
                 return;
             }
         }
-
-        event.getGuild().removeRoleFromMember(member, role).queue();
+        if (member.getRoles().contains(role))
+            event.getGuild().removeRoleFromMember(member, role).queue();
     }
 
     @Override

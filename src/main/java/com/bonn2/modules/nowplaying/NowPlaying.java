@@ -9,8 +9,6 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
-import static com.bonn2.Bot.logger;
-
 public class NowPlaying extends Module {
 
     public NowPlaying() {
@@ -30,7 +28,6 @@ public class NowPlaying extends Module {
     @Override
     public void load() {
         Bot.jda.addEventListener(new NowPlayingListener(this));
-        logger.info("Checking users");
         checkUsers();
     }
 
@@ -49,11 +46,11 @@ public class NowPlaying extends Module {
                             && activity.getName().equalsIgnoreCase(Settings.get(this, "game").getAsString())) {
                         Bot.guild.addRoleToMember(member, role).queue();
                         isPlaying = true;
-                        break;
                     }
                 }
                 if (!isPlaying)
-                    Bot.guild.removeRoleFromMember(member, role).queue();
+                    if (member.getRoles().contains(role))
+                        Bot.guild.removeRoleFromMember(member, role).queue();
             }
         }));
     }
