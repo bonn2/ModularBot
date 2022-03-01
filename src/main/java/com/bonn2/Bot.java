@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.reflections.Reflections;
@@ -78,7 +79,11 @@ public class Bot
         jda = JDABuilder.createDefault(Config.get("token").getAsString())
                 .enableIntents(
                         GatewayIntent.GUILD_MEMBERS,
-                        GatewayIntent.GUILD_BANS
+                        GatewayIntent.GUILD_BANS,
+                        GatewayIntent.GUILD_PRESENCES
+                )
+                .enableCache(
+                        CacheFlag.ACTIVITY
                 )
                 .build();
 
