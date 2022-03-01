@@ -47,16 +47,13 @@ public class NowPlaying extends Module {
                 for (Activity activity : member.getActivities()) {
                     if (activity.getType().equals(Activity.ActivityType.PLAYING)
                             && activity.getName().equalsIgnoreCase(Settings.get(this, "game").getAsString())) {
+                        Bot.guild.addRoleToMember(member, role).queue();
                         isPlaying = true;
-                        if (!member.getRoles().contains(role)) {
-                            Bot.guild.addRoleToMember(member, role).queue();
-                            break;
-                        }
+                        break;
                     }
                 }
                 if (!isPlaying)
-                    if (member.getRoles().contains(role))
-                        Bot.guild.removeRoleFromMember(member, role).queue();
+                    Bot.guild.removeRoleFromMember(member, role).queue();
             }
         }));
     }

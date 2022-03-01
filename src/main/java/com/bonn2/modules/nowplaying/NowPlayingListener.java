@@ -1,5 +1,6 @@
 package com.bonn2.modules.nowplaying;
 
+import com.bonn2.Bot;
 import com.bonn2.modules.core.settings.Settings;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Member;
@@ -26,14 +27,12 @@ public class NowPlayingListener extends ListenerAdapter {
         for (Activity activity : member.getActivities()) {
             if (activity.getType().equals(Activity.ActivityType.PLAYING)
                     && activity.getName().equalsIgnoreCase(Settings.get(module, "game").getAsString())) {
-                if (!member.getRoles().contains(role))
-                    event.getGuild().addRoleToMember(member, role).queue();
+                event.getGuild().addRoleToMember(member, role).queue();
                 return;
             }
         }
 
-        if (member.getRoles().contains(role))
-            event.getGuild().removeRoleFromMember(member, role).queue();
+        event.getGuild().removeRoleFromMember(member, role).queue();
     }
 
     @Override
@@ -44,8 +43,7 @@ public class NowPlayingListener extends ListenerAdapter {
         for (Activity activity : member.getActivities()) {
             if (activity.getType().equals(Activity.ActivityType.PLAYING)
                     && activity.getName().equalsIgnoreCase(Settings.get(module, "game").getAsString())) {
-                if (!member.getRoles().contains(role))
-                    event.getGuild().addRoleToMember(member, role).queue();
+                event.getGuild().addRoleToMember(member, role).queue();
                 return;
             }
         }
