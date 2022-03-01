@@ -47,9 +47,9 @@ public class NowPlaying extends Module {
                 for (Activity activity : member.getActivities()) {
                     if (activity.getType().equals(Activity.ActivityType.PLAYING)
                             && activity.getName().equalsIgnoreCase(Settings.get(this, "game").getAsString())) {
+                        isPlaying = true;
                         if (!member.getRoles().contains(role)) {
                             Bot.guild.addRoleToMember(member, role).queue();
-                            isPlaying = true;
                             break;
                         }
                     }
