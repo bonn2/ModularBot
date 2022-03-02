@@ -53,7 +53,10 @@ public class NSFWFilterListener extends ListenerAdapter {
                     boolean deleteAdult = Settings.get(module, "delete_adult").getAsBoolean();
                     if (deleteAdult && Objects.equals(response.get("rating_letter").getAsString(), "a")) {
                         MessageBuilder messageBuilder = new MessageBuilder();
-                        messageBuilder.setContent(":x: Deleted an image that was detected as adult!");
+                        messageBuilder.setContent(":x: Deleted an image, sent by %s in %s, that was detected as adult!".formatted(
+                                event.getAuthor().getAsMention(),
+                                event.getChannel().getAsMention()
+                        ));
                         messageBuilder.setEmbeds(getResultsEmbed(
                                 response.get("predictions").getAsJsonObject(),
                                 event.getMessage().getTimeCreated().toInstant().toEpochMilli())
@@ -80,7 +83,10 @@ public class NSFWFilterListener extends ListenerAdapter {
                     // Delete if over adult threshold
                     if (adultDeleteThreshold >= 0 && response.get("predictions").getAsJsonObject().get("adult").getAsFloat() >= adultDeleteThreshold) {
                         MessageBuilder messageBuilder = new MessageBuilder();
-                        messageBuilder.setContent(":x: Deleted an image that is over the adult threshold!");
+                        messageBuilder.setContent(":x: Deleted an image, sent by %s in %s, that is over the adult threshold!".formatted(
+                                event.getAuthor().getAsMention(),
+                                event.getChannel().getAsMention()
+                        ));
                         messageBuilder.setEmbeds(getResultsEmbed(
                                 response.get("predictions").getAsJsonObject(),
                                 event.getMessage().getTimeCreated().toInstant().toEpochMilli())
@@ -108,7 +114,10 @@ public class NSFWFilterListener extends ListenerAdapter {
                     // Delete if over teen threshold
                     if (teenDeleteThreshold >= 0 && response.get("predictions").getAsJsonObject().get("teen").getAsFloat() >= teenDeleteThreshold) {
                         MessageBuilder messageBuilder = new MessageBuilder();
-                        messageBuilder.setContent(":x: Deleted an image that is over the teen threshold!");
+                        messageBuilder.setContent(":x: Deleted an image, sent by %s in %s, that is over the teen threshold!".formatted(
+                                event.getAuthor().getAsMention(),
+                                event.getChannel().getAsMention()
+                        ));
                         messageBuilder.setEmbeds(getResultsEmbed(
                                 response.get("predictions").getAsJsonObject(),
                                 event.getMessage().getTimeCreated().toInstant().toEpochMilli())
@@ -137,7 +146,10 @@ public class NSFWFilterListener extends ListenerAdapter {
                     if (teenAndAdultThreshold >= 0 &&
                             response.get("predictions").getAsJsonObject().get("teen").getAsFloat() + response.get("predictions").getAsJsonObject().get("adult").getAsFloat() >= teenAndAdultThreshold) {
                         MessageBuilder messageBuilder = new MessageBuilder();
-                        messageBuilder.setContent(":x: Deleted an image that is over the teen + adult threshold!");
+                        messageBuilder.setContent(":x: Deleted an image, sent by %s in %s that is over the teen + adult threshold!".formatted(
+                                event.getAuthor().getAsMention(),
+                                event.getChannel().getAsMention()
+                        ));
                         messageBuilder.setEmbeds(getResultsEmbed(
                                 response.get("predictions").getAsJsonObject(),
                                 event.getMessage().getTimeCreated().toInstant().toEpochMilli())
@@ -165,7 +177,10 @@ public class NSFWFilterListener extends ListenerAdapter {
                     if (response.get("rating_index").getAsInt() > 1) {
                         // Image was not auto rated as E
                         MessageBuilder messageBuilder = new MessageBuilder();
-                        messageBuilder.setContent(":x: Detected an image that seems to be NSFW!");
+                        messageBuilder.setContent(":x: Detected an image, sent by %s in %s that seems to be NSFW!".formatted(
+                                event.getAuthor().getAsMention(),
+                                event.getChannel().getAsMention()
+                        ));
                         messageBuilder.setEmbeds(getResultsEmbed(
                                 response.get("predictions").getAsJsonObject(),
                                 event.getMessage().getTimeCreated().toInstant().toEpochMilli())
