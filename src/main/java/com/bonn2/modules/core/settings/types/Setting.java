@@ -13,7 +13,8 @@ public abstract class Setting {
 
     public enum Type {
         INT("0"), DOUBLE("0"), FLOAT("0"), ROLE("0"), NULL("0"),
-        ROLE_LIST("0"), TEXT_CHANNEL("0"), STRING(""), BOOLEAN("false");
+        ROLE_LIST("0"), TEXT_CHANNEL("0"), TEXT_CHANNEL_LIST("0"), STRING(""),
+        BOOLEAN("false");
 
         public final String unset;
 
@@ -29,6 +30,7 @@ public abstract class Setting {
                 case "ROLE" -> ROLE;
                 case "ROLE_LIST" -> ROLE_LIST;
                 case "TEXT_CHANNEL" -> TEXT_CHANNEL;
+                case "TEXT_CHANNEL_LIST" -> TEXT_CHANNEL_LIST;
                 case "STRING" -> STRING;
                 case "BOOLEAN" -> BOOLEAN;
                 default -> NULL;
@@ -66,6 +68,7 @@ public abstract class Setting {
                 case ROLE -> new RoleSetting(value);
                 case ROLE_LIST -> new RoleListSetting(value);
                 case TEXT_CHANNEL -> new TextChannelSetting(value);
+                case TEXT_CHANNEL_LIST -> new TextChannelListSetting(value);
                 case STRING -> new StringSetting(value);
                 case BOOLEAN -> new BooleanSetting(value);
                 default -> null;
@@ -110,6 +113,16 @@ public abstract class Setting {
     public TextChannel getAsTextChannel() {
         Bot.logger.warn("Getting unimplemented setting value!");
         return null;
+    }
+
+    public List<TextChannel> getAsTextChannelList() {
+        Bot.logger.warn("Getting unimplemented setting value!");
+        return null;
+    }
+
+    public List<String> getAsTextChannelIdList() {
+        Bot.logger.warn("Getting unimplemented setting value!");
+        return new ArrayList<>();
     }
 
     public String getAsString() {

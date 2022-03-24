@@ -14,10 +14,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 public class SettingsCommand extends ListenerAdapter {
 
@@ -97,6 +95,27 @@ public class SettingsCommand extends ListenerAdapter {
                         Settings.set(module, key, valueToSet.toString());
                         event.replyEmbeds(getModuleSettingEmbed(module)).queue();
                     }
+                    case TEXT_CHANNEL_LIST -> {
+                        String[] splitValues = Objects.requireNonNull(event.getOption("values")).getAsString().split(" ");
+                        List<TextChannel> channels = new LinkedList<>();
+                        for (String value : splitValues) {
+                            if (!value.matches("<#[0-9]{18}>")) continue;
+                            TextChannel channel = Bot.guild.getTextChannelById(value.substring(2, 20));
+                            if (channel == null) continue;
+                            channels.add(channel);
+                        }
+                        StringBuilder valueToSet = new StringBuilder();
+                        for (TextChannel channel : channels) {
+                            valueToSet.append(channel.getId());
+                            valueToSet.append(",");
+                        }
+                        // Remove trailing ,
+                        if (!valueToSet.isEmpty())
+                            valueToSet.deleteCharAt(valueToSet.length() - 1);
+
+                        Settings.set(module, key, valueToSet.toString());
+                        event.replyEmbeds(getModuleSettingEmbed(module)).queue();
+                    }
                     default -> event.reply("This setting does not support multiple values!")
                             .setEphemeral(true)
                             .queue();
@@ -146,7 +165,7 @@ public class SettingsCommand extends ListenerAdapter {
                         Settings.set(module, key, role.getId());
                         event.replyEmbeds(getModuleSettingEmbed(module)).queue();
                     }
-                    case TEXT_CHANNEL -> {
+                    case TEXT_CHANNEL, TEXT_CHANNEL_LIST -> {
                         // Check if text channel was provided
                         if (!value.matches("<#[0-9]{18}>")) {
                             event.reply("`%s` is not a channel! Make sure you tab complete the channel, rather than just typing the name!"
