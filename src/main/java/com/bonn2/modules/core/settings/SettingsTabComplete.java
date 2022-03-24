@@ -77,7 +77,7 @@ public class SettingsTabComplete extends ListenerAdapter {
                 List<Command.Choice> choices = new ArrayList<>();
                 String value = Objects.requireNonNull(event.getOption("value")).getAsString().trim().toLowerCase(Locale.ROOT);
                 switch (Settings.getRegisteredSettingType(module, setting)) {
-                    case TEXT_CHANNEL -> {
+                    case TEXT_CHANNEL, TEXT_CHANNEL_LIST -> {
                         for (TextChannel channel : Objects.requireNonNull(event.getGuild()).getTextChannels()) {
                             if (channel.getName().toLowerCase(Locale.ROOT).startsWith(value)) {
                                 choices.add(new Command.Choice(
