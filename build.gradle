@@ -21,7 +21,7 @@ dependencies {
     implementation('net.dv8tion:JDA:5.0.0-alpha.9')
     implementation('org.slf4j:slf4j-simple:2.0.0-alpha7')
     implementation('com.google.code.gson:gson:2.9.0')
-    implementation('club.minnced:discord-webhooks:0.7.5')
+    implementation('club.minnced:discord-webhooks:0.8.0')
     implementation('org.reflections:reflections:0.10.2')
 }
 
