@@ -65,6 +65,7 @@ public class FAQ extends Module {
                 "The maximum number of FAQ responses per message");
     }
 
+    @SuppressWarnings("resource")
     @Override
     public void load() {
         logger.info("Loading Saved Data...");
@@ -151,6 +152,7 @@ public class FAQ extends Module {
     /**
      * Save all questions to file
      */
+    @SuppressWarnings("resource")
     public static void save() {
         logger.info("Saving FAQs to file...");
         try {
