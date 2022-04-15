@@ -11,7 +11,7 @@ import static com.bonn2.Bot.logger;
 public class EmbedMsg extends Module {
 
     public EmbedMsg() {
-        version = "v1.1";
+        version = "v1.2";
         priority = Priority.POST_JDA_LOW;
         name = "EmbedMsg";
     }

@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 public class EmbedMsgListener extends ListenerAdapter {
 
-    static Pattern linkPattern = Pattern.compile("https://discord\\.com/channels/[0-9]+/[0-9]+/[0-9]+");
+    static Pattern linkPattern = Pattern.compile("[0-9]+/[0-9]+/[0-9]+");
     final EmbedMsg module;
 
     public EmbedMsgListener(EmbedMsg module) {
@@ -32,16 +32,16 @@ public class EmbedMsgListener extends ListenerAdapter {
         embedBuilder.setColor(Color.CYAN);
         while (matcher.find()) {
             // Array Mapping
-            // 4: Guild ID
-            // 5: Channel ID
-            // 6: Message ID
+            // 0: Guild ID
+            // 1: Channel ID
+            // 2: Message ID
             String[] splitLink = matcher.group().split("/");
-            Guild guild = Bot.jda.getGuildById(splitLink[4]);
+            Guild guild = Bot.jda.getGuildById(splitLink[0]);
             if (guild == null) continue;
-            Channel channel = guild.getGuildChannelById(splitLink[5]);
+            Channel channel = guild.getGuildChannelById(splitLink[1]);
             if (channel == null) continue;
             if (channel instanceof BaseGuildMessageChannel messageChannel) {
-                Message message = messageChannel.retrieveMessageById(splitLink[6]).complete();
+                Message message = messageChannel.retrieveMessageById(splitLink[2]).complete();
                 if (message == null) continue;
                 if (message.getContentRaw().equals("")) continue;
                 embedBuilder.addField(
@@ -51,7 +51,7 @@ public class EmbedMsgListener extends ListenerAdapter {
                         ),
                         "%s\n\n[See Original](%s)".formatted(
                                 message.getContentRaw(),
-                                matcher.group()
+                                "https://discord.com/channels/" + matcher.group()
                         ),
                         true
                 );
