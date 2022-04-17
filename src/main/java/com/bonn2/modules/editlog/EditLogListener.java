@@ -34,7 +34,6 @@ public class EditLogListener extends ListenerAdapter {
 
     @Override
     public void onMessageUpdate(@Nonnull MessageUpdateEvent event) {
-        // TODO: 4/16/2022 Handle removal of attachments
         Message cachedMessage = cache.getIfPresent(event.getMessageId());
         TextChannel logChannel = Settings.get(module, "log_channel").getAsTextChannel();
         if (cachedMessage != null && logChannel != null) {
@@ -42,17 +41,37 @@ public class EditLogListener extends ListenerAdapter {
             embedBuilder.setTitle("Message Edited");
             embedBuilder.setColor(Color.YELLOW);
             embedBuilder.setDescription(
-                    "%s edited a message in %s\n".formatted(
+                    "%s edited a message in %s".formatted(
                             event.getAuthor().getAsMention(),
                             event.getMessage().getChannel().getAsMention()
                     )
-                    + "Original: `%s`\nNew: `%s`\n\n[See Message](%s)".formatted(
-                            cachedMessage.getContentRaw(),
-                            event.getMessage().getContentRaw(),
-                            event.getMessage().getJumpUrl()
-                    )
             );
-            logChannel.sendMessageEmbeds(embedBuilder.build()).queue();
+            boolean wasEdited = false;
+            if (!cachedMessage.getContentRaw().equals(event.getMessage().getContentRaw())) {
+                // Text was edited
+                wasEdited = true;
+                embedBuilder.appendDescription("\n\nOriginal: `%s`\nNew: `%s`".formatted(
+                        cachedMessage.getContentRaw(),
+                        event.getMessage().getContentRaw()
+                ));
+            }
+            if (cachedMessage.getAttachments().size() > event.getMessage().getAttachments().size()) {
+                // Attachments were removed
+                wasEdited = true;
+                embedBuilder.appendDescription("\n\n**Removed Attachments**");
+                for (int i = 1; i <= cachedMessage.getAttachments().size(); i++)
+                    if (!event.getMessage().getAttachments().contains(cachedMessage.getAttachments().get(i - 1)))
+                        embedBuilder.appendDescription("\n**%s:** [%s](%s)".formatted(
+                                i,
+                                cachedMessage.getAttachments().get(i - 1).getFileName(),
+                                cachedMessage.getAttachments().get(i - 1).getUrl()
+                        ));
+            }
+            embedBuilder.appendDescription("\n\n[See Message](%s)".formatted(
+                    event.getMessage().getJumpUrl()
+            ));
+
+            if (wasEdited) logChannel.sendMessageEmbeds(embedBuilder.build()).queue();
         }
         cache.put(event.getMessageId(), event.getMessage());
     }
@@ -62,11 +81,11 @@ public class EditLogListener extends ListenerAdapter {
         Message cachedMessage = cache.getIfPresent(event.getMessageId());
         TextChannel logChannel = Settings.get(module, "log_channel").getAsTextChannel();
         EmbedBuilder embedBuilder = new EmbedBuilder();
-        embedBuilder.setTitle("A message was deleted!");
+        embedBuilder.setTitle("Message Deleted");
         embedBuilder.setColor(Color.RED);
         boolean hasContent = false;
         if (cachedMessage != null) {
-            embedBuilder.setDescription("%s deleted a message in %s.".formatted(
+            embedBuilder.setDescription("%s's message was deleted from %s.".formatted(
                     cachedMessage.getAuthor().getAsMention(),
                     cachedMessage.getChannel().getAsMention()
             ));
