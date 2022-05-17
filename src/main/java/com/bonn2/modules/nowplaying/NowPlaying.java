@@ -14,7 +14,7 @@ public class NowPlaying extends Module {
     public NowPlaying() {
         name = "NowPlaying";
         version = "v1.1";
-        priority = Priority.POST_JDA_LOW;
+        priority = Priority.DO_NOT_LOAD;
     }
 
     @Override

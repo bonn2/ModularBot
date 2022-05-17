@@ -8,7 +8,7 @@ import java.util.Comparator;
 public abstract class Module {
 
     public enum Priority {
-        PRE_JDA_HIGH, PRE_JDA_LOW, POST_JDA_HIGH, POST_JDA_LOW, SETTINGS
+        PRE_JDA_HIGH, PRE_JDA_LOW, POST_JDA_HIGH, POST_JDA_LOW, SETTINGS, DO_NOT_LOAD
     }
 
     public String version = "v0.0";
