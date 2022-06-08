@@ -82,7 +82,7 @@ public class AntiSpamListener extends ListenerAdapter {
                 embedBuilder.setColor(Color.RED);
                 embedBuilder.setDescription("Spam is not allowed in %s!\nContinued spam will result in a kick!"
                         .formatted(
-                                Bot.guild.getName()
+                                member.getGuild().getName()
                         ));
                 embedBuilder.setTimestamp(Instant.now());
                 user.openPrivateChannel().complete().sendMessageEmbeds(embedBuilder.build()).queue();
