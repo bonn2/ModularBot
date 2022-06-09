@@ -107,13 +107,13 @@ public class Bot
         settings.load();
         modules.add(settings);
 
-        for (Module module : modules) {
-            if (!Objects.equals(module.getName(), "Settings") && !Objects.equals(module.getName(), "Config")) {
-                logger.info("Loading %s version %s...".formatted(module.getName(), module.getVersion()));
-                module.load();
-                logger.info("Loaded %s version %s".formatted(module.getName(), module.getVersion()));
-            }
-        }
+//        for (Module module : modules) {
+//            if (!Objects.equals(module.getName(), "Settings") && !Objects.equals(module.getName(), "Config")) {
+//                logger.info("Loading %s version %s...".formatted(module.getName(), module.getVersion()));
+//                module.load();
+//                logger.info("Loaded %s version %s".formatted(module.getName(), module.getVersion()));
+//            }
+//        }
 
         for (Guild guild : jda.getGuilds())
             updateCommands(guild);

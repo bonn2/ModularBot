@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
     implementation('net.dv8tion:JDA:5.0.0-alpha.12')
-    implementation('org.slf4j:slf4j-simple:2.0.0-alpha7')
+    implementation('ch.qos.logback:logback-classic:1.2.11')
     implementation('com.google.code.gson:gson:2.9.0')
 }
 
