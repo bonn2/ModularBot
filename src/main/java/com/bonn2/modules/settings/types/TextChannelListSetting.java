@@ -3,6 +3,7 @@ package com.bonn2.modules.settings.types;
 import com.bonn2.Bot;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,11 +49,11 @@ public class TextChannelListSetting extends Setting {
     }
 
     @Override
-    public List<TextChannel> getAsTextChannelList() {
+    public List<TextChannel> getAsTextChannelList(Guild guild) {
         List<TextChannel> channels = new LinkedList<>();
         for (String id : ids)
             if (!id.equals("0"))
-                channels.add(Bot.guild.getTextChannelById(id));
+                channels.add(guild.getTextChannelById(id));
         return channels;
     }
 

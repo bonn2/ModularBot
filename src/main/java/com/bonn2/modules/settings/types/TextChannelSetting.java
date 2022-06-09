@@ -3,6 +3,7 @@ package com.bonn2.modules.settings.types;
 import com.bonn2.Bot;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +26,7 @@ public class TextChannelSetting extends Setting {
     }
 
     @Override
-    public TextChannel getAsTextChannel() {
-        return Bot.jda.getTextChannelById(id);
+    public TextChannel getAsTextChannel(Guild guild) {
+        return guild.getTextChannelById(id);
     }
 }

@@ -49,7 +49,7 @@ public class SettingsCommand extends ListenerAdapter {
         }
         // Return a list of all registered settings for the module
         if (event.getOption("setting") == null) {
-            event.replyEmbeds(getModuleSettingEmbed(module)).queue();
+            event.replyEmbeds(getModuleSettingEmbed(module, event.getGuild().getId())).queue();
             return;
         }
         String key = Objects.requireNonNull(event.getOption("setting"))
@@ -59,8 +59,8 @@ public class SettingsCommand extends ListenerAdapter {
         // Unset the value
         if (event.getOption("default") != null && Objects.requireNonNull(event.getOption("default")).getAsBoolean()) {
             if (Settings.hasSetting(module, key)) {
-                Settings.unSet(module, key);
-                event.replyEmbeds(getModuleSettingEmbed(module)).queue();
+                Settings.unSet(module, event.getGuild().getId(), key);
+                event.replyEmbeds(getModuleSettingEmbed(module, event.getGuild().getId())).queue();
             } else {
                 event.reply("The module %s does not have a setting %s!".formatted(module.name, key))
                         .setEphemeral(true)
@@ -90,15 +90,15 @@ public class SettingsCommand extends ListenerAdapter {
                         if (!valueToSet.isEmpty())
                             valueToSet.deleteCharAt(valueToSet.length() - 1);
 
-                        Settings.set(module, key, valueToSet.toString());
-                        event.replyEmbeds(getModuleSettingEmbed(module)).queue();
+                        Settings.set(module, event.getGuild().getId(), key, valueToSet.toString());
+                        event.replyEmbeds(getModuleSettingEmbed(module, event.getGuild().getId())).queue();
                     }
                     case TEXT_CHANNEL_LIST -> {
                         String[] splitValues = Objects.requireNonNull(event.getOption("values")).getAsString().split(" ");
                         List<TextChannel> channels = new LinkedList<>();
                         for (String value : splitValues) {
                             if (!value.matches("<#[0-9]{18}>")) continue;
-                            TextChannel channel = Bot.guild.getTextChannelById(value.substring(2, 20));
+                            TextChannel channel = event.getGuild().getTextChannelById(value.substring(2, 20));
                             if (channel == null) continue;
                             channels.add(channel);
                         }
@@ -111,8 +111,8 @@ public class SettingsCommand extends ListenerAdapter {
                         if (!valueToSet.isEmpty())
                             valueToSet.deleteCharAt(valueToSet.length() - 1);
 
-                        Settings.set(module, key, valueToSet.toString());
-                        event.replyEmbeds(getModuleSettingEmbed(module)).queue();
+                        Settings.set(module, event.getGuild().getId(), key, valueToSet.toString());
+                        event.replyEmbeds(getModuleSettingEmbed(module, event.getGuild().getId())).queue();
                     }
                     default -> event.reply("This setting does not support multiple values!")
                             .setEphemeral(true)
@@ -143,7 +143,7 @@ public class SettingsCommand extends ListenerAdapter {
             // Attempt to set the value
             if (Settings.hasSetting(module, key)) {
                 switch (Settings.getRegisteredSettingType(module, key)) {
-                    // Handle mentionables
+                    // Handle mentionable
                     case ROLE, ROLE_LIST -> {
                         // Check if passed value is a role
                         if (!value.matches("<@&[0-9]{18}>")) {
@@ -160,8 +160,8 @@ public class SettingsCommand extends ListenerAdapter {
                                     .queue();
                             return;
                         }
-                        Settings.set(module, key, role.getId());
-                        event.replyEmbeds(getModuleSettingEmbed(module)).queue();
+                        Settings.set(module, event.getGuild().getId(), key, role.getId());
+                        event.replyEmbeds(getModuleSettingEmbed(module, event.getGuild().getId())).queue();
                     }
                     case TEXT_CHANNEL, TEXT_CHANNEL_LIST -> {
                         // Check if text channel was provided
@@ -179,13 +179,13 @@ public class SettingsCommand extends ListenerAdapter {
                                     .queue();
                             return;
                         }
-                        Settings.set(module, key, textChannel.getId());
-                        event.replyEmbeds(getModuleSettingEmbed(module)).queue();
+                        Settings.set(module, event.getGuild().getId(), key, textChannel.getId());
+                        event.replyEmbeds(getModuleSettingEmbed(module, event.getGuild().getId())).queue();
                     }
                     // Handle everything else
                     default -> {
-                        if (Settings.set(module, key, value)) {
-                            event.replyEmbeds(getModuleSettingEmbed(module)).queue();
+                        if (Settings.set(module, event.getGuild().getId(), key, value)) {
+                            event.replyEmbeds(getModuleSettingEmbed(module, event.getGuild().getId())).queue();
                         } else {
                             event.reply("That is not a valid value!")
                                     .setEphemeral(true)
@@ -201,7 +201,7 @@ public class SettingsCommand extends ListenerAdapter {
         }
     }
 
-    private @NotNull MessageEmbed getModuleSettingEmbed(@NotNull Module module) {
+    private @NotNull MessageEmbed getModuleSettingEmbed(@NotNull Module module, String guildID) {
         // Get registered settings for the module
         Map<String, Setting.Type> registeredSettings = Settings.getRegisteredSettings(module.name);
         // Get setting descriptions
@@ -216,7 +216,7 @@ public class SettingsCommand extends ListenerAdapter {
                     "%s\n**Type:** %s\n**Value:** %s".formatted(
                             descriptions.get(key),
                             StringUtil.capitalize(registeredSettings.get(key).toString().toLowerCase()),
-                            Objects.requireNonNull(Settings.get(module, key)).getDisplayString()
+                            Objects.requireNonNull(Settings.get(module, guildID, key)).getDisplayString()
                     ),
                     false
             );

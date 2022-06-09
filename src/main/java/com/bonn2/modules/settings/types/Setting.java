@@ -2,6 +2,7 @@ package com.bonn2.modules.settings.types;
 
 import com.bonn2.Bot;
 import com.google.gson.JsonElement;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import org.jetbrains.annotations.NotNull;
@@ -95,12 +96,12 @@ public abstract class Setting {
         return Float.parseFloat(Type.FLOAT.unset);
     }
 
-    public Role getAsRole() {
+    public Role getAsRole(Guild guild) {
         Bot.logger.warn("Getting unimplemented setting value!");
         return null;
     }
 
-    public List<Role> getAsRoleList() {
+    public List<Role> getAsRoleList(Guild guild) {
         Bot.logger.warn("Getting unimplemented setting value!");
         return new ArrayList<>();
     }
@@ -110,12 +111,12 @@ public abstract class Setting {
         return new ArrayList<>();
     }
 
-    public TextChannel getAsTextChannel() {
+    public TextChannel getAsTextChannel(Guild guild) {
         Bot.logger.warn("Getting unimplemented setting value!");
         return null;
     }
 
-    public List<TextChannel> getAsTextChannelList() {
+    public List<TextChannel> getAsTextChannelList(Guild guild) {
         Bot.logger.warn("Getting unimplemented setting value!");
         return null;
     }

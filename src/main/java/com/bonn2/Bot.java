@@ -29,7 +29,6 @@ public class Bot
     public static JDA jda = null;
     public static String localPath = null;
     public static String modulePath = null;
-    public static Guild guild = null;
     public static List<Module> modules = new LinkedList<>();
 
     // Handles starting the bot, and initializing static variables
@@ -93,12 +92,10 @@ public class Bot
 
         logger.info("Logged in to: " + jda.getSelfUser().getAsTag());
 
-        // Get Guild
-        // TODO: 6/9/2022 Remove this (make guild independent)
-        guild = jda.getGuildById(Config.get("guild").getAsString());
-        if (guild == null) {
-            logger.error("Failed to get guild!");
-            return;
+        logger.info("Registering Settings...");
+        for (Module module : modules) {
+            module.registerSettings();
+            logger.info("Registered settings for %s version %s".formatted(module.name, module.version));
         }
 
         // Load settings
@@ -106,12 +103,6 @@ public class Bot
         Settings settings = new Settings();
         settings.load();
         modules.add(settings);
-
-        logger.info("Registering Settings...");
-        for (Module module : modules) {
-            module.registerSettings();
-            logger.info("Registered settings for %s version %s".formatted(module.name, module.version));
-        }
 
         for (Module module : modules) {
             if (module.priority.equals(Module.Priority.POST_JDA_HIGH)) {
@@ -128,12 +119,13 @@ public class Bot
             }
         }
 
-        updateCommands();
+        for (Guild guild : jda.getGuilds())
+            updateCommands(guild);
 
         logger.info("Finished Loading! (" + ((float)(System.currentTimeMillis() - startTime)) / 1000 + " sec)");
     }
 
-    public static void updateCommands() {
+    public static void updateCommands(Guild guild) {
         logger.info("Updating commands...");
         CommandListUpdateAction commandListUpdateAction = guild.updateCommands();
         int totalCommands = 0;

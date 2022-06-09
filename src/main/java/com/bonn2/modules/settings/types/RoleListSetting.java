@@ -3,6 +3,7 @@ package com.bonn2.modules.settings.types;
 import com.bonn2.Bot;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,11 +49,11 @@ public class RoleListSetting extends Setting {
     }
 
     @Override
-    public List<Role> getAsRoleList() {
+    public List<Role> getAsRoleList(Guild guild) {
         List<Role> roles = new LinkedList<>();
         for (String id : ids)
             if (!id.equals("0"))
-                roles.add(Bot.guild.getRoleById(id));
+                roles.add(guild.getRoleById(id));
         return roles;
     }
 
