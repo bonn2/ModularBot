@@ -31,8 +31,8 @@ public class BasicCommands extends ListenerAdapter {
                         embedBuilder.setColor(Color.CYAN);
                         for (Module module : Bot.modules) {
                             embedBuilder.addField(
-                                    module.name,
-                                    "Version: %s".formatted(module.version),
+                                    module.getName(),
+                                    "Version: %s".formatted(module.getVersion()),
                                     true
                             );
                         }

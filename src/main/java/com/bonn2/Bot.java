@@ -71,7 +71,7 @@ public class Bot
                 continue;
             }
             modules.add(module);
-            logger.info("Got %s %s".formatted(module.name, module.version));
+            logger.info("Got %s %s".formatted(module.getName(), module.getVersion()));
         }
 
         // TODO: 6/9/2022 Decide what intents and caches are required
@@ -95,7 +95,7 @@ public class Bot
         logger.info("Registering Settings...");
         for (Module module : modules) {
             module.registerSettings();
-            logger.info("Registered settings for %s version %s".formatted(module.name, module.version));
+            logger.info("Registered settings for %s version %s".formatted(module.getName(), module.getVersion()));
         }
 
         // Load settings
@@ -105,17 +105,10 @@ public class Bot
         modules.add(settings);
 
         for (Module module : modules) {
-            if (module.priority.equals(Module.Priority.POST_JDA_HIGH)) {
-                logger.info("Loading %s version %s...".formatted(module.name, module.version));
+            if (!Objects.equals(module.getName(), "Settings") && !Objects.equals(module.getName(), "Config")) {
+                logger.info("Loading %s version %s...".formatted(module.getName(), module.getVersion()));
                 module.load();
-                logger.info("Loaded %s version %s".formatted(module.name, module.version));
-            }
-        }
-        for (Module module : modules) {
-            if (module.priority.equals(Module.Priority.POST_JDA_LOW)) {
-                logger.info("Loading %s version %s...".formatted(module.name, module.version));
-                module.load();
-                logger.info("Loaded %s version %s".formatted(module.name, module.version));
+                logger.info("Loaded %s version %s".formatted(module.getName(), module.getVersion()));
             }
         }
 
@@ -135,7 +128,7 @@ public class Bot
             logger.info("Got %s command%s from %s".formatted(
                     commands.length,
                     commands.length == 1 ? "" : "s",
-                    module.name));
+                    module.getName()));
             commandListUpdateAction = commandListUpdateAction.addCommands(commands);
         }
         logger.info("Queueing %s / 50 top level command%s".formatted(
@@ -152,7 +145,7 @@ public class Bot
      */
     public static @Nullable Module getModuleIgnoreCase(@NotNull String name) {
         for (Module module : modules)
-            if (module.name.equalsIgnoreCase(name)) return module;
+            if (module.getName().equalsIgnoreCase(name)) return module;
         return null;
     }
 

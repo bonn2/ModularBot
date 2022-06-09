@@ -11,10 +11,14 @@ import static com.bonn2.Bot.logger;
 
 public class Basic extends Module {
 
-    public Basic() {
-        name = "Basic";
-        version = "v1.0";
-        priority = Priority.POST_JDA_LOW;
+    @Override
+    public String getName() {
+        return "Basic";
+    }
+
+    @Override
+    public String getVersion() {
+        return "v1.0";
     }
 
     @Override

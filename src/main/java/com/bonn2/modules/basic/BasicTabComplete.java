@@ -20,8 +20,8 @@ public class BasicTabComplete extends ListenerAdapter {
 
         List<Command.Choice> choices = new ArrayList<>();
         for (Module module : Bot.modules)
-            if (module.name.toLowerCase(Locale.ROOT).startsWith(Objects.requireNonNull(event.getOption("module")).getAsString().toLowerCase(Locale.ROOT)))
-                choices.add(new Command.Choice(module.name, module.name));
+            if (module.getName().toLowerCase(Locale.ROOT).startsWith(Objects.requireNonNull(event.getOption("module")).getAsString().toLowerCase(Locale.ROOT)))
+                choices.add(new Command.Choice(module.getName(), module.getName()));
         event.replyChoices(choices).queue();
     }
 }

@@ -20,12 +20,6 @@ import static com.bonn2.Bot.*;
 
 public class Settings extends Module {
 
-    public Settings() {
-        version = "v1.2";
-        priority = Priority.SETTINGS;
-        name = "Settings";
-    }
-
     // All registered settings
     // Mapping
     // Module -> Key -> Type
@@ -37,6 +31,16 @@ public class Settings extends Module {
     // Guild ID -> Module -> Key -> Value
     static Map<String, Map<String, Map<String, Setting>>> settings = new HashMap<>();
     static File settingsFolder = new File(localPath + File.separator + "settings");
+
+    @Override
+    public String getName() {
+        return "Settings";
+    }
+
+    @Override
+    public String getVersion() {
+        return "v1.2";
+    }
 
     @Override
     public void registerSettings() {
@@ -76,7 +80,7 @@ public class Settings extends Module {
                                     );
                                 } else {
                                     logger.warn("Type mismatch in setting %s -> %s; %s != %s".formatted(
-                                            module.name,
+                                            module.getName(),
                                             settingKey,
                                             Setting.Type.fromString(typeValue[0]),
                                             getRegisteredSettings(moduleKey).get(settingKey)
@@ -84,7 +88,7 @@ public class Settings extends Module {
                                 }
                             } else {
                                 logger.warn("Found unregistered settings for module %s; %s".formatted(
-                                        module.name,
+                                        module.getName(),
                                         settingKey
                                 ));
                             }
@@ -142,30 +146,30 @@ public class Settings extends Module {
     public static void register(@NotNull Module module, String key, Setting.Type type, String unSet, String description) {
         // Register setting type
         Map<String, Setting.Type> moduleSettings;
-        if (registeredSettings.containsKey(module.name))
-            moduleSettings = registeredSettings.get(module.name);
+        if (registeredSettings.containsKey(module.getName()))
+            moduleSettings = registeredSettings.get(module.getName());
         else
             moduleSettings = new HashMap<>();
         moduleSettings.put(key, type);
-        registeredSettings.put(module.name, moduleSettings);
+        registeredSettings.put(module.getName(), moduleSettings);
 
         // Register setting default
         Map<String, Setting> moduleDefaults;
-        if (defaultSettings.containsKey(module.name))
-            moduleDefaults = defaultSettings.get(module.name);
+        if (defaultSettings.containsKey(module.getName()))
+            moduleDefaults = defaultSettings.get(module.getName());
         else
             moduleDefaults = new HashMap<>();
         moduleDefaults.put(key, Setting.of(unSet, type));
-        defaultSettings.put(module.name, moduleDefaults);
+        defaultSettings.put(module.getName(), moduleDefaults);
 
         // Register setting description
         Map<String, String> moduleSettingDescriptions;
-        if (descriptions.containsKey(module.name))
-            moduleSettingDescriptions = descriptions.get(module.name);
+        if (descriptions.containsKey(module.getName()))
+            moduleSettingDescriptions = descriptions.get(module.getName());
         else
             moduleSettingDescriptions = new HashMap<>();
         moduleSettingDescriptions.put(key, description);
-        descriptions.put(module.name, moduleSettingDescriptions);
+        descriptions.put(module.getName(), moduleSettingDescriptions);
     }
 
     public static Map<String, Setting.Type> getRegisteredSettings(String module) {
@@ -231,7 +235,7 @@ public class Settings extends Module {
                 type = getRegisteredSettingType(module, key);
         } else {
             logger.warn("Tried to set an unregistered setting!\nModule: %s\nKey: %s\nValue: %s".formatted(
-                    module.name,
+                    module.getName(),
                     key,
                     value
             ));
@@ -247,8 +251,8 @@ public class Settings extends Module {
 
         // Get current module settings or default
         Map<String, Setting> moduleSettings;
-        if (guildSettings.containsKey(module.name))
-            moduleSettings = guildSettings.get(module.name);
+        if (guildSettings.containsKey(module.getName()))
+            moduleSettings = guildSettings.get(module.getName());
         else
             moduleSettings = new HashMap<>();
 
@@ -256,7 +260,7 @@ public class Settings extends Module {
         Setting setting = Setting.of(value, type);
         if (setting == null) return false;
         moduleSettings.put(key, setting);
-        guildSettings.put(module.name, moduleSettings);
+        guildSettings.put(module.getName(), moduleSettings);
         settings.put(guildID, guildSettings);
 
         // Save the new settings to file
@@ -276,7 +280,7 @@ public class Settings extends Module {
         // Check if setting is registered
         if (!hasSetting(module, key)) {
             logger.warn("Tried to unSet an unregistered setting!\nModule: %s\nKey: %s".formatted(
-                    module.name,
+                    module.getName(),
                     key
             ));
             return false;
@@ -289,11 +293,11 @@ public class Settings extends Module {
 
             // Get current module settings or do nothing
             Map<String, Setting> moduleSettings;
-            if (settings.containsKey(module.name)) {
-                moduleSettings = guildSettings.get(module.name);
+            if (settings.containsKey(module.getName())) {
+                moduleSettings = guildSettings.get(module.getName());
                 // UnSet module setting
                 moduleSettings.remove(key);
-                guildSettings.put(module.name, moduleSettings);
+                guildSettings.put(module.getName(), moduleSettings);
                 settings.put(guildID, guildSettings);
                 // Save the new settings to file
                 save(guildID);
@@ -314,15 +318,15 @@ public class Settings extends Module {
                 // If setting is set, return that
                 // else return setting value of unset
                 if (settings.containsKey(guildID)
-                        && settings.get(guildID).containsKey(module.name)
-                        && settings.get(guildID).get(module.name).containsKey(key)) {
-                    return settings.get(guildID).get(module.name).get(key);
+                        && settings.get(guildID).containsKey(module.getName())
+                        && settings.get(guildID).get(module.getName()).containsKey(key)) {
+                    return settings.get(guildID).get(module.getName()).get(key);
                 } else {
-                    return defaultSettings.get(module.name).get(key);
+                    return defaultSettings.get(module.getName()).get(key);
                 }
         } else {
             logger.warn("Tried to get an unregistered setting!\nModule: %s\nKey: %s".formatted(
-                    module.name,
+                    module.getName(),
                     key
             ));
             return new IntSetting(0);
@@ -330,8 +334,8 @@ public class Settings extends Module {
     }
 
     public static int registeredSettingsCount(@NotNull Module module) {
-        if (registeredSettings.containsKey(module.name))
-            return registeredSettings.get(module.name).keySet().size();
+        if (registeredSettings.containsKey(module.getName()))
+            return registeredSettings.get(module.getName()).keySet().size();
         return 0;
     }
 
@@ -342,14 +346,14 @@ public class Settings extends Module {
      * @return       True if the setting is registered, false if it isn't
      */
     public static boolean hasSetting(@NotNull Module module, String key) {
-        if (registeredSettings.containsKey(module.name))
-            return registeredSettings.get(module.name).containsKey(key);
+        if (registeredSettings.containsKey(module.getName()))
+            return registeredSettings.get(module.getName()).containsKey(key);
         return false;
     }
 
     public static Setting.Type getRegisteredSettingType(Module module, String key) {
         if (hasSetting(module, key)) {
-            return registeredSettings.get(module.name).get(key);
+            return registeredSettings.get(module.getName()).get(key);
         }
         return Setting.Type.NULL;
     }
@@ -360,9 +364,9 @@ public class Settings extends Module {
      * @return       The {@link Set<String>} of settings registered
      */
     public static Set<String> getSettings(@NotNull Module module) {
-        if (registeredSettings.get(module.name) == null)
+        if (registeredSettings.get(module.getName()) == null)
             return new HashSet<>(0);
-        return registeredSettings.get(module.name).keySet();
+        return registeredSettings.get(module.getName()).keySet();
     }
 
 }

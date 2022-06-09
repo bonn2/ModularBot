@@ -28,8 +28,8 @@ public class SettingsCommand extends ListenerAdapter {
             embedBuilder.setColor(Color.CYAN);
             for (Module module : Bot.modules) {
                 embedBuilder.addField(
-                        module.name,
-                        "Setting nodes: %s".formatted(Settings.getRegisteredSettings(module.name).keySet().size()),
+                        module.getName(),
+                        "Setting nodes: %s".formatted(Settings.getRegisteredSettings(module.getName()).keySet().size()),
                         true
                 );
             }
@@ -62,7 +62,7 @@ public class SettingsCommand extends ListenerAdapter {
                 Settings.unSet(module, event.getGuild().getId(), key);
                 event.replyEmbeds(getModuleSettingEmbed(module, event.getGuild().getId())).queue();
             } else {
-                event.reply("The module %s does not have a setting %s!".formatted(module.name, key))
+                event.reply("The module %s does not have a setting %s!".formatted(module.getName(), key))
                         .setEphemeral(true)
                         .queue();
             }
@@ -119,7 +119,7 @@ public class SettingsCommand extends ListenerAdapter {
                             .queue();
                 }
             } else {
-                event.reply("The module %s does not have a setting %s!".formatted(module.name, key))
+                event.reply("The module %s does not have a setting %s!".formatted(module.getName(), key))
                         .setEphemeral(true)
                         .queue();
             }
@@ -131,7 +131,7 @@ public class SettingsCommand extends ListenerAdapter {
                         .setEphemeral(true)
                         .queue();
             } else {
-                event.reply("The module %s does not have a setting %s!".formatted(module.name, key))
+                event.reply("The module %s does not have a setting %s!".formatted(module.getName(), key))
                         .setEphemeral(true)
                         .queue();
             }
@@ -194,7 +194,7 @@ public class SettingsCommand extends ListenerAdapter {
                     }
                 }
             } else {
-                event.reply("The module %s does not have a setting %s!".formatted(module.name, key))
+                event.reply("The module %s does not have a setting %s!".formatted(module.getName(), key))
                         .setEphemeral(true)
                         .queue();
             }
@@ -203,12 +203,12 @@ public class SettingsCommand extends ListenerAdapter {
 
     private @NotNull MessageEmbed getModuleSettingEmbed(@NotNull Module module, String guildID) {
         // Get registered settings for the module
-        Map<String, Setting.Type> registeredSettings = Settings.getRegisteredSettings(module.name);
+        Map<String, Setting.Type> registeredSettings = Settings.getRegisteredSettings(module.getName());
         // Get setting descriptions
-        Map<String, String> descriptions = Settings.getDescriptions(module.name);
+        Map<String, String> descriptions = Settings.getDescriptions(module.getName());
         // Create embed
         EmbedBuilder embedBuilder = new EmbedBuilder();
-        embedBuilder.setTitle("%s settings".formatted(module.name));
+        embedBuilder.setTitle("%s settings".formatted(module.getName()));
         embedBuilder.setColor(Color.CYAN);
         for (String key : registeredSettings.keySet()) {
             embedBuilder.addField(

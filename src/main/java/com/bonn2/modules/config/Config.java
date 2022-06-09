@@ -21,13 +21,17 @@ import static com.bonn2.Bot.logger;
 
 public class Config extends Module {
 
-    public Config() {
-        version = "v1.0";
-        priority = Priority.PRE_JDA_HIGH;
-        name = "Config";
+    static JsonObject CONFIG;
+
+    @Override
+    public String getName() {
+        return "Config";
     }
 
-    static JsonObject CONFIG;
+    @Override
+    public String getVersion() {
+        return "v1.0";
+    }
 
     @Override
     public void registerSettings() {
