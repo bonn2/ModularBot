@@ -3,7 +3,6 @@ package com.bonn2;
 import com.bonn2.modules.Module;
 import com.bonn2.modules.config.Config;
 import com.bonn2.modules.settings.Settings;
-import com.google.common.io.Files;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -16,10 +15,14 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
@@ -64,7 +67,7 @@ public class Bot
 
         // Load external modules
         for (File externalFile : externalModules) {
-            if (!Files.getFileExtension(externalFile.getName()).equalsIgnoreCase("jar")) continue;
+            if (!externalFile.getName().endsWith(".jar")) continue;
             Module module = loadModuleFromFile(externalFile.getAbsolutePath());
             if (module == null) {
                 logger.info("Failed to load module: " + externalFile.getName());
