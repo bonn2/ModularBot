@@ -2,6 +2,8 @@ package com.bonn2;
 
 import com.bonn2.modules.Module;
 import com.bonn2.modules.core.config.Config;
+import com.bonn2.modules.core.settings.Settings;
+import com.google.common.io.Files;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -11,70 +13,70 @@ import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URISyntaxException;
-import java.security.GeneralSecurityException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.io.*;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 
 public class Bot
 {
     public final static Logger logger = LoggerFactory.getLogger("Modular Bot");
     public static JDA jda = null;
     public static String localPath = null;
+    public static String modulePath = null;
     public static Guild guild = null;
     public static List<CommandData> commands = new LinkedList<>();
     public static List<Module> modules = new LinkedList<>();
 
     // Handles starting the bot, and initializing static variables
-    public static void main(String[] args) throws GeneralSecurityException, URISyntaxException, InterruptedException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public static void main(String[] args) throws Exception {
 
         long startTime = System.currentTimeMillis();
 
         logger.info("Starting Bot...");
 
+        // Get relevant paths
         File jarFile = new File(Bot.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
         localPath = jarFile.getParent() + File.separator;
+        modulePath = localPath + "modules" + File.separator;
+        File moduleFolder = new File(modulePath);
+        if (moduleFolder.mkdir()) logger.info("Created new modules folder.");
 
-        logger.info("Locating modules...");
-        Reflections reflections = new Reflections("com.bonn2.modules");
-        Set<Class<? extends Module>> moduleClasses = reflections.getSubTypesOf(Module.class);
-        for (Class<? extends Module> module : moduleClasses) {
-            logger.info("Located module %s".formatted(module.getCanonicalName()));
-            modules.add(module.getDeclaredConstructor().newInstance());
-        }
-
-        logger.info("Sorting modules...");
-        modules.sort(new Module.SortByName());
-
-        logger.info("Loading Pre-JDA Modules...");
-        for (Module module : modules) {
-            if (module.priority.equals(Module.Priority.PRE_JDA_HIGH)) {
-                logger.info("Loading %s version %s...".formatted(module.name, module.version));
-                module.load();
-                logger.info("Loaded %s version %s".formatted(module.name, module.version));
-            }
-        }
-        for (Module module : modules) {
-            if (module.priority.equals(Module.Priority.PRE_JDA_LOW)) {
-                logger.info("Loading %s version %s...".formatted(module.name, module.version));
-                module.load();
-                logger.info("Loaded %s version %s".formatted(module.name, module.version));
-            }
-        }
+        // Load Config
+        logger.info("Loading Config...");
+        Config config = new Config();
+        config.load();
+        modules.add(config);
 
         // Check token
         if (Objects.equals(Config.get("guild").getAsString(), "")) {
             logger.error("Token is empty!");
             return;
         }
+
+        // Get Module Jars
+        logger.info("Getting Modules...");
+        File[] externalModules = moduleFolder.listFiles();
+        if (externalModules == null) externalModules = new File[0];
+
+        // Load external modules
+        for (File externalFile : externalModules) {
+            if (!Files.getFileExtension(externalFile.getName()).equalsIgnoreCase("jar")) continue;
+            Module module = loadModuleFromFile(externalFile.getAbsolutePath());
+            if (module == null) {
+                logger.info("Failed to load module: " + externalFile.getName());
+                continue;
+            }
+            modules.add(module);
+            logger.info("Got %s %s".formatted(module.name, module.version));
+        }
+
+        // TODO: 6/9/2022 Decide what intents and caches are required
 
         jda = JDABuilder.createDefault(Config.get("token").getAsString())
                 .enableIntents(
@@ -93,11 +95,18 @@ public class Bot
         logger.info("Logged in to: " + jda.getSelfUser().getAsTag());
 
         // Get Guild
+        // TODO: 6/9/2022 Remove this (make guild independent)
         guild = jda.getGuildById(Config.get("guild").getAsString());
         if (guild == null) {
             logger.error("Failed to get guild!");
             return;
         }
+
+        // Load settings
+        logger.info("Loading Settings...");
+        Settings settings = new Settings();
+        settings.load();
+        modules.add(settings);
 
         logger.info("Registering Settings...");
         for (Module module : modules) {
@@ -105,14 +114,6 @@ public class Bot
             logger.info("Registered settings for %s version %s".formatted(module.name, module.version));
         }
 
-        logger.info("Loading Post-JDA Modules...");
-        for (Module module : modules) {
-            if (module.priority.equals(Module.Priority.SETTINGS)) {
-                logger.info("Loading %s version %s...".formatted(module.name, module.version));
-                module.load();
-                logger.info("Loaded %s version %s".formatted(module.name, module.version));
-            }
-        }
         for (Module module : modules) {
             if (module.priority.equals(Module.Priority.POST_JDA_HIGH)) {
                 logger.info("Loading %s version %s...".formatted(module.name, module.version));
@@ -161,6 +162,51 @@ public class Bot
     public static @Nullable Module getModuleIgnoreCase(@NotNull String name) {
         for (Module module : modules)
             if (module.name.equalsIgnoreCase(name)) return module;
+        return null;
+    }
+
+    private static Module loadModuleFromFile(String filePath) throws Exception {
+
+        ArrayList<Module> availableModules = new ArrayList<>();
+
+        // Get class names
+        ArrayList<String> classNames = new ArrayList<>();
+        try {
+            JarInputStream jarFile = new JarInputStream(new FileInputStream(filePath));
+            JarEntry jar;
+
+            //Iterate through the contents of the jar file
+            while (true) {
+                jar = jarFile.getNextJarEntry();
+                if (jar == null) {
+                    break;
+                }
+                //Pick file that has the extension of .class
+                if ((jar.getName().endsWith(".class"))) {
+                    String className = jar.getName().replaceAll("/", "\\.");
+                    String myClass = className.substring(0, className.lastIndexOf('.'));
+                    classNames.add(myClass);
+                }
+            }
+        } catch (Exception e) {
+            throw new Exception("Error while getting class names from jar", e);
+        }
+        File file = new File(filePath);
+
+        URLClassLoader classLoader = new URLClassLoader(new URL[]{file.toURI().toURL()});
+        for (String className : classNames) {
+            try {
+                Class<?> cc = classLoader.loadClass(className);
+                if (!cc.getGenericSuperclass().equals(Module.class)) continue;
+                Object obj = cc.getDeclaredConstructor().newInstance();
+                if (obj instanceof Module module) {
+                    availableModules.add(module);
+                }
+            } catch (ClassNotFoundException e) {
+                logger.info("Class " + className + " was not found!", e);
+            }
+        }
+        if (availableModules.size() == 1) return availableModules.get(0);
         return null;
     }
 }
