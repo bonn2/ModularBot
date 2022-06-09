@@ -52,7 +52,7 @@ public class Bot
         modules.add(config);
 
         // Check token
-        if (Objects.equals(Config.get("guild").getAsString(), "")) {
+        if (Objects.equals(Config.get("token").getAsString(), "")) {
             logger.error("Token is empty!");
             return;
         }
