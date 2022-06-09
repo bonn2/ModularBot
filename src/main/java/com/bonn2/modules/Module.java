@@ -18,11 +18,4 @@ public abstract class Module {
     public abstract void registerSettings();
     public abstract void load();
     public abstract CommandData[] getCommands();
-
-    public static class SortByName implements Comparator<Module> {
-        @Override
-        public int compare(@NotNull Module o1, @NotNull Module o2) {
-            return o1.name.compareTo(o2.name);
-        }
-    }
 }
