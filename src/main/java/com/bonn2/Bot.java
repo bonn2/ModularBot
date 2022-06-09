@@ -1,8 +1,8 @@
 package com.bonn2;
 
 import com.bonn2.modules.Module;
-import com.bonn2.modules.core.config.Config;
-import com.bonn2.modules.core.settings.Settings;
+import com.bonn2.modules.config.Config;
+import com.bonn2.modules.settings.Settings;
 import com.google.common.io.Files;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -30,7 +30,6 @@ public class Bot
     public static String localPath = null;
     public static String modulePath = null;
     public static Guild guild = null;
-    public static List<CommandData> commands = new LinkedList<>();
     public static List<Module> modules = new LinkedList<>();
 
     // Handles starting the bot, and initializing static variables
