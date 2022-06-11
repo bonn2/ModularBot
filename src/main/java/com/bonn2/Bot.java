@@ -3,6 +3,8 @@ package com.bonn2;
 import com.bonn2.modules.Module;
 import com.bonn2.modules.config.Config;
 import com.bonn2.modules.settings.Settings;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -17,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -24,7 +27,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
+import java.util.zip.ZipInputStream;
 
 public class Bot
 {
@@ -74,7 +79,7 @@ public class Bot
                 continue;
             }
             modules.add(module);
-            logger.info("Got %s %s".formatted(module.getName(), module.getVersion()));
+            logger.info("Found: %s %s".formatted(module.getName(), module.getVersion()));
         }
 
         // TODO: 6/9/2022 Decide what intents and caches are required
@@ -152,48 +157,37 @@ public class Bot
         return null;
     }
 
-    private static Module loadModuleFromFile(String filePath) throws Exception {
+    private static @Nullable Module loadModuleFromFile(String filePath) throws Exception {
 
-        ArrayList<Module> availableModules = new ArrayList<>();
-
-        // Get class names
-        ArrayList<String> classNames = new ArrayList<>();
-        try {
-            JarInputStream jarFile = new JarInputStream(new FileInputStream(filePath));
-            JarEntry jar;
-
-            //Iterate through the contents of the jar file
-            while (true) {
-                jar = jarFile.getNextJarEntry();
-                if (jar == null) {
-                    break;
-                }
-                //Pick file that has the extension of .class
-                if ((jar.getName().endsWith(".class"))) {
-                    String className = jar.getName().replaceAll("/", "\\.");
-                    String myClass = className.substring(0, className.lastIndexOf('.'));
-                    classNames.add(myClass);
-                }
+        // Get meta.json
+        JsonObject meta;
+        try (JarFile jarFile = new JarFile(filePath)) {
+            JarEntry entry = jarFile.getJarEntry("meta.json");
+            if (entry == null) {
+                logger.warn(filePath + " has no meta.json!");
+                return null;
             }
-        } catch (Exception e) {
-            throw new Exception("Error while getting class names from jar", e);
+            meta = new Gson().fromJson(new String(jarFile.getInputStream(entry).readAllBytes()), JsonObject.class);
         }
-        File file = new File(filePath);
 
-        URLClassLoader classLoader = new URLClassLoader(new URL[]{file.toURI().toURL()});
-        for (String className : classNames) {
+        File file = new File(filePath);
+        try (URLClassLoader classLoader = new URLClassLoader(new URL[]{file.toURI().toURL()})) {
             try {
+                String className = meta.get("main").getAsString();
                 Class<?> cc = classLoader.loadClass(className);
-                if (!cc.getGenericSuperclass().equals(Module.class)) continue;
+                if (!cc.getGenericSuperclass().equals(Module.class)) {
+                    logger.warn(filePath + "'s main does not extend Module");
+                    return null;
+                }
                 Object obj = cc.getDeclaredConstructor().newInstance();
                 if (obj instanceof Module module) {
-                    availableModules.add(module);
+                    return module;
                 }
             } catch (ClassNotFoundException e) {
-                logger.info("Class " + className + " was not found!", e);
+                logger.warn("Main class was not found!", e);
             }
         }
-        if (availableModules.size() == 1) return availableModules.get(0);
+
         return null;
     }
 }
