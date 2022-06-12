@@ -32,6 +32,11 @@ public class Settings extends Module {
     static Map<String, Map<String, Map<String, Setting>>> settings = new HashMap<>();
     static File settingsFolder = new File(localPath + File.separator + "settings");
 
+    public Settings() {
+        name = "Settings";
+        version = "v2.0";
+    }
+
     @Override
     public String getName() {
         return "Settings";

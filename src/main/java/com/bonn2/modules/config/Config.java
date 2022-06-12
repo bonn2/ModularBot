@@ -23,6 +23,11 @@ public class Config extends Module {
 
     static JsonObject CONFIG;
 
+    public Config() {
+        name = "Config";
+        version = "v1.0";
+    }
+
     @Override
     public String getName() {
         return "Config";
