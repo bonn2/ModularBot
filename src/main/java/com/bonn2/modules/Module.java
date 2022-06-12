@@ -9,8 +9,8 @@ import java.io.InputStream;
 
 public abstract class Module {
 
-    public String name;
-    public String version;
+    protected String name;
+    protected String version;
 
     public Module() {
         try {
@@ -25,8 +25,12 @@ public abstract class Module {
         }
     }
 
-    public abstract String getName();
-    public abstract String getVersion();
+    public String getName() {
+        return name;
+    }
+    public String getVersion() {
+        return version;
+    }
 
     public abstract void registerSettings();
     public abstract void load();
