@@ -157,7 +157,7 @@ public class Bot
                 totalCommands,
                 totalCommands == 1 ? "" : "s"
         ));
-        //commandListUpdateAction.queue();
+        commandListUpdateAction.queue();
     }
 
     /**
