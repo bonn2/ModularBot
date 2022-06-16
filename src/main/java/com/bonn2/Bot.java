@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.jar.JarInputStream;
 
 public class Bot
 {
@@ -109,6 +110,12 @@ public class Bot
 
         for (Guild guild : jda.getGuilds())
             updateCommands(guild);
+
+        for (Module module : modules) {
+            if (module.getName().equals("Settings")) continue;
+            if (module.getName().equals("Config")) continue;
+            module.load();
+        }
 
         logger.info("Finished Loading! (" + ((float)(System.currentTimeMillis() - startTime)) / 1000 + " sec)");
     }
