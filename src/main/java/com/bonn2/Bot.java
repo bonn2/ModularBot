@@ -3,8 +3,6 @@ package com.bonn2;
 import com.bonn2.modules.Module;
 import com.bonn2.modules.config.Config;
 import com.bonn2.modules.settings.Settings;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -18,14 +16,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.jar.JarEntry;
+import java.util.*;
 import java.util.jar.JarFile;
-import java.util.jar.JarInputStream;
 
 public class Bot
 {
@@ -33,7 +29,7 @@ public class Bot
     public static JDA jda = null;
     public static String localPath = null;
     public static String modulePath = null;
-    public static List<Module> modules = new LinkedList<>();
+    public final static List<Module> modules = new LinkedList<>();
 
     // Handles starting the bot, and initializing static variables
     public static void main(String[] args) throws Exception {
@@ -43,8 +39,8 @@ public class Bot
         logger.info("Starting Bot...");
 
         // Get relevant paths
-        File jarFile = new File(Bot.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
-        localPath = jarFile.getParent() + File.separator;
+        File mainFile = new File(Bot.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+        localPath = mainFile.getParent() + File.separator;
         modulePath = localPath + "modules" + File.separator;
         File moduleFolder = new File(modulePath);
         if (moduleFolder.mkdir()) logger.info("Created new modules folder.");
@@ -63,19 +59,43 @@ public class Bot
 
         // Get Module Jars
         logger.info("Getting Modules...");
-        File[] externalModules = moduleFolder.listFiles();
-        if (externalModules == null) externalModules = new File[0];
-
         // Load external modules
-        for (File externalFile : externalModules) {
-            if (!externalFile.getName().endsWith(".jar")) continue;
-            Module module = loadModuleFromFile(externalFile.getAbsolutePath());
-            if (module == null) {
-                logger.info("Failed to load module: " + externalFile.getName());
-                continue;
+        File[] files = moduleFolder.listFiles((dir, name) -> name.endsWith(".jar"));
+
+        ArrayList<URL> urls = new ArrayList<>();
+        ArrayList<String> classes = new ArrayList<>();
+        if(files != null) {
+            Arrays.stream(files).forEach(file -> {
+                try (JarFile jarFile = new JarFile(file)){
+                    urls.add(new URL("jar:file:" + modulePath + File.separator + file.getName() + "!/"));
+                    jarFile.stream().forEach(jarEntry -> {
+                        if(jarEntry.getName().endsWith(".class"))
+                            classes.add(jarEntry.getName());
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            try (URLClassLoader moduleLoader = new URLClassLoader(urls.toArray(new URL[0]))) {
+                classes.forEach(s -> {
+                    try {
+                        Class<?> clazz = moduleLoader.loadClass(s.replaceAll("/",".").replace(".class",""));
+                        if(clazz.getGenericSuperclass().equals(Module.class))
+                        {
+                            Module module = (Module) clazz.getConstructor().newInstance();
+                            modules.add(module);
+                            logger.info("Found " + clazz.getCanonicalName() + " module");
+                        }
+                    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                        e.printStackTrace();
+                        logger.error(e.getMessage());
+                        for (StackTraceElement element : e.getStackTrace()) {
+                            logger.error("\t\t" + element.toString());
+                        }
+                    }
+                });
             }
-            modules.add(module);
-            logger.info("Found: %s %s".formatted(module.getName(), module.getVersion()));
         }
 
         // TODO: 6/9/2022 Decide what intents and caches are required
@@ -120,7 +140,7 @@ public class Bot
         logger.info("Finished Loading! (" + ((float)(System.currentTimeMillis() - startTime)) / 1000 + " sec)");
     }
 
-    public static void updateCommands(Guild guild) {
+    public static void updateCommands(@NotNull Guild guild) {
         logger.info("Updating commands...");
         CommandListUpdateAction commandListUpdateAction = guild.updateCommands();
         int totalCommands = 0;
@@ -137,7 +157,7 @@ public class Bot
                 totalCommands,
                 totalCommands == 1 ? "" : "s"
         ));
-        commandListUpdateAction.queue();
+        //commandListUpdateAction.queue();
     }
 
     /**
@@ -148,40 +168,6 @@ public class Bot
     public static @Nullable Module getModuleIgnoreCase(@NotNull String name) {
         for (Module module : modules)
             if (module.getName().equalsIgnoreCase(name)) return module;
-        return null;
-    }
-
-    private static @Nullable Module loadModuleFromFile(String filePath) throws Exception {
-
-        // Get meta.json
-        JsonObject meta;
-        try (JarFile jarFile = new JarFile(filePath)) {
-            JarEntry entry = jarFile.getJarEntry("meta.json");
-            if (entry == null) {
-                logger.warn(filePath + " has no meta.json!");
-                return null;
-            }
-            meta = new Gson().fromJson(new String(jarFile.getInputStream(entry).readAllBytes()), JsonObject.class);
-        }
-
-        File file = new File(filePath);
-        try (URLClassLoader classLoader = new URLClassLoader(new URL[]{file.toURI().toURL()})) {
-            try {
-                String className = meta.get("main").getAsString();
-                Class<?> cc = classLoader.loadClass(className);
-                if (!cc.getGenericSuperclass().equals(Module.class)) {
-                    logger.warn(filePath + "'s main does not extend Module");
-                    return null;
-                }
-                Object obj = cc.getDeclaredConstructor().newInstance();
-                if (obj instanceof Module module) {
-                    return module;
-                }
-            } catch (ClassNotFoundException e) {
-                logger.warn("Main class was not found!", e);
-            }
-        }
-
         return null;
     }
 }
