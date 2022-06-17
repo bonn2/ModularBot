@@ -10,6 +10,6 @@ The purpose of this project is to make creating bots using the jdk framework eas
 A module is a piece of code that requires very little boilerplate to create custom functionality for the bot.
 
 ## Official Modules
-[Say](https://github.com/bonn2/SayModule) Creates a simple to use /say command to make the bot say anything or send embeds.
+[SayModule](https://github.com/bonn2/SayModule) : Creates a simple to use /say command to make the bot say anything or send embeds.
 
 ## More readme to come!
