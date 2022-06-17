@@ -38,8 +38,9 @@ shadowJar {
 
 publishing {
     publications {
-        gpr(MavenPublication) {
-            from(components.java)
+        maven(MavenPublication) {
+            artifactId = 'ModularBot'
+            from components.java
         }
     }
     repositories {
