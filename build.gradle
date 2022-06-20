@@ -35,16 +35,6 @@ publishing {
         maven(MavenPublication) {
             artifactId = 'modular-bot'
             from components.java
-        }
-    }
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/bonn2/ModularBot")
-            credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
-            }
             layout.buildDirectory.dir("libs/")
         }
     }
