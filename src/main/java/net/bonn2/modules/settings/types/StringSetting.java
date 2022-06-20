@@ -1,4 +1,4 @@
-package com.bonn2.modules.settings.types;
+package net.bonn2.modules.settings.types;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;

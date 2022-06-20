@@ -1,7 +1,7 @@
-package com.bonn2.modules.config;
+package net.bonn2.modules.config;
 
-import com.bonn2.Bot;
-import com.bonn2.modules.Module;
+import net.bonn2.Bot;
+import net.bonn2.modules.Module;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -16,8 +16,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-
-import static com.bonn2.Bot.logger;
 
 public class Config extends Module {
 
@@ -49,7 +47,7 @@ public class Config extends Module {
      */
     @Override
     public void load() {
-        logger.info("Loading config...");
+        Bot.logger.info("Loading config...");
         try {
             File configFile = new File(Bot.localPath + "config.json");
             if (configFile.createNewFile()) {

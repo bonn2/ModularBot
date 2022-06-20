@@ -1,9 +1,9 @@
-package com.bonn2.modules.settings;
+package net.bonn2.modules.settings;
 
-import com.bonn2.Bot;
-import com.bonn2.modules.Module;
-import com.bonn2.modules.settings.types.Setting;
-import com.bonn2.utils.StringUtil;
+import net.bonn2.Bot;
+import net.bonn2.modules.Module;
+import net.bonn2.modules.settings.types.Setting;
+import net.bonn2.utils.StringUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;

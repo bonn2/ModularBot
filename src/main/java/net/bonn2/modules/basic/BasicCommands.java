@@ -1,7 +1,7 @@
-package com.bonn2.modules.basic;
+package net.bonn2.modules.basic;
 
-import com.bonn2.Bot;
-import com.bonn2.modules.Module;
+import net.bonn2.Bot;
+import net.bonn2.modules.Module;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;

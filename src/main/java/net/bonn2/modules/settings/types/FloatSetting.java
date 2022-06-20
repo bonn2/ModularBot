@@ -1,18 +1,18 @@
-package com.bonn2.modules.settings.types;
+package net.bonn2.modules.settings.types;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 
-public class DoubleSetting extends Setting {
+public class FloatSetting extends Setting {
 
-    public double value;
+    public float value;
 
-    public DoubleSetting(double number) {
+    public FloatSetting(float number) {
         value = number;
     }
 
     @Override
-    public double getAsDouble() {
+    public float getAsFloat() {
         return value;
     }
 
@@ -23,6 +23,6 @@ public class DoubleSetting extends Setting {
 
     @Override
     public JsonElement toJson() {
-        return new JsonPrimitive("%s:%s".formatted(Type.DOUBLE.toString(), value));
+        return new JsonPrimitive("%s:%s".formatted(Type.FLOAT.toString(), value));
     }
 }

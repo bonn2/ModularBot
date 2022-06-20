@@ -1,9 +1,9 @@
-package com.bonn2.modules.settings;
+package net.bonn2.modules.settings;
 
-import com.bonn2.Bot;
-import com.bonn2.modules.Module;
-import com.bonn2.modules.settings.types.IntSetting;
-import com.bonn2.modules.settings.types.Setting;
+import net.bonn2.Bot;
+import net.bonn2.modules.Module;
+import net.bonn2.modules.settings.types.IntSetting;
+import net.bonn2.modules.settings.types.Setting;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -15,8 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-
-import static com.bonn2.Bot.*;
 
 public class Settings extends Module {
 
@@ -30,7 +28,7 @@ public class Settings extends Module {
     static Map<String, Map<String, String>> descriptions = new HashMap<>();
     // Guild ID -> Module -> Key -> Value
     static Map<String, Map<String, Map<String, Setting>>> settings = new HashMap<>();
-    static File settingsFolder = new File(localPath + File.separator + "settings");
+    static File settingsFolder = new File(Bot.localPath + File.separator + "settings");
 
     public Settings() {
         name = "Settings";
@@ -54,11 +52,11 @@ public class Settings extends Module {
 
     @Override
     public void load() {
-        logger.info("Registering listeners...");
-        jda.addEventListener(new SettingsCommand());
-        jda.addEventListener(new SettingsTabComplete());
+        Bot.logger.info("Registering listeners...");
+        Bot.jda.addEventListener(new SettingsCommand());
+        Bot.jda.addEventListener(new SettingsTabComplete());
 
-        logger.info("Loading settings from file...");
+        Bot.logger.info("Loading settings from file...");
         try {
             settingsFolder.mkdirs();
             for (String filename : Objects.requireNonNull(settingsFolder.list())) {
@@ -84,7 +82,7 @@ public class Settings extends Module {
                                             false
                                     );
                                 } else {
-                                    logger.warn("Type mismatch in setting %s -> %s; %s != %s".formatted(
+                                    Bot.logger.warn("Type mismatch in setting %s -> %s; %s != %s".formatted(
                                             module.getName(),
                                             settingKey,
                                             Setting.Type.fromString(typeValue[0]),
@@ -92,20 +90,20 @@ public class Settings extends Module {
                                     ));
                                 }
                             } else {
-                                logger.warn("Found unregistered settings for module %s; %s".formatted(
+                                Bot.logger.warn("Found unregistered settings for module %s; %s".formatted(
                                         module.getName(),
                                         settingKey
                                 ));
                             }
                         }
                     } else {
-                        logger.warn("Found settings for a module that does not exist: %s".formatted(moduleKey));
+                        Bot.logger.warn("Found settings for a module that does not exist: %s".formatted(moduleKey));
                     }
                 }
 
             }
         } catch (IOException e) {
-            logger.error("Failed to load settings!");
+            Bot.logger.error("Failed to load settings!");
             e.printStackTrace();
         }
     }
@@ -192,7 +190,7 @@ public class Settings extends Module {
     }
 
     private static void save(String guildID) {
-        logger.info("Saving settings to file.");
+        Bot.logger.info("Saving settings to file.");
         JsonObject jsonObject = new JsonObject();
         Map<String, Map<String, Setting>> guildSettings = settings.get(guildID);
         for (String moduleKey : guildSettings.keySet()) {
@@ -219,7 +217,7 @@ public class Settings extends Module {
                                 .getBytes(StandardCharsets.UTF_8)
                 );
             } catch (IOException e) {
-                logger.error("Failed to save settings!");
+                Bot.logger.error("Failed to save settings!");
                 e.printStackTrace();
             }
         }
@@ -239,7 +237,7 @@ public class Settings extends Module {
         if (hasSetting(module, key)) {
                 type = getRegisteredSettingType(module, key);
         } else {
-            logger.warn("Tried to set an unregistered setting!\nModule: %s\nKey: %s\nValue: %s".formatted(
+            Bot.logger.warn("Tried to set an unregistered setting!\nModule: %s\nKey: %s\nValue: %s".formatted(
                     module.getName(),
                     key,
                     value
@@ -284,7 +282,7 @@ public class Settings extends Module {
     public static boolean unSet(@NotNull Module module, String guildID, String key) {
         // Check if setting is registered
         if (!hasSetting(module, key)) {
-            logger.warn("Tried to unSet an unregistered setting!\nModule: %s\nKey: %s".formatted(
+            Bot.logger.warn("Tried to unSet an unregistered setting!\nModule: %s\nKey: %s".formatted(
                     module.getName(),
                     key
             ));
@@ -330,7 +328,7 @@ public class Settings extends Module {
                     return defaultSettings.get(module.getName()).get(key);
                 }
         } else {
-            logger.warn("Tried to get an unregistered setting!\nModule: %s\nKey: %s".formatted(
+            Bot.logger.warn("Tried to get an unregistered setting!\nModule: %s\nKey: %s".formatted(
                     module.getName(),
                     key
             ));

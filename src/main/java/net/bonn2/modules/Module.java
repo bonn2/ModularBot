@@ -1,4 +1,4 @@
-package com.bonn2.modules;
+package net.bonn2.modules;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

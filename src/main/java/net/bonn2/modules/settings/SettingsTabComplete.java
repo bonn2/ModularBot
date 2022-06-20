@@ -1,8 +1,8 @@
-package com.bonn2.modules.settings;
+package net.bonn2.modules.settings;
 
-import com.bonn2.Bot;
-import com.bonn2.modules.Module;
-import com.bonn2.utils.StringUtil;
+import net.bonn2.Bot;
+import net.bonn2.modules.Module;
+import net.bonn2.utils.StringUtil;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;

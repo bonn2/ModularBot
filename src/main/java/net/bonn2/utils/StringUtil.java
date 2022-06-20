@@ -1,4 +1,4 @@
-package com.bonn2.utils;
+package net.bonn2.utils;
 
 import org.jetbrains.annotations.NotNull;
 

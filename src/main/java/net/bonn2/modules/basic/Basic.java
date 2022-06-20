@@ -1,13 +1,11 @@
-package com.bonn2.modules.basic;
+package net.bonn2.modules.basic;
 
-import com.bonn2.Bot;
-import com.bonn2.modules.Module;
+import net.bonn2.Bot;
+import net.bonn2.modules.Module;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
-
-import static com.bonn2.Bot.logger;
 
 public class Basic extends Module {
 
@@ -28,7 +26,7 @@ public class Basic extends Module {
 
     @Override
     public void load() {
-        logger.info("Registering Listeners...");
+        Bot.logger.info("Registering Listeners...");
         Bot.jda.addEventListener(new BasicCommands());
         Bot.jda.addEventListener(new BasicTabComplete());
     }
