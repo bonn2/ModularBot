@@ -30,11 +30,6 @@ public class Settings extends Module {
     static Map<String, Map<String, Map<String, Setting>>> settings = new HashMap<>();
     static File settingsFolder = new File(Bot.localPath + File.separator + "settings");
 
-    public Settings() {
-        name = "Settings";
-        version = "v2.0";
-    }
-
     @Override
     public String getName() {
         return "Settings";
@@ -42,7 +37,7 @@ public class Settings extends Module {
 
     @Override
     public String getVersion() {
-        return "v1.2";
+        return "v2.0";
     }
 
     @Override
