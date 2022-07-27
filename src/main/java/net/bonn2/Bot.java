@@ -6,6 +6,7 @@ import net.bonn2.modules.settings.Settings;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
@@ -128,8 +129,7 @@ public class Bot
         settings.load();
         modules.add(settings);
 
-        for (Guild guild : jda.getGuilds())
-            updateCommands(guild);
+        updateCommands();
 
         for (Module module : modules) {
             if (module.getName().equals("Settings")) continue;
@@ -140,9 +140,10 @@ public class Bot
         logger.info("Finished Loading! (" + ((float)(System.currentTimeMillis() - startTime)) / 1000 + " sec)");
     }
 
-    public static void updateCommands(@NotNull Guild guild) {
+    public static void updateCommands() {
         logger.info("Updating commands...");
-        CommandListUpdateAction commandListUpdateAction = guild.updateCommands();
+
+        CommandListUpdateAction commandListUpdateAction = jda.updateCommands();
         int totalCommands = 0;
         for (Module module : modules) {
             CommandData[] commands = module.getCommands();
@@ -153,11 +154,12 @@ public class Bot
                     module.getName()));
             commandListUpdateAction = commandListUpdateAction.addCommands(commands);
         }
-        logger.info("Queueing %s / 50 top level command%s".formatted(
+        logger.info("Queueing %s top level command%s".formatted(
                 totalCommands,
                 totalCommands == 1 ? "" : "s"
         ));
         commandListUpdateAction.queue();
+
     }
 
     /**
