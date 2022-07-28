@@ -7,6 +7,8 @@ import net.bonn2.modules.settings.types.Setting;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -137,7 +139,7 @@ public class Settings extends Module {
                         "default",
                         "Set an option to default.",
                         false
-                ).setDefaultEnabled(false)
+                ).setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MANAGE_SERVER))
         };
     }
 
