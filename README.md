@@ -1,5 +1,5 @@
 # ModularBot
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/net.bonn2/ModularBot/badge.svg)](https://maven-badges.herokuapp.com/maven-central/net.bonn2/ModularBot) [![Build](https://github.com/bonn2/ModularBot/actions/workflows/gradle.yml/badge.svg)](https://github.com/bonn2/ModularBot/actions/workflows/gradle.yml)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/net.bonn2/ModularBot/badge.svg)](https://maven-badges.herokuapp.com/maven-central/net.bonn2/ModularBot) [![Build](https://github.com/bonn2/ModularBot/actions/workflows/maven.yml/badge.svg)](https://github.com/bonn2/ModularBot/actions/workflows/maven.yml)
 
 **This bot framework is still under active development, there are still missing features and will likely be breaking changes in the future**
 
