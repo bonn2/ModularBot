@@ -1,5 +1,5 @@
 # ModularBot
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/net.bonn2/ModularBot/badge.svg)](https://maven-badges.herokuapp.com/maven-central/net.bonn2/ModularBot) [![Build](https://github.com/bonn2/ModularBot/actions/workflows/maven.yml/badge.svg)](https://github.com/bonn2/ModularBot/actions/workflows/maven.yml) ![License](https://img.shields.io/github/license/bonn2/ModularBot)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/net.bonn2/ModularBot/badge.svg)](https://maven-badges.herokuapp.com/maven-central/net.bonn2/ModularBot) [![Build](https://github.com/bonn2/ModularBot/actions/workflows/maven.yml/badge.svg)](https://github.com/bonn2/ModularBot/actions/workflows/maven.yml) [![javadoc](https://javadoc.io/badge2/net.bonn2/ModularBot/javadoc.svg)](https://javadoc.io/doc/net.bonn2/ModularBot) ![License](https://img.shields.io/github/license/bonn2/ModularBot)
 
 **This bot framework is still under active development, there are still missing features and will likely be breaking changes in the future**
 
