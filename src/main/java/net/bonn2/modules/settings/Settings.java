@@ -39,7 +39,7 @@ public class Settings extends Module {
 
     @Override
     public String getVersion() {
-        return "v2.0";
+        return "2.0";
     }
 
     @Override
