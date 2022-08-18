@@ -4,7 +4,7 @@
   <groupId>net.bonn2</groupId>
   <artifactId>ModularBot</artifactId>
   <name>ModularBot</name>
-  <version>1.0.0-alpha.1</version>
+  <version>1.0.1-SNAPSHOT</version>
   <description>A framework to allow for easy modular discord bot development.</description>
   <url>https://github.com/bonn2/ModularBot</url>
   <developers>
@@ -60,7 +60,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-source-plugin</artifactId>
-        <version>2.2.1</version>
+        <version>3.2.1</version>
         <executions>
           <execution>
             <id>attach-sources</id>
@@ -72,7 +72,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.9.1</version>
+        <version>3.4.0</version>
         <executions>
           <execution>
             <id>attach-javadocs</id>
@@ -81,10 +81,13 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <includeTransitiveDependencySources>true</includeTransitiveDependencySources>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-gpg-plugin</artifactId>
-        <version>1.5</version>
+        <version>3.0.1</version>
         <executions>
           <execution>
             <id>sign-artifacts</id>
