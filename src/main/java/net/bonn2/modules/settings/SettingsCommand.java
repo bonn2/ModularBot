@@ -15,6 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SettingsCommand extends ListenerAdapter {
 
@@ -74,10 +76,10 @@ public class SettingsCommand extends ListenerAdapter {
                     case ROLE_LIST -> {
                         String[] splitValues = Objects.requireNonNull(event.getOption("values")).getAsString().split(" ");
                         List<Role> roles = new LinkedList<>();
-                        for (String value : splitValues) {
-                            // Check if passed value is a role
-                            if (!value.matches("<@&[0-9]{18}>")) continue;
-                            Role role = Bot.jda.getRoleById(value.substring(3, 21));
+                        Pattern pattern = Pattern.compile("[0-9]+");
+                        Matcher matcher = pattern.matcher(event.getOption("values").getAsString());
+                        while (matcher.find()) {
+                            Role role = Bot.jda.getRoleById(matcher.group());
                             if (role == null) continue;
                             roles.add(role);
                         }
@@ -96,9 +98,10 @@ public class SettingsCommand extends ListenerAdapter {
                     case TEXT_CHANNEL_LIST -> {
                         String[] splitValues = Objects.requireNonNull(event.getOption("values")).getAsString().split(" ");
                         List<TextChannel> channels = new LinkedList<>();
-                        for (String value : splitValues) {
-                            if (!value.matches("<#[0-9]{18}>")) continue;
-                            TextChannel channel = event.getGuild().getTextChannelById(value.substring(2, 20));
+                        Pattern pattern = Pattern.compile("[0-9]+");
+                        Matcher matcher = pattern.matcher(event.getOption("values").getAsString());
+                        while (matcher.find()) {
+                            TextChannel channel = event.getGuild().getTextChannelById(matcher.group());
                             if (channel == null) continue;
                             channels.add(channel);
                         }
@@ -146,14 +149,18 @@ public class SettingsCommand extends ListenerAdapter {
                     // Handle mentionable
                     case ROLE, ROLE_LIST -> {
                         // Check if passed value is a role
-                        if (!value.matches("<@&[0-9]{18}>")) {
+                        if (!value.matches("<@&[0-9]+>")) {
                             event.reply("`%s` is not a role! Make sure you tab complete the role rather than just typing the name!"
                                             .formatted(value))
                                     .setEphemeral(true)
                                     .queue();
                             return;
                         }
-                        Role role = Bot.jda.getRoleById(value.substring(3, 21));
+                        Pattern pattern = Pattern.compile("[0-9]+");
+                        Matcher matcher = pattern.matcher(value);
+                        Role role = null;
+                        if (matcher.find())
+                            role = Bot.jda.getRoleById(matcher.group());
                         if (role == null) {
                             event.reply("Could not find that role!")
                                     .setEphemeral(true)
@@ -165,14 +172,18 @@ public class SettingsCommand extends ListenerAdapter {
                     }
                     case TEXT_CHANNEL, TEXT_CHANNEL_LIST -> {
                         // Check if text channel was provided
-                        if (!value.matches("<#[0-9]{18}>")) {
+                        if (!value.matches("<#[0-9]+>")) {
                             event.reply("`%s` is not a channel! Make sure you tab complete the channel, rather than just typing the name!"
                                             .formatted(value))
                                     .setEphemeral(true)
                                     .queue();
                             return;
                         }
-                        TextChannel textChannel = Bot.jda.getTextChannelById(value.substring(2, 20));
+                        Pattern pattern = Pattern.compile("[0-9]+");
+                        Matcher matcher = pattern.matcher(value);
+                        TextChannel textChannel = null;
+                        if (matcher.find())
+                            textChannel = Bot.jda.getTextChannelById(matcher.group());
                         if (textChannel == null) {
                             event.reply("Could not find that channel!")
                                     .setEphemeral(true)
