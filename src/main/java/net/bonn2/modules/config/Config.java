@@ -37,9 +37,10 @@ public class Config extends Module {
     }
 
     @Override
-    public void registerSettings() {
+    public void registerLoggingChannels() {}
 
-    }
+    @Override
+    public void registerSettings() {}
 
     /**
      * Load the config from file into ram.

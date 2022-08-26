@@ -2,6 +2,7 @@ package net.bonn2;
 
 import net.bonn2.modules.Module;
 import net.bonn2.modules.config.Config;
+import net.bonn2.modules.logging.Logging;
 import net.bonn2.modules.settings.Settings;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -117,7 +118,18 @@ public class Bot
 
         logger.info("Logged in to: " + jda.getSelfUser().getAsTag());
 
-        logger.info("Registering Settings...");
+        logger.info("Loading Logging Module...");
+        Logging logging = new Logging();
+        logging.load();
+        modules.add(logging);
+
+        logger.info("Registering Log Channels...");
+        for (Module module : modules) {
+            module.registerLoggingChannels();
+            logger.info("Registered log channels for %s version %s".formatted(module.getName(), module.getVersion()));
+        }
+
+        logger.info("Registering Settings Module...");
         for (Module module : modules) {
             module.registerSettings();
             logger.info("Registered settings for %s version %s".formatted(module.getName(), module.getVersion()));
@@ -134,6 +146,7 @@ public class Bot
         for (Module module : modules) {
             if (module.getName().equals("Settings")) continue;
             if (module.getName().equals("Config")) continue;
+            if (module.getName().equals("Logging")) continue;
             module.load();
         }
 

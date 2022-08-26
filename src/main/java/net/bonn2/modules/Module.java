@@ -73,6 +73,8 @@ public abstract class Module {
         return depends;
     }
 
+    public abstract void registerLoggingChannels();
+
     public abstract void registerSettings();
     public abstract void load();
     public abstract CommandData[] getCommands();

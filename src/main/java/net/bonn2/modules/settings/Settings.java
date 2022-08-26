@@ -43,9 +43,10 @@ public class Settings extends Module {
     }
 
     @Override
-    public void registerSettings() {
+    public void registerLoggingChannels() {}
 
-    }
+    @Override
+    public void registerSettings() {}
 
     @Override
     public void load() {
