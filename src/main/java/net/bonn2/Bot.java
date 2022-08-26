@@ -4,6 +4,7 @@ import net.bonn2.modules.Module;
 import net.bonn2.modules.config.Config;
 import net.bonn2.modules.logging.Logging;
 import net.bonn2.modules.settings.Settings;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -149,6 +150,21 @@ public class Bot
         }
 
         logger.info("Finished Loading! (" + ((float)(System.currentTimeMillis() - startTime)) / 1000 + " sec)");
+
+        // Log startup status
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        embedBuilder.setTitle("Bot started!");
+        StringBuilder loadedModules = new StringBuilder();
+        for (Module module : modules)
+            loadedModules
+                    .append(module.getName())
+                    .append("\n");
+        embedBuilder.addField(
+                "Loaded Modules",
+                loadedModules.toString(),
+                false
+        );
+        Logging.log("startup", embedBuilder.build());
     }
 
     public static void updateCommands() {

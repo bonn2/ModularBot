@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import org.jetbrains.annotations.NotNull;
 
@@ -53,7 +54,9 @@ public class Logging extends Module {
             Bot.logger.warn("A message was logged to a channel that was not registered!");
             return;
         }
-        Settings.get(instance, guild.getId(), channel).getAsTextChannel(guild).sendMessage(message).queue();
+        List<TextChannel> textChannels = Settings.get(instance, guild.getId(), channel).getAsTextChannelList(guild);
+        for (TextChannel textChannel : textChannels)
+            textChannel.sendMessage(message).queue();
     }
 
     /**
