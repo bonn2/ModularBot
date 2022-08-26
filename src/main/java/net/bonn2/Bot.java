@@ -6,8 +6,6 @@ import net.bonn2.modules.logging.Logging;
 import net.bonn2.modules.settings.Settings;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
@@ -126,13 +124,13 @@ public class Bot
         logger.info("Registering Log Channels...");
         for (Module module : modules) {
             module.registerLoggingChannels();
-            logger.info("Registered log channels for %s version %s".formatted(module.getName(), module.getVersion()));
+            logger.info("- Registered log channels for %s version %s".formatted(module.getName(), module.getVersion()));
         }
 
         logger.info("Registering Settings Module...");
         for (Module module : modules) {
             module.registerSettings();
-            logger.info("Registered settings for %s version %s".formatted(module.getName(), module.getVersion()));
+            logger.info("- Registered settings for %s version %s".formatted(module.getName(), module.getVersion()));
         }
 
         // Load settings
