@@ -4,12 +4,10 @@ import net.bonn2.Bot;
 import net.bonn2.modules.Module;
 import net.bonn2.modules.settings.Settings;
 import net.bonn2.modules.settings.types.Setting;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -19,7 +17,7 @@ import java.util.Map;
 
 public class Logging extends Module {
 
-    private static Map<String, List<String>> channels = new HashMap<>();
+    private static final Map<String, List<String>> channels = new HashMap<>();
     private static Logging instance;
 
     public Logging() {
@@ -45,7 +43,7 @@ public class Logging extends Module {
      * @param guild   The guild to send the message to
      * @param message The message to send
      */
-    public static void log(String channel, Guild guild, Message message) {
+    public static void log(String channel, Guild guild, MessageCreateData message) {
         if (instance == null) {
             Bot.logger.warn("A message was logged before the logger was initialized!");
             return;
@@ -64,35 +62,9 @@ public class Logging extends Module {
      * @param channel The registered channel
      * @param message The message to send
      */
-    public static void log(String channel, Message message) {
+    public static void log(String channel, MessageCreateData message) {
         for (Guild guild : Bot.jda.getGuilds())
             log(channel, guild, message);
-    }
-
-    /**
-     * Log up to 10 message embeds to a configured channel in a specific guild
-     * @param channel The registered channel
-     * @param guild   The guild to send the message to
-     * @param embeds  The embeds to send (10 max)
-     */
-    public static void log(String channel, Guild guild, MessageEmbed @NotNull ... embeds) {
-        if (embeds.length > 10) {
-            Bot.logger.warn("A message was logged with too many embeds! Max 10");
-            return;
-        }
-        MessageBuilder messageBuilder = new MessageBuilder();
-        messageBuilder.setEmbeds(embeds);
-        log(channel, guild, messageBuilder.build());
-    }
-
-    /**
-     * Log up to 10 message embeds to a configured channel in <b>all</b> guilds the bot is in
-     * @param channel The registered channel
-     * @param embeds  The embeds to send (10 max)
-     */
-    public static void log(String channel, MessageEmbed @NotNull ... embeds) {
-        for (Guild guild : Bot.jda.getGuilds())
-            log(channel, guild, embeds);
     }
 
     @Override

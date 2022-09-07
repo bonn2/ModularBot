@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -166,7 +167,12 @@ public class Bot
                 loadedModules.toString(),
                 false
         );
-        Logging.log("startup", embedBuilder.build());
+        Logging.log(
+                "startup",
+                new MessageCreateBuilder()
+                        .addEmbeds(embedBuilder.build())
+                        .build()
+        );
     }
 
     public static void updateCommands() {

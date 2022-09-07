@@ -6,7 +6,7 @@
 
     <groupId>net.bonn2</groupId>
     <artifactId>ModularBot</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
 
     <name>ModularBot</name>
     <description>A framework to allow for easy modular discord bot development.</description>
@@ -63,7 +63,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>5.0.0-alpha.17</version>
+            <version>5.0.0-alpha.18</version>
         </dependency>
 
         <dependency>
