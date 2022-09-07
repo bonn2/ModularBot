@@ -158,6 +158,8 @@ public class Bot
         for (Module module : modules)
             loadedModules
                     .append(module.getName())
+                    .append(" ")
+                    .append(module.getVersion())
                     .append("\n");
         embedBuilder.addField(
                 "Loaded Modules",
