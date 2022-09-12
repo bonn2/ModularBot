@@ -21,11 +21,6 @@ public class Config extends Module {
 
     static JsonObject CONFIG;
 
-    public Config() {
-        name = "Config";
-        version = "1.0";
-    }
-
     @Override
     public String getName() {
         return "Config";
@@ -33,7 +28,7 @@ public class Config extends Module {
 
     @Override
     public String getVersion() {
-        return "v1.0";
+        return "1.0";
     }
 
     @Override
