@@ -184,7 +184,7 @@ public class Bot
         for (Module module : modules) {
             CommandData[] moduleCommands = module.getCommands();
             totalCommands += moduleCommands.length;
-            logger.info("Got %s command%s from %s".formatted(
+            logger.info("- Got %s command%s from %s".formatted(
                     moduleCommands.length,
                     moduleCommands.length == 1 ? "" : "s",
                     module.getName()));
