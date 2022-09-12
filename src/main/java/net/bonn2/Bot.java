@@ -7,6 +7,7 @@ import net.bonn2.modules.settings.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
@@ -176,25 +177,36 @@ public class Bot
     }
 
     public static void updateCommands() {
-        logger.info("Updating commands...");
+        logger.info("Attempting to update commands...");
 
+        List<String> commandStrings = new ArrayList<>();
         CommandListUpdateAction commandListUpdateAction = jda.updateCommands();
         int totalCommands = 0;
         for (Module module : modules) {
-            CommandData[] commands = module.getCommands();
-            totalCommands += commands.length;
+            CommandData[] moduleCommands = module.getCommands();
+            totalCommands += moduleCommands.length;
             logger.info("Got %s command%s from %s".formatted(
-                    commands.length,
-                    commands.length == 1 ? "" : "s",
+                    moduleCommands.length,
+                    moduleCommands.length == 1 ? "" : "s",
                     module.getName()));
-            commandListUpdateAction = commandListUpdateAction.addCommands(commands);
+            commandListUpdateAction = commandListUpdateAction.addCommands(moduleCommands);
+            commandStrings.addAll(Arrays.stream(moduleCommands).map(commandData -> commandData.toData().toString()).toList());
         }
         logger.info("Queueing %s top level command%s".formatted(
                 totalCommands,
                 totalCommands == 1 ? "" : "s"
         ));
-        commandListUpdateAction.queue();
 
+        logger.info("Getting current live commands...");
+        List<String> liveCommandStrings = jda.retrieveCommands().complete().stream()
+                .map(command -> CommandData.fromCommand(command).toData().toString()).toList();
+
+        if (new HashSet<>(liveCommandStrings).containsAll(commandStrings) && new HashSet<>(commandStrings).containsAll(liveCommandStrings)) {
+            logger.info("Live commands match local commands!");
+        } else {
+            logger.info("Pushing local commands!");
+            commandListUpdateAction.queue();
+        }
     }
 
     /**
