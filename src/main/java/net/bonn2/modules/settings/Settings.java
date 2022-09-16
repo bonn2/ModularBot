@@ -294,7 +294,7 @@ public class Settings extends Module {
 
             // Get current module settings or do nothing
             Map<String, Setting> moduleSettings;
-            if (settings.containsKey(module.getName())) {
+            if (guildSettings.containsKey(module.getName())) {
                 moduleSettings = guildSettings.get(module.getName());
                 // UnSet module setting
                 moduleSettings.remove(key);
