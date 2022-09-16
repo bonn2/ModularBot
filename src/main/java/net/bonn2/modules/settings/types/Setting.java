@@ -4,7 +4,7 @@ import net.bonn2.Bot;
 import com.google.gson.JsonElement;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ public abstract class Setting {
 
     public enum Type {
         INT("0"), DOUBLE("0"), FLOAT("0"), ROLE("0"), NULL("0"),
-        ROLE_LIST("0"), TEXT_CHANNEL("0"), TEXT_CHANNEL_LIST("0"), STRING(""),
+        ROLE_LIST("0"), MESSAGE_CHANNEL("0"), MESSAGE_CHANNEL_LIST("0"), STRING(""),
         BOOLEAN("false");
 
         public final String unset;
@@ -30,8 +30,8 @@ public abstract class Setting {
                 case "FLOAT" -> FLOAT;
                 case "ROLE" -> ROLE;
                 case "ROLE_LIST" -> ROLE_LIST;
-                case "TEXT_CHANNEL" -> TEXT_CHANNEL;
-                case "TEXT_CHANNEL_LIST" -> TEXT_CHANNEL_LIST;
+                case "MESSAGE_CHANNEL" -> MESSAGE_CHANNEL;
+                case "MESSAGE_CHANNEL_LIST" -> MESSAGE_CHANNEL_LIST;
                 case "STRING" -> STRING;
                 case "BOOLEAN" -> BOOLEAN;
                 default -> NULL;
@@ -68,8 +68,8 @@ public abstract class Setting {
                 case FLOAT -> new FloatSetting(Float.parseFloat(value));
                 case ROLE -> new RoleSetting(value);
                 case ROLE_LIST -> new RoleListSetting(value);
-                case TEXT_CHANNEL -> new TextChannelSetting(value);
-                case TEXT_CHANNEL_LIST -> new TextChannelListSetting(value);
+                case MESSAGE_CHANNEL -> new MessageChannelSetting(value);
+                case MESSAGE_CHANNEL_LIST -> new MessageChannelListSetting(value);
                 case STRING -> new StringSetting(value);
                 case BOOLEAN -> new BooleanSetting(value);
                 default -> null;
@@ -111,17 +111,17 @@ public abstract class Setting {
         return new ArrayList<>();
     }
 
-    public TextChannel getAsTextChannel(Guild guild) {
+    public MessageChannel getAsMessageChannel(Guild guild) {
         Bot.logger.warn("Getting unimplemented setting value!");
         return null;
     }
 
-    public List<TextChannel> getAsTextChannelList(Guild guild) {
+    public List<MessageChannel> getAsMessageChannelList(Guild guild) {
         Bot.logger.warn("Getting unimplemented setting value!");
         return null;
     }
 
-    public List<String> getAsTextChannelIdList() {
+    public List<String> getAsChannelIdList() {
         Bot.logger.warn("Getting unimplemented setting value!");
         return new ArrayList<>();
     }

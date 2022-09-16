@@ -5,7 +5,7 @@ import net.bonn2.modules.Module;
 import net.bonn2.modules.settings.Settings;
 import net.bonn2.modules.settings.types.Setting;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 import org.jetbrains.annotations.NotNull;
@@ -52,9 +52,9 @@ public class Logging extends Module {
             Bot.logger.warn("A message was logged to a channel that was not registered!");
             return;
         }
-        List<TextChannel> textChannels = Settings.get(instance, guild.getId(), channel).getAsTextChannelList(guild);
-        for (TextChannel textChannel : textChannels)
-            textChannel.sendMessage(message).queue();
+        List<MessageChannel> messageChannels = Settings.get(instance, guild.getId(), channel).getAsMessageChannelList(guild);
+        for (MessageChannel messageChannel : messageChannels)
+            messageChannel.sendMessage(message).queue();
     }
 
     /**
@@ -78,7 +78,7 @@ public class Logging extends Module {
             StringBuilder description = new StringBuilder("Used by: ");
             for (String module : channels.get(channel))
                 description.append(module);
-            Settings.register(this, channel, Setting.Type.TEXT_CHANNEL_LIST, Setting.Type.TEXT_CHANNEL_LIST.unset,
+            Settings.register(this, channel, Setting.Type.MESSAGE_CHANNEL_LIST, Setting.Type.MESSAGE_CHANNEL_LIST.unset,
                     description.toString());
         }
     }

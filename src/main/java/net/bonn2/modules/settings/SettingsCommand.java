@@ -7,7 +7,8 @@ import net.bonn2.utils.StringUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -95,18 +96,17 @@ public class SettingsCommand extends ListenerAdapter {
                         Settings.set(module, event.getGuild().getId(), key, valueToSet.toString());
                         event.replyEmbeds(getModuleSettingEmbed(module, event.getGuild().getId())).queue();
                     }
-                    case TEXT_CHANNEL_LIST -> {
-                        String[] splitValues = Objects.requireNonNull(event.getOption("values")).getAsString().split(" ");
-                        List<TextChannel> channels = new LinkedList<>();
+                    case MESSAGE_CHANNEL_LIST -> {
+                        List<MessageChannel> channels = new LinkedList<>();
                         Pattern pattern = Pattern.compile("[0-9]+");
                         Matcher matcher = pattern.matcher(event.getOption("values").getAsString());
                         while (matcher.find()) {
-                            TextChannel channel = event.getGuild().getTextChannelById(matcher.group());
-                            if (channel == null) continue;
-                            channels.add(channel);
+                            GuildChannel guildChannel = event.getGuild().getGuildChannelById(matcher.group());
+                            if (guildChannel instanceof MessageChannel messageChannel)
+                                channels.add(messageChannel);
                         }
                         StringBuilder valueToSet = new StringBuilder();
-                        for (TextChannel channel : channels) {
+                        for (MessageChannel channel : channels) {
                             valueToSet.append(channel.getId());
                             valueToSet.append(",");
                         }
@@ -170,7 +170,7 @@ public class SettingsCommand extends ListenerAdapter {
                         Settings.set(module, event.getGuild().getId(), key, role.getId());
                         event.replyEmbeds(getModuleSettingEmbed(module, event.getGuild().getId())).queue();
                     }
-                    case TEXT_CHANNEL, TEXT_CHANNEL_LIST -> {
+                    case MESSAGE_CHANNEL, MESSAGE_CHANNEL_LIST -> {
                         // Check if text channel was provided
                         if (!value.matches("<#[0-9]+>")) {
                             event.reply("`%s` is not a channel! Make sure you tab complete the channel, rather than just typing the name!"
@@ -181,17 +181,17 @@ public class SettingsCommand extends ListenerAdapter {
                         }
                         Pattern pattern = Pattern.compile("[0-9]+");
                         Matcher matcher = pattern.matcher(value);
-                        TextChannel textChannel = null;
+                        GuildChannel guildChannel = null;
                         if (matcher.find())
-                            textChannel = Bot.jda.getTextChannelById(matcher.group());
-                        if (textChannel == null) {
+                            guildChannel = Bot.jda.getGuildChannelById(matcher.group());
+                        if (guildChannel instanceof MessageChannel messageChannel) {
+                            Settings.set(module, event.getGuild().getId(), key, messageChannel.getId());
+                            event.replyEmbeds(getModuleSettingEmbed(module, event.getGuild().getId())).queue();
+                        } else {
                             event.reply("Could not find that channel!")
                                     .setEphemeral(true)
                                     .queue();
-                            return;
                         }
-                        Settings.set(module, event.getGuild().getId(), key, textChannel.getId());
-                        event.replyEmbeds(getModuleSettingEmbed(module, event.getGuild().getId())).queue();
                     }
                     // Handle everything else
                     default -> {

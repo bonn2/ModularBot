@@ -5,6 +5,8 @@ import net.bonn2.modules.Module;
 import net.bonn2.utils.StringUtil;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -77,12 +79,12 @@ public class SettingsTabComplete extends ListenerAdapter {
                 List<Command.Choice> choices = new ArrayList<>();
                 String value = Objects.requireNonNull(event.getOption("value")).getAsString().trim().toLowerCase(Locale.ROOT);
                 switch (Settings.getRegisteredSettingType(module, setting)) {
-                    case TEXT_CHANNEL, TEXT_CHANNEL_LIST -> {
-                        for (TextChannel channel : Objects.requireNonNull(event.getGuild()).getTextChannels()) {
-                            if (channel.getName().toLowerCase(Locale.ROOT).startsWith(value)) {
+                    case MESSAGE_CHANNEL, MESSAGE_CHANNEL_LIST -> {
+                        for (GuildChannel channel : Objects.requireNonNull(event.getGuild()).getChannels()) {
+                            if (channel.getName().toLowerCase(Locale.ROOT).startsWith(value) && channel instanceof MessageChannel messageChannel) {
                                 choices.add(new Command.Choice(
-                                        "#" + channel.getName(),
-                                        channel.getAsMention()
+                                        "#" + messageChannel.getName(),
+                                        messageChannel.getAsMention()
                                 ));
                             }
                             if (choices.size() == 25) break;
