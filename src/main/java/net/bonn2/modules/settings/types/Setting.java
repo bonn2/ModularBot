@@ -4,7 +4,7 @@ import net.bonn2.Bot;
 import com.google.gson.JsonElement;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

@@ -7,6 +7,7 @@ import net.bonn2.modules.settings.Settings;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
@@ -177,6 +178,9 @@ public class Bot
 
     public static void updateCommands() {
         logger.info("Attempting to update commands...");
+
+        for (Guild guild : Bot.jda.getGuilds())
+            guild.updateCommands().queue();
 
         List<String> commandStrings = new ArrayList<>();
         CommandListUpdateAction commandListUpdateAction = jda.updateCommands();

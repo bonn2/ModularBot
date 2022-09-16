@@ -5,7 +5,7 @@ import net.bonn2.modules.Module;
 import net.bonn2.modules.settings.Settings;
 import net.bonn2.modules.settings.types.Setting;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 import org.jetbrains.annotations.NotNull;
