@@ -6,7 +6,7 @@
 
     <groupId>net.bonn2</groupId>
     <artifactId>ModularBot</artifactId>
-    <version>1.2.5</version>
+    <version>1.3.0</version>
 
     <name>ModularBot</name>
     <description>A framework to allow for easy modular discord bot development.</description>
