@@ -84,7 +84,7 @@ public class Bot
                 classes.forEach(s -> {
                     try {
                         Class<?> clazz = moduleLoader.loadClass(s.replaceAll("/",".").replace(".class",""));
-                        if(clazz.getGenericSuperclass().equals(Module.class))
+                        if(clazz.getGenericSuperclass() != null && clazz.getGenericSuperclass().equals(Module.class))
                         {
                             Module module = (Module) clazz.getConstructor().newInstance();
                             modules.add(module);
