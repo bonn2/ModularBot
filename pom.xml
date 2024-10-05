@@ -63,7 +63,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>5.0.0-beta.13</version>
+            <version>5.1.2</version>
         </dependency>
 
         <dependency>
@@ -158,7 +158,7 @@
                         <additionalDependency>
                             <groupId>net.dv8tion</groupId>
                             <artifactId>JDA</artifactId>
-                            <version>5.0.0-beta.1</version>
+                            <version>5.1.2</version>
                         </additionalDependency>
                     </additionalDependencies>
                 </configuration>
